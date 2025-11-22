@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Output
+output/
+*.docx
+!templates/*.docx
+
+# Data temporal
+data/fuentes/*.xlsx
+data/fuentes/*.csv
+data/fuentes/*.json
+!data/fuentes/comunicados_*.json.example
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Configuración sensible
+.env
+config_local.py
+
+
