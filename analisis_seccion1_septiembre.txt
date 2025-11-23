@@ -1,0 +1,2902 @@
+
+--- PÁGINA 8 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  8  | 142  
+1. INFORMACIÓN GENERAL DEL CONTRATO SCJ-1809-2024 
+Se celebra el número de proceso SECOP II SCJ-SIF-CD-480-2024 bajo número de contrato SCJ-1809-
+2024 con vigencia de doce (12) meses luego de suscripción de acta de inicio suscrita el 19 de 
+noviembre del 2024, fecha a partir de la cual el sistema de video vi gilancia de Bogotá D.C. queda 
+con contrato de mantenimiento de videovigilancia. Se detalla la información general del contrato. 
+INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024 
+NIT 899.999.115-8 
+RAZÓN SOCIAL EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A E.S. P - ETB S.A E.S.P. 
+CIUDAD BOGOTÁ – COLOMBIA 
+DIRECCIÓN NIZA, CALLE 126 60 32 | PISO 1 
+TELÉFONO 6012423499 
+DATOS DEL CONTRATO 
+CONTRATO NO. SCJ-1809-2024 FECHA DE 
+INICIO 19 DE NOVIEMBRE DE 2024 
+PLAZO DE EJECUCIÓN INICIAL DOCE (12) MESES FECHA DE 
+TERMINACIÓN 18 DE NOVIEMBRE DE 2025 
+VALOR INICIAL DEL CONTRATO $16.450.000.000 
+ADICIÓN I $2.000.000.000 
+TOTAL $18.450.000.000 
+OBJETO 
+PRESTACIÓN DE LOS SERVICIOS DE ADMINISTRACIÓN, SOPORTE, 
+MANTENIMIENTO PREVENTIVO, CORRECTIVO Y/O DE ACTUALIZACIÓN AL 
+SISTEMA DE VIDEO VIGILANCIA DE BOGOTÁ D.C., CON DISPONIBILIDAD DE 
+BOLSA DE REPUESTOS. 
+FECHA FIRMA ACTA DE INICIO 19 DE NOVIEMBRE DE 2024 
+FECHA SUSCRIPCIÓN DEL 
+CONTRATO 31 DE OCTUBRE DE 2024 
+VIGENCIA PÓLIZA INICIAL 31 DE OCTUBRE DE 2024 31 DE OCTUBRE DE 2028 
+VIGENCIA PÓLIZA ACTA INICIAL 19 DE NOVIEMBRE DE 2024 19 DE NOVIEMBRE 2028 
+Tabla 1. INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024 
+Se anexa soportes del contrato y el acta de inicio firmada en la ruta: 01SEP - 30SEP/ 01 
+OBLIGACIONES GENERALES / OBLIGACIÓN 2,5,6,9,13 / ANEXOS OTROS/ SCJ -1809-2024 ACTA DE 
+INICIO.PDF 
+Se presenta ADICIÓN Nro. 01 AL CONTRATO INTERADMINISTRATIVO DE PRESTACIÓN DE SERVICIOS 
+Nro. SCJ-1809-2024,SUSCRITO ENTRE LA SECRETARÍA DISTRITAL DE SEGURIDAD, CONVIVENCIA Y 
+JUSTICIA Y LA EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. - ETB S.A. E.S.P. A TRAVÉS 
+DEL PROCESO DE SELECCIÓN SCJSIF-CD-480-2024 DE LA PLATAFORMA SECOP II  por $2.000.000.000 
+se deja documento en la ruta:  01SEP - 30SEP/ 01 OBLIGACIONES GENERALES/ OBLIGACIÓN 
+2,5,6,9,13/ ANEXOS OTROS/ Adicion1.pdf 
+Asi mismo se realizó modificación de la póliza  consignada en la ruta:  01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ OBLIGACIÓN 4/Pólizas Cto SCJ-1809-2024 con SSCJ.pdf
+
+--- PÁGINA 9 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  9  | 142  
+1.1. OBJETO CONTRATO SCJ-1809-2024 
+ 
+MANTENIMIENTO PREVENTIVO, MANTENIMIENTO CORRECTIVO Y SOPORTE AL SISTEMA DE 
+VIDEOVIGILANCIA DE BOGOTÁ D.C., CON DISPONIBILIDAD DE BOLSA DE REPUESTOS, en las mejores 
+condiciones técnicas y financieras y en aplicación de los principios de colaboración entre entidades 
+públicas, de eficiencia y economía, resulta necesario adelantar un contrato interadministrativo de 
+prestación de servicios con la EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ SA ESP - ETB S.A. 
+E.S.P., para el desarrollo del objeto contractual requerido. 
+1.2. ALCANCE 
+ 
+El mantenimiento consiste en actividades técnicas preventivas, correctivas y/o de actualización a 
+los bienes que conforman el sistema de video vigilancia de Bogotá, permitiendo garantizar la 
+continuidad de la operación y visualización del sistema, teniendo  en cuenta las recomendaciones 
+técnicas de los fabricantes de los equipos, estándares y normas que aplican para tal propósito. 
+Realizar el mantenimiento al sistema involucra, principalmente, el desarrollo de las siguientes 
+actividades: 
+• Revisión y limpieza periódica de los bienes, para garantizar su buen funcionamiento. 
+• Cambio e instalación de los bienes para la puesta en funcionamiento o actualización de 
+cada uno de los sistemas de video vigilancia. 
+• Solucionar cualquier fallo o anomalía dentro de las seis (6) horas siguientes a la 
+notificación efectuada por la supervisión o interventoría del contrato. 
+• Generar un reporte (ticket) ante un fallo o anomalía detectada por el contratista o 
+notificado por cualquier actor del sistema (MEBOG, SDSCJ, Interventoría, etc.). 
+• Diagnosticar remotamente las fallas o anomalías, haciendo uso de herramientas como: 
+grabaciones, logs de eventos, SNMP, TRACERT, telnet, ping sobre los equipos activos (Ej. 
+UPS o cámara o switch), equipos de medición de tráfico, etcétera. 
+• Actualizar en línea y en tiempo real el estado de todos y cada uno de los puntos de video 
+vigilancia, así como la trazabilidad de los requerimientos (tickets), de tal forma que le 
+permita a la Interventoría hacer el seguimiento a la ejecución de sus actividades. 
+Para realizar los mantenimientos de los bienes que componen el sistema de videovigilancia, se debe 
+tener en cuenta el ANEXO 1 ESPECIFICACIONES TÉCNICAS que incluye la ubicación y arquitectura de 
+red eléctrica y de conectividad de cada sistema, así como la relación de bienes que se prevé sean 
+utilizados durante la ejecución del proyecto. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PÁGINA 10 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  10  | 142  
+1.3. DESCRIPCIÓN DE LA INFRAESTRUCTURA DEL SISTEMA 
+Para efectos referenciales, se deben tener en cuenta los siguientes tipos de sistemas de video 
+vigilancia, ubicaciones y cantidades, sobre las cuales se efectuarán los mantenimientos: 
+  
+SISTEMA DE VIDEO 
+VIGILANCIA 
+CANTIDAD DE 
+UBICACIONES 
+CANTIDAD DE 
+PUNTOS DE CÁMARA 
+CANTIDAD CENTROS DE 
+MONITOREO – C4 
+CANTIDAD 
+VISUALIZADAS 
+LOCALMENTE 
+N
+. 
+1 CIUDADANA 4451 4451 4451 0 
+2 COLEGIOS 98 235 235 0 
+3 TRANSMILENIO 71 164 164 0 
+4 CAI 157 510 89 421 
+5 ESTADIO EL 
+CAMPIN 1 58 0 58 
+6 CTP 1 104 0 104 
+7 ESTACIONES DE 
+POLICÍA 24 302 0 302 
+TOTAL 4739 5824 4939 885 
+Tabla 2. COMPONENTES POR CADA SUBSISTEMA SEGÚN ANEXO 1. 
+Los Centros de Monitoreo que actualmente están bajo la supervisión de la MEBOG para la operación 
+y monitoreo de video vigilancia se relacionan a continuación: 
+N° CENTRO DE MONITOREO DIRECCIÓN LOCALIDAD 
+1 CENTRO DE COMANDO, CONTROL, CÓMPUTO Y 
+COMUNICACIONES - C4 CALLE 20 NO 68 A 06 PUENTE ARANDA 
+2 CENTRO DE MONITOREO ENGATIVÁ KR 78A NO. 70 – 54 ENGATIVÁ 
+3 CENTRO DE MONITOREO BARRIOS UNIDOS ESTACIÓN POLICÍA CALLE 72 # 62-81 BARRIOS UNIDOS 
+4 CENTRO DE MONITOREO TEUSAQUILLO ESTACIÓN POLICÍA CRA 13 # 39-86 TEUSAQUILLO 
+5 CENTRO DE MONITOREO KENNEDY TRANSVERSAL 78 K CON CALLE 41 D SUR KENNEDY 
+6 CENTRO DE MONITOREO CHAPINERO KR 1 CALLE 57-00 CHAPINERO 
+7 CENTRO DE MONITOREO CIUDAD BOLÍVAR DIAGONAL 70 SUR CON TRANSVERSAL 54 CIUDAD BOLÍVAR 
+8 CENTRO DE MONITOREO PUENTE ARANDA CRA 39 CON CALLE 10 PUENTE ARANDA 
+9 CENTRO DE MONITOREO USAQUÉN CL. 165 #8A-99 USAQUÉN 
+10 CENTRO DE MONITOREO RAFAEL URIBE Calle 27 Sur #24-39 Calle 27 Sur #24-39 
+11 CENTRO DE MONITOREO SANTA FE Carrera 5 # 29-11 SANTA FE 
+Tabla 3.CENTRO DE MONITOREO 
+Nota: Los centros de monitoreo Rafael Uribe se encuentra en garantía y el centro monitoreo Santa 
+Fe aún no ha sido entregado oficialmente.  
+La SDSCJ pagará al contratista los servicios prestados y elementos utilizados mensualmente de 
+acuerdo con las condiciones establecidas para este Acuerdo No 9, oferta de servicio mensualizado 
+y el uso de la bolsa de repuestos y servicios, así: 
+N
+° DESCRIPCIÓN TIPO SERVICIO CARACTERÍSTI
+CA 
+1 Mantenimientos preventivos por UBICACIÓN, aprobados mediante cronograma con 
+interventoría / supervisión. Por Demanda 
+2 Servicio de mantenimiento correctivo y soporte al sistema de video vigilancia de Bogotá Mensualidad 
+3 Bolsa de repuestos, elementos aprobados por interventoría / supervisión. Por Demanda 
+Tabla 4. FORMA DE PAGO SDSCJ 
+ 
+1 Se aclara que se desmonta La Estación de Transmilenio Calle 26 con 12 cámaras por obras del metro  de la 
+ciudad de Bogotá D.C. 
+
+--- PÁGINA 11 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  11  | 142  
+ 
+1.4. GLOSARIO  
+ 
+AC: Corriente Alterna  
+ 
+AGENT VI: Comprehensive Video Analytics Range.  
+  
+Al: Auto iris - Función del objetivo que permite regular automáticamente la cantidad de luz que 
+entra en el sensor CCD / CMOS simulando el funcionamiento del iris en el ojo humano.  
+  
+AMPERE: Un ampere, o amperio, es la unidad de intensidad de corriente o la densidad eléctrica 
+que corre por un punto de circuito en un momento dado. Es la corriente producida por 1 volt que 
+va por una resistencia de 1 ohmio.  
+  
+ANS: Acuerdos de niveles de servicio.  
+  
+ARCGIS: Es el nombre de un conjunto de productos de software en el campo de los Sistemas de 
+Información Geográfica o SIG. ... Estas aplicaciones se engloban en familias temáticas como ArcGIS 
+Server, para la publicación y gestión web, o ArcGIS Móvil para la captur a y gestión de información 
+en campo.  
+  
+ATENUACIÓN: Termino usado para describir y medir (dB) la disminución de señal de video cuando 
+se transmite de un punto a otro.  
+  
+AUTOFOCUS: El objetivo garantiza la imagen más nítida posible gracias a la regulación automática 
+continua del enfoque.  
+  
+BALUN: Se denomina balun (del inglés balanced-un balanced lines transformer ) a un dispositivo 
+adaptador de impedancias que convierte líneas de transmisión simétricas en asimétricas. La inversa 
+también es cierta: el balun es un dispositivo reversible. En el mundo de CCTV se utilizan para hacer 
+el cableado de video con cable UTP en  vez de coaxial, ya que permiten pasar de coaxial a UTP y al 
+contrario con facilidad.  
+  
+BIT: Digito binario, es el más pequeño elemento de información de un sistema binario (base 2) su 
+valor puede ser “1” o “0”. En los circuitos eléctricos digitales generalmente el “1” corresponde a un 
+nivel de voltaje cercano a 5VDC y “0” la ausencia de dicho voltaje o un valor inferior a 2.5VDC.  
+  
+BLC: Compensación de Luz de Fondo (Back Light Compensation) - Función de algunas cámaras de 
+seguridad con la que el dispositivo analiza digitalmente la escena y ajusta automáticamente el brillo 
+
+--- PÁGINA 12 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  12  | 142  
+y contraste de la imagen para que se vean con más claridad las áreas oscuras. Esto lo hace a 
+expensas de que puedan quedar sobre iluminadas las zonas más claras de la imagen que en 
+ocasiones pueden verse totalmente blancas.  
+  
+BNC: Sistema de interconexión utilizado en video profesional. Usualmente es el Standard de los 
+conectores que se ponen a los coaxiales y que tienen detrás los grabadores digitales (DVR).  
+  
+BPS: Abreviatura de "bits por segundo". Generalmente se escribe con minúsculas: “bps”  
+  
+BYTE: Conjunto de 8 bits.  
+  
+CAD: Centro Administrativo Distrital.  
+  
+CAI: Centro De Atención Inmediata  
+  
+CÁMARAS PTZ : Son aquellas cámaras de seguridad motorizadas que tienen funcionalidad de 
+movimiento horizontal (Pan), vertical (Tilt) y capacidad de hacer aumento sobre la imagen (Zoom).  
+  
+CABLE COAXIAL: Cable que contiene un conductor central sólido recubierto de material aislante, 
+una malla, y un forro o protector exterior. Muy usado para trasportar señales de video análogas.  
+  
+CIF: Significa Common Intermediate Format y se refiere al tamaño o resolución de una imagen en 
+el ámbito analógico. Para hacer la comparación entre video analógico (caso NTSC) y digital, 1CIF 
+(CIF) equivale a 1/4 de los píxeles contenidos en una imagen de tamañ o completo de 704x480 
+píxeles, es decir, 352x240 píxeles. Existe también la variante 2CIF, que incluye la totalidad de los 
+píxeles en la dimensión horizontal de la imagen (704) pero sólo la mitad de los de la vertical (240), 
+así como también QCIF, que incluye sólo 1/16 de los píxeles de la imagen completa (176x120).  
+  
+CCTV: Circuito Cerrado de Televisión - Sistema de Vigilancia Utilizado para ver imágenes / videos en 
+privado y no para uso público.  
+  
+CMOS (Complementary Metal Oxide Semiconductor ): Los dispositivos son semiconductores 
+comúnmente usados, construidos de circuitos positivos y negativos. Dado que en un determinado 
+período temporal solamente uno de ellos está activo, los dispositivos necesitan menos energía 
+respecto a los usados por parte de otros tipos de transistor. Los sensores CMOS permiten integrar 
+los circuitos de procesamiento de la imagen en el mismo chip a diferencia de los sensores CCD / 
+CMOS, cuya producción es también más cara. 
+C4: Centro de Comando, Control, Comunicaciones y Cómputo. 
+
+--- PÁGINA 13 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  13  | 142  
+CODIFICACIÓN: En la terminología del multiplexor indica que una grabación de video tiene una 
+marca en el fotograma que impide su manipulación.  
+DC: Corriente Continua.  
+  
+D/N (Day and Night) : Las cámaras de seguridad que tienen esta especificación poseen una 
+sensibilidad a la luz lo que las hace efectivas para monitoreo en lugares con muy poca iluminación. 
+En estas condiciones, estas cámaras cambian su configuración de color a blanco y negro 
+automáticamente, logrando una mejor visualización de la imagen. 
+DEFINICIÓN: Capacidad de una cámara, monitor, videograbador, de reproducir fielmente las 
+imágenes capturadas.  
+DIRECCIÓN IP (IP Address ): Se trata de una dirección numérica que se traduce después en un 
+nombre de dominio (Domain Name Server). Cuando insertamos el nombre de un sitio web, el 
+ordenador la traduce en su dirección IP, un número único de 32 bites. Las direcciones IP van de 
+0.0.0.0 a 255.255.255.255. El protocolo TCP/IP dirige los paquetes de datos a su destinación. Cada 
+host en una red tiene una dirección IP única.  
+DVR: Grabador de video analógico.  
+  
+ERROR CONOCIDO O FUERA DEL ALCANCE: Problema de los cuales ya se conoce su causa raíz y de 
+los cuales se busca el planteamiento de la solución definitiva o la cual está en análisis la viabilidad 
+para su implementación.  
+ 
+ETB: EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A E.S. P - ETB S.A E.S.P. 
+ 
+ETHERNET: El método de acceder a una red LAN (Local Área Network) más usado. La tecnología 
+Ethernet es similar a estándar IEEE 802.3. La tecnología Ethernet apoya la velocidad de transmisión 
+10 Mbps, 100 Mbps y 1000 Mbps (Gigabit).  
+  
+FRAME (CUADRO): Una imagen de Video completa. 1 frame está compuesto de 2 field en el video 
+análogo, y en el digital es como una foto estática. En el estándar de CCTV análogo o televisión el 
+video tiene 30 frames por segundo (NTSC).  
+  
+FRAMES PER SECOND (FPS) : Se refiere al número de cuadros por segundo al cual se muestra o 
+graba el video. Las transmisiones de TV convencionales son a 30 fps, ya que esta tasa es considerada 
+como video en tiempo real  
+  
+HZ: Hertzios - Ciclos por segundo: medida de la frecuencia.  
+    
+
+--- PÁGINA 14 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  14  | 142  
+ILUMINACIÓN CON INFRARROJOS: Iluminación de una zona oscura por medio de emisores de luz 
+en el espectro infrarrojo para permitir que se vean las imágenes aun en ausencia de luces visibles 
+en la escena.  
+  
+IMAGEN COMPRIMIDA: Una imagen reducida en tamaño que permite almacenar más imágenes 
+que en una imagen normal de video original.  
+  
+IMPEDANCIA: Medida en ohmios, se refiere a la combinación entre la resistencia y la reactancia en 
+un circuito eléctrico.  
+  
+INCIDENTES: Eventos que afectan la operación de los sistemas cubiertos y que requieren ser 
+gestionados pasando por las etapas de respuesta, atención, hasta encontrar su solución o 
+workaround.  
+  
+IRIS: Mecanismo interno del lente para regular la cantidad de luz que pasa a través de él y llega al 
+sensor CCD /CMOS.  
+  
+LAN: Local Área Network – Nombre dado a las Redes de Datos locales relativas a una Edificación. 
+Usualmente con velocidad de 10Mbps a 1000 Mbps.  
+  
+LED: Diodo de Emisor de Luz.  
+    
+MEGAPÍXEL: Un megapíxel o megapixel (Mpx) es una unidad que equivale a 1 millón de píxeles (px). 
+A diferencia de otras unidades usadas en el ámbito de la computación que usan la base 2 para sus 
+cantidades (1.024KB = 1MB, 1.024MB = 1GB, etc.), en este caso se usa la b ase 10 (1.000.000px = 
+1Mpx). Esta unidad se usa para expresar la resolución de imágenes digitales, por ejemplo, una 
+cámara que puede tomar fotografías o video con una resolución de 2.048x1.536 píxeles se dice que 
+tiene 3,1 megapíxeles de resolución (2048x1536 = 3.145.728px).  
+  
+MOS: Metal Oxido Semiconductor - Forma de chip usado en algunas cámaras de CCTV.  
+  
+NTSC: National Television Standards Committee - Señal de video en color, estándar de la televisión 
+en Norteamérica y Japón - 525 líneas, 60 Hz.  
+  
+NVR: Grabador de video en red.  
+ 
+PAL: (Phase Alternative Line) Señal estándar de video en color en Europa, Australia y Medio Oriente.  
+  
+
+--- PÁGINA 15 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  15  | 142  
+PÍVOT: Es una tecnología que permite procesar y analizar información compleja en poco tiempo, 
+con poco esfuerzo y con poco hardware.  
+  
+PÍXEL: Un punto en una imagen digital. El punto simple sensible de un sensor CCD / CMOS o el más 
+pequeño punto luminoso de un monitor LCD / LED.  
+  
+PIXELAMIENTO: Aplica a la visualización de pequeños cuadros en la constitución o forma de la 
+imagen, manifestándose también en distorsión de la visualización. Comúnmente asociado al 
+procesamiento de imágenes de la cámara o fallas del canal de transmisión.  
+  
+PRESET: Posición memorizada de las coordenadas horizontal, vertical y zoom, de una cámara 
+robótica (speed dome) generalmente usada para ser activada a voluntad de un operador o 
+automáticamente con alguna función programada como un recorrido o una alarma.  
+  
+PROBLEMAS: Incidentes que a pesar del análisis técnico y funcional o de la fábrica, se desconoce la 
+causa raíz; también están en esta categoría el análisis de incidentes reportados como repetitivos, 
+de los cuales se tiene un proceso de solución alterna no definitiva (workaround) para dar 
+continuidad a la operación.  
+  
+PROTOCOLO: Lenguaje de comunicación entre dispositivos que ha sido estandarizado.  
+  
+PSU: Power Supply Unit – Unidad / Fuente de alimentación.  
+  
+RED SAN: (Storage Área Network, red de área de almacenamiento) es una red de almacenamiento 
+integral. Se trata de una arquitectura completa que agrupa una red de alta velocidad de canal de 
+fibra o SCSI, un equipo de interconexión dedicado (conmutadores, puentes, e tc.) y elementos de 
+almacenamiento de red (discos duros)  
+  
+RESOLUCIÓN: Medida del más pequeño detalle que se puede visualizar en una imagen. En los 
+sistemas analógicos, la medición se realiza en TVL (líneas de TV). Resolución vertical – la cantidad 
+de detalle resoluble en sentido vertical en una foto. Generalmente se expresa como el número de 
+distintas líneas horizontales, alternativamente en blanco y negro, que teóricamente se puede ver 
+en una foto. En sistemas digitales se expresa en Megapíxel.  
+  
+ROBOTIZACIÓN: Aplica cuando las imágenes por segundo de la Cámara no son constantes o no son 
+enviadas en relación con lo configurado en los fps (frames per seconds), es decir una transmisión 
+de imágenes por segundo 30 fps, no debe estar variando a valores menores porque  se observan 
+imágenes cuadro por cuadro. Puede provenir de fallas en algún componente de la red.  
+  
+
+--- PÁGINA 16 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  16  | 142  
+RUIDO: Efecto en pantalla que muestra elementos que no son parte de la imagen útil, como puntos, 
+llovizna, nieve ondas, rayas. Es más evidente este efecto con baja luminosidad en escena.  
+  
+SDSCJ: Secretaría Distrital De Seguridad, Convivencia Y Justicia.  
+ 
+SEÑAL DIGITAL: Una señal que ha sido convertida en “datos” y la conforma información binaria, es 
+decir “1” y “0”.  
+  
+SINCRONIZACIÓN: Dos o más impulsos eléctricos que se ejecutan con los mismos intervalos de 
+tiempo para evitar la distorsión de imagen y el ruido.  
+  
+TEAMVIEWER: Es un software informático “privado” de fácil acceso, que permite conectarse 
+remotamente a otro equipo. Entre sus funciones están: compartir y controlar escritorios, reuniones 
+en línea, videoconferencias y transferencia de archivos entre ordenadores.  
+  
+ISS: (Intelligent Security Systems) Sistema de seguridad inteligente.  
+  
+ISP: Internet Service Provider.  
+  
+MCC: Monitoring & Control Center.  
+  
+SAVVI: Video Analytics Software Solution.  
+  
+SecurOS: Plataforma VMS desarrollada por el fabricante ISS, permite adaptar sistemas de 
+administración y grabación de video en cualquier instalación, ya sean pequeños o de gran escala, 
+soportando servidores en red y analíticas de ISS que pueden integrarse con sistemas de control de 
+acceso, seguridad contra incendios, y son compatibles con prácticamente cualquier equipo de 
+seguridad de terceros  
+SQL: Structured Query Language (Data Base)  
+  
+VMS: Video Management Software.  
+  
+ VPN: Virtual Private Network (VPN), es una tecnología de red de computadoras que permite una 
+extensión segura de la red de área local (LAN) sobre una red pública o no controlada como Internet. 
+
+--- PÁGINA 17 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  17  | 142  
+1.5. OBLIGACIONES 
+1.5.1. OBLIGACIONES GENERALES 
+A continuación, se relacionan las obligaciones contractuales y como se dio su respectivo 
+cumplimento durante el contrato SCJ-1809 de 2024  con el anexo que soporta la observación 
+descrita. 
+ 
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ
+/ NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+1 
+Acatar la Constitución, la Ley, las 
+normas legales y procedimientos 
+establecidos por el Gobierno 
+Nacional y Distrital, y demás 
+disposiciones pertinentes.  
+Permanente Cumplió 
+La EMPRESA DE 
+TELECOMUNICACIONES DE 
+BOGOTÁ S.A. E.S.P acata la 
+Constitución, la Ley, las normas 
+legales y procedimientos 
+establecidos por el Gobierno 
+Nacional y Distrital, y demás 
+disposiciones pertinentes.  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+2 
+Cumplir con lo previsto en las 
+disposiciones de las especificaciones 
+esenciales, así como en la propuesta 
+presentada. 
+Permanente Cumplió Se da cumplimiento con el 
+presente informe y sus anexos. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 2,5,6,9,13 
+INFORME MENSUAL 
+SEPTIEMBRE 2025.pdf 
+3 
+Dar cumplimiento a las obligaciones 
+con los Sistemas de Seguridad Social, 
+Salud, pensión, aportes parafiscales, 
+cuando haya lugar, riesgos laborales y 
+presentar los documentos 
+respectivos que así lo acrediten, 
+conforme lo establecido por el 
+artículo 50 de la Ley 789 de 2002, la 
+Ley 828 de 2003, la Ley 1122 de 2007, 
+la Ley 1562 de 2012, Decreto 1703 de 
+2002, Decreto 510 del 5 de 
+SEPTIEMBRE de 2003, artículo 23 de 
+la Ley 1150 de 2007, Ley 1562 de 
+2012 y demás normas que las 
+adicionen. Complementen o 
+modifiquen. 
+Permanente Cumplió 
+Se acredita el cumplimiento del 
+Sistema de Seguridad Social, 
+incluyendo salud, pensión, aportes 
+parafiscales y riesgos laborales, 
+mediante la presentación de las 
+planillas de pago 
+correspondientes, los certificados 
+de revisoría fiscal y el listado del 
+personal disponible durante el 
+mes de septiembre de 2025, el 
+cual registra un total de 10 5 
+personas vinculadas a la ejecución 
+del contrato SCJ-1809-2024. 
+Lo anterior corresponde a las 
+obligaciones de ETB como 
+responsable de la ejecución del 
+contrato, así como de los 
+contratistas aliados. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01  
+OBLIGACIONES GENERALES / 
+OBLIGACIÓN 3. 
+01 seguridad Social 
+02 Cert Revisor fiscal 
+
+--- PÁGINA 18 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  18  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ
+/ NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+4 
+Dentro de los tres (3) días hábiles 
+siguientes a la fecha en la que se 
+entregue la copia del contrato, 
+deberá constituir las garantías  
+pactadas en el mismo.  
+Única Vez Cumplió 
+Se adjunta copia de la póliza con la 
+cual se cumple la obligación . Se 
+presente actualización de Póliza 
+como consecuencia de Adición 
+firmada en el mes de septiembre 
+del 2025. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 4 
+5 
+Garantizar la calidad de los bienes y 
+servicios contratados y responder por 
+ello. 
+Permanente Cumplió Se da cumplimiento con el 
+presente informe y sus anexos. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 2,5,6,9,13 
+INFORME MENSUAL 
+SEPTIEMBRE 2025.pdf 
+6 
+Colaborar con la entidad para que el 
+objeto contratado cumpla y que este 
+sea el de mejor calidad. 
+Permanente Cumplió Se da cumplimiento con el 
+presente informe y sus anexos. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 2,5,6,9,13 
+INFORME MENSUAL 
+SEPTIEMBRE 2025.pdf 
+7 
+Acatar las órdenes que durante el 
+desarrollo del contrato la entidad le 
+imparta, y de manera general, obrar 
+con lealtad y buena fe  
+en las distintas etapas contractuales 
+evitando las dilaciones y en 
+trabamientos que pudieran 
+presentarse. 
+Permanente Cumplió 
+Se acatan todas las ordenes e 
+instrucciones impartidas por la 
+entidad 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 7 Y 10 
+RUTA: 01 SEP – 30SEP\01 
+OBLIGACIONES 
+GENERALES\OBLIGACIÓN 
+2,5,6,9,13\ANEXO MESA DE 
+SERVICIO\SOLICITUD 
+
+--- PÁGINA 19 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  19  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ
+/ NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+8 
+Reportar de manera inmediata 
+cualquier novedad o anomalía, al 
+supervisor o interventor del contrato, 
+según corresponda. 
+Permanente Cumplió 
+En el respectivo periodo no se 
+presentaron novedades o 
+anomalías del contrato  que 
+requieran ser reportadas al 
+supervisor o interventor. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+9 
+Guardar total reserva de la 
+información que por razón del 
+servicio y desarrollo de sus 
+actividades obtenga. Esta es de 
+propiedad de la Secretaría de 
+Seguridad, Convivencia y Justicia y 
+solo salvo expreso requerimiento de 
+autoridad competente podrá ser  
+divulgada. 
+Permanente Cumplió 
+Se da cumplimiento con el 
+diligenciamiento de los acuerdos 
+de confidencialidad por parte del 
+personal del contrato de 
+mantenimiento. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+2,5,6,9,13/ANEXOS 
+OTROS/PERSONAL/CONFIDE
+NCIALIDAD. 
+ 
+10 
+Acatar las instrucciones que durante 
+el desarrollo del contrato imparta la 
+SDSCJ por conducto del supervisor o 
+interventor del contrato. 
+Permanente Cumplió 
+Se acatan todas las ordenes e 
+instrucciones impartidas por la 
+entidad 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 7 Y 10 
+11 
+Dar cumplimiento a la Directiva 001 
+del 31 de enero de 2011 
+“Democratización de las 
+oportunidades económicas en el 
+Distrito capital y promoción de 
+estrategias para la participación real y 
+efectiva de las personas naturales 
+vulnerables, marginadas y/o  
+excluidas de la dinámica productiva 
+de la ciudad”, cuando aplique. 
+Permanente Cumplió 
+Se certifica que no aplica dar 
+cumplimiento al a la Directiva 001 
+del 31 de enero de 2011 
+“Democratización de las 
+oportunidades económicas en el 
+Distrito capital y promoción de 
+estrategias para la participación 
+real y efectiva de las personas 
+naturales vulnerables, marginadas 
+y/o excluidas de la dinámica 
+productiva de la ciudad. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+12 
+Desarrollar las actividades necesarias 
+para dar cumplimiento a las 
+obligaciones y a la normatividad 
+vigente en materia de Seguridad y 
+Salud en el Trabajo, de acuerdo con la 
+exposición del contratista o 
+subcontratista, a los riesgos 
+encontrados en el centro  de trabajo 
+donde se desarrolla la actividad 
+contratada. 
+Permanente Cumplió 
+Durante el mes de septiembre 
+2025: Se cumplió con el 40% de las 
+actividades programadas en la 
+Matriz de Capacitaciones, 
+desarrollando dos (2) 
+capacitaciones en SST y 
+reprogramando la actividad  
+ambiental. La participación 
+alcanzó un 6 3,4% del personal 
+convocado.  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01. 
+OBLIGACIONES GENERALES / 
+OBLIGACIÓN 12 
+
+--- PÁGINA 20 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  20  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ
+/ NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+Adicionalmente, se efectuaron 
+entregas de dotación y Elementos 
+de Protección Personal (EPP) 
+como parte de las actividades de 
+fortalecimiento en SST 
+01 Formación 
+02 Entrega de dotación y EEP 
+13 
+Abstenerse de suministrar, entregar 
+y/o publicar, sin la autorización 
+previa de la SDSCJ, información que 
+NO sea considerada pública, tales 
+como la relativa a documentos que se 
+encuentren en construcción o que 
+contengan información preliminar y 
+no definitiva 
+Permanente Cumplió 
+No se ha realizado ningún 
+suministro, entrega y/o 
+publicación en el periodo del 
+presente informe. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 2,5,6,9,13/ 
+ANEXOS OTROS/ PERSONAL/ 
+CONFIDENCIALIDAD 
+14 
+En cumplimiento de la Directiva 
+Distrital No. 003 del 2012, el 
+contratista se obliga: a). Velar por el 
+respeto de los derechos 
+constitucionales y laborales de los 
+trabajadores que utilice para la 
+ejecución del contrato, para lo cual, 
+eliminará formas de co ntratación 
+lesivas para los derechos laborales de 
+los trabajadores. b). Velar por el 
+respeto de la legislación laboral 
+vigente e  
+incentivar la mejor oferta laboral y 
+prestacional que garantice el acceso a 
+mejores oportunidades de trabajo. El 
+incumplimiento de las obligaciones 
+contractuales incluidas en el presente 
+numeral ocasionará el inicio de 
+procesos sancionatorios, conforme 
+con la normatividad vigente, esto es, 
+la imposición de multas o la 
+declaratoria de incumplimiento 
+haciendo efectiva la cláusula p enal  
+pecuniaria, si es el caso. 
+Permanente Cumplió 
+Se da cumplimiento con la 
+Directiva Distrital No. 003 del 
+2012, sustentada por medio de los 
+contratos laborales. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf  
+15 
+Dar cumplimiento a los dispuesto en 
+la Circular No. 1 de 2011 expedida por 
+el alcalde Mayor de Bogotá D.C., en el 
+sentido de no contratar a menores de 
+edad, en cumplimiento de los pactos, 
+convenios y convenciones 
+internacionales ratificados por 
+Colombia, s egún lo establece la 
+Constitución Política de 1991 y demás 
+normas vigentes sobre la materia, en 
+particular aquellas que consagran los 
+derechos de los niños. 
+ Permanente  Cumplió 
+Se da cumplimiento mediante 
+constancia escrita donde se  
+asegura que no contratar a 
+menores de edad, en 
+cumplimiento de los pactos, 
+convenios y convenciones 
+internacionales ratificados por 
+Colombia. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+
+--- PÁGINA 21 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  21  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ
+/ NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+16 
+Publicar de forma mensual en la 
+plataforma del Sistema Electrónico 
+de Contratación Pública SECOP II los 
+informes y/o productos  
+de ejecución contractual, con los 
+soportes, si hubiere lugar a ellos, de 
+acuerdo con lo estipulado en la Ley 
+1712 de 2014. 
+Mensual Cumplió 
+Se genera el cargue en SECOP de 
+los informes mensuales aprobados 
+y del plan de pagos desde el mes 
+de noviembre 2024 al mes de julio 
+2025, dado que son los informes 
+aprobados a la fecha de 
+presentación del presente 
+informe. 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 
+1,7,8,9,10,11,13,14 y 15/ 
+Oficio Obli SEPTIEMBRE 
+2025.pdf 
+01SEP - 30SEP / 01 
+OBLIGACIONES GENERALES/ 
+OBLIGACIÓN 16/ SOPORTE 
+CARGUE SECOP.pdf 
+ Tabla 5. OBLIGACIONES GENERALES
+
+--- PÁGINA 22 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  22  | 142  
+1.5.2. OBLIGACIONES ESPECÍFICAS DEL CONTRATISTA 
+A continuación, se relacionan las obligaciones específicas del contratista y como se dio su respectivo 
+cumplimento durante el contrato SCJ-1809 de 2024  con el anexo que soporta la observación 
+descrita. 
+ 
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+1 
+Ejecutar el contrato en tiempo, 
+costos, alcance, gestión de riesgos 
+y calidad, de acuerdo con la 
+propuesta y oferta presentada,  
+incluyendo las actividades de valor 
+agregado (anexo 5), así como con 
+las especificaciones técnicas 
+descritas en los anexos que hacen  
+parte integral del contrato. 
+PERMANENTE Cumplió 
+Se da cumplimiento con el 
+presente informe y sus 
+anexos. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 11 VALORES PÚBLICOS 
+2 
+Disponer del personal mínimo 
+requerido desde el momento de 
+inicio del contrato para realizar el 
+empalme de actividades del 
+contrato anterior y garantizar el 
+correcto recibo y ejecución del 
+objeto contractual. 
+PERMANENTE Cumplió 
+Se presentaron las hojas de 
+vida del personal mínimo 
+requerido quienes se 
+mantuvieron durante el 
+periodo del presente informe. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+2,24,35/PERSONAL  
+ 
+3 Cumplir con los Acuerdos de 
+Niveles de Servicio (Anexo 6). PERMANENTE Cumplió 
+Se da cumplimiento al Anexo 
+6 con los  valores de ANS los 
+cuales son conciliados desde 
+los componentes  técnico, 
+administrativo y financiero. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 3 INFORMES DE 
+MEDICIÓN NIVELES DE SERVICIO. 
+4 
+Presentar, dentro de los cuatro (4) 
+primeros días hábiles de cada mes, 
+para aprobación de la 
+INTERVENTORIA o quien haga sus  
+veces, informes técnicos 
+mensuales sobre la ejecución de 
+las actividades. 
+PERMANENTE Cumplió 
+Se da cumplimiento con la 
+radicación del presente 
+informe el día 06 de 
+SEPTIEMBRE del año 2025  y 
+de presenta una nueva 
+versión el 26 de septiembre 
+del 2025. 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41/ 
+INFORME MENSUAL SEPTIEMBRE 
+2025.pdf 
+5 
+Dentro de los 8 días siguientes a 
+vencimiento del plazo de ejecución 
+del contrato, presentar informe 
+final, para la revisión y validación 
+de la INTERVENTORIA o quien haga 
+sus veces, sobre las actividades 
+realizadas durante la ejecución del 
+contrato, entreg ando los 
+respectivos soportes y 
+documentación de la ejecución y 
+cierre del contrato. 
+UNICA VEZ No aplica No aplica para el periodo del 
+presente informe. No aplica 
+
+--- PÁGINA 23 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  23  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+6 
+Disponer de una línea de atención 
+telefónica y correo electrónico 
+para la recepción de peticiones, 
+quejas y reclamos durante el plazo 
+de ejecución del contrato, 
+operando las 24 horas de forma 
+ininterrumpida. El tiempo máximo 
+entre la atención, diagnóstico y 
+solución total de los incidentes o 
+fallas del sistema instalado será de 
+máximo seis (6) horas. Tanto la 
+línea telefónica como el correo 
+electrónico deben estar en pleno 
+funcionamiento a partir del día de 
+suscripción del acta de inicio del 
+contrato, junto  a especificaciones 
+de la mesa de servicio descritos en 
+el Anexo 3.  
+PERMANENTE Cumplió 
+Se cuenta con el número 
+telefónico 318 3915138 y el 
+correo 
+jhonsuaq@etb.com.co, para 
+atender las peticiones, quejas 
+y reclamos. 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 6 
+7 
+Presentar, para aprobación de la 
+INTERVENTORIA o quien haga sus 
+veces, dentro de los diez (10) 
+primeros días hábiles siguientes a 
+la suscripción del acta de inicio, el 
+“Plan de Gestión del Contrato el 
+cual deberá contener como 
+mínimo”:  
+a) Plan de adquisiciones,  
+b) EDT (Estructura de 
+Descomposición de Trabajo),  
+c) Cronograma (Detalle de las 
+actividades de mantenimiento 
+preventivo y correctivo),  
+d) Plan de Gestión de Calidad,  
+e) Plan de Comunicaciones,  
+f) Plan de Gestión de Riesgos  
+g) Plan de Capacitación,  
+h) Plan de Mantenimiento,  
+i) Plan de Manejo de Tráfico,  
+j) Plan de Manejo Ambiental  
+k) Programa de Seguridad y Salud 
+en el Trabajo.  
+l) El contratista, dentro del Plan de 
+Gestión del Proyecto, deberá 
+presentar para formularios, 
+formatos y en general (Anexo No. 1 
+–Especificaciones Técnicas), todos 
+los reportes a los que les será 
+aplicable la medición de los ANS.  
+m) Plan de Operación de la mesa 
+de servicio. 
+PERMANENTE Cumplió 
+El Plan de Gestión fue 
+radicado inicialmente el 
+03/12/2024 bajo el No. GSC -
+4708-2024 y posteriormente 
+subsanado el 02/01/2025 
+mediante el radicado GSC -
+4967-2024, el cual fue 
+aprobado por la Supervisión 
+mediante Acta ANX -2025-
+7312_2. A excepción del 
+literal K (Programa de 
+Seguridad y Salud en el 
+Trabajo). 
+Para el periodo de septiembre 
+2025, el Plan de Gestión en su 
+Ítem K) Programa de 
+Seguridad y Salud en el 
+Trabajo, fue ajustado de 
+acuerdo con los 
+requerimientos de la 
+interventoría del contrato, y 
+fue remitido nuevamente 
+mediante oficio GSC -6508-
+2025, en el que se obtuvo la  
+aprobación correspondiente 
+al componente k) bajo 
+comunicado VVG -CCS-ETB-
+632-25 del 13 de agosto del 
+2025. 
+Se presenta actualización al 
+plan de comunicados el 15 de 
+septiembre del 2025 baj o 
+comunicado GSC-7157-2025 
+ETB-PL-005 Plan De 
+Comunicaciones V6 validado y 
+aprobado con comunicado 
+VVG-CCS-ETB-769-25 . 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 7 
+CORREO DE RADICACION.PDF 
+GSC-4708-2024- PLAN DE 
+GESTION.PDF 
+VVG-CCS-ETB-632-25 . Plan Gestión 
+v4 31072025 
+GSC-7157-2025 ETB-PL-005 Plan De 
+Comunicaciones V6 
+VVG-CCS-ETB-769-25 . Aprobación 
+Plan Gestión v6 16092025.pdf 
+
+--- PÁGINA 24 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  24  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+Aprobación Plan Gestión v6 
+16092025.pdf 
+8 
+Presentar para aprobación de la 
+interventoría o quien haga sus 
+veces, las hojas de vida requeridas, 
+dentro de los cinco (5) días  
+hábiles posteriores a la suscripción 
+del contrato y previo a la 
+suscripción del Acta de Inicio. 
+UNICA VEZ Cumplió 
+El Contrato se firmó el 31 de 
+octubre de 2024 y el 13 de 
+noviembre de 2024 se 
+presentaron las hojas de vida, 
+para su aprobaron a los 7 días 
+hábiles. 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 8 
+SCJ-1809-2024 HOJAS DE VIDA 
+PERSONAL MININO.pdf 
+9 
+Adelantar todos los trámites y 
+solicitudes pertinentes ante las 
+entidades públicas y/o terceros 
+que intervengan o se requieran 
+para el adecuado funcionamiento y 
+servicio del sistema de 
+videovigilancia. 
+PERMANENTE Cumplió Se realizaron los 
+escalamientos respectivos. 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 2.5 ESCALAMIENTOS 
+10 
+Garantizar que las actividades y 
+acciones de mantenimiento que 
+aseguren la operación y 
+funcionamiento de la solución 
+requerida, conforme se especifica 
+en los anexos que hacen parte 
+integral del proceso. 
+PERMANENTE Cumplió 
+Se realizan actividades de 
+mantenimientos correctivos , 
+mantenimientos en 
+acometida eléctrica y 
+limpiezas de acrílico. 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 6 INFORME DE VISITAS 
+EJECUTADAS 
+11 
+Entregar documentación completa 
+(registro fotográfico, actas, 
+manuales y catálogos etc. con las 
+fechas y parámetros indicados en  
+el Anexo No. 1 – Especificaciones 
+Técnicas de manera impresa y 
+digital, de las actividades de 
+mantenimiento realizadas. 
+PERMANENTE Cumplió 
+Se realiza la entrega de los 
+PDF unificados con la 
+información solicitada  como 
+registro fotográfico, actas, 
+manuales y catálogos etc. con 
+las fechas y parámetros 
+indicados en  
+el Anexo No. 1 – 
+Especificaciones Técnicas 
+01SEP - 30SEP / 01 OBLIGACIONES 
+GENERALES / OBLIGACIÓN 7 Y 10 
+CAPITULO 1.5 COMUNICADOS 
+12 
+Atender las sugerencias que, para 
+el mejor y óptimo desarrollo del 
+contrato, le formule quien ejerce la 
+INTERVENTORIA o quien  
+haga sus veces. 
+PERMANENTE Cumplió 
+Se atienden las observaciones 
+y sugerencias que se dan en 
+las reuniones seguimiento con 
+el fin de mejor la 
+disponibilidad del sistema.  
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 12 Y 16 
+13 
+Una vez instalado el equipo y/o 
+elemento, el contratista deberá 
+demostrar su correcta 
+operatividad, elaborar un informe 
+de entrega  
+y recibo a satisfacción firmada por 
+el personal designado por el 
+usuario final, el contratista y la 
+INTERVENTORIA o quien haga sus 
+veces. El término para la entrega 
+de dicho informe es de máximo 
+cuatro (4) días hábiles una vez 
+culminada la actividad. Dicho  
+PERMANENTE Cumplió 
+Se realiza la entrega de los 
+PDF unificados con la 
+información solicitada. 
+01SEP - 30SEP / 01 OBLIGACIONES 
+GENERALES / OBLIGACIÓN 7 Y 10 
+CAPITULO 1.5 COMUNICADOS 
+
+--- PÁGINA 25 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  25  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+informe debe contener la totalidad 
+de los elementos suministrados 
+con su nombre, marca, modelo, 
+número de serie y valor unitario. 
+14 
+Verificar y diagnosticar las 
+instalaciones eléctricas y lógicas 
+necesarias para la conexión de la 
+solución o equipo, siguiendo las  
+mejores prácticas. 
+PERMANENTE Cumplió 
+En las respectivas visitas se 
+realiza el diagnóstico de las 
+instalaciones eléctricas y  
+lógicas 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 6 INFORME DE VISITAS 
+EJECUTADAS 
+15 
+Mantener actualizado en línea y en 
+tiempo real la información como el 
+estado de visualización de las 
+cámaras y los tickets en el  
+aplicativo web o sistema de 
+información que indique la SDSCJ. 
+PERMANENTE Cumplió Se tiene actualizado y en línea 
+el estado del sistema 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 2.4 INFORME 
+CONSOLIDACIÓN DEL ESTADO DEL 
+SISTEMA 
+16 
+Realizar de común acuerdo con la 
+INTERVENTORIA del contrato o 
+quien haga sus veces, reuniones de 
+seguimiento al contrato  
+atendiendo las observaciones 
+presentadas por la SDSCJ, para 
+tomar las acciones que se deriven 
+de la ejecución del contrato.  
+PERMANENTE Cumplió 
+Se realizaron reuniones con la 
+SCJ los días 24 de SEPTIEMBRE 
+DE 2025 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 12 Y 16 
+17 
+Suministrar a la INTERVENTORIA 
+del contrato o quien haga sus 
+veces, la información y 
+documentación que este requiera, 
+sin ningún tipo de restricción o 
+condición por parte del 
+CONTRATISTA. 
+PERMANENTE Cumplió 
+En el presente periodo no se 
+restringió ni condiciono 
+ninguna solicitud realizada 
+por la supervisión del contrato 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 12 Y 
+16/ COMUNICADOS EMITIDOS 
+18 
+Concertar junto con la 
+INTERVENTORIA del contrato o 
+quien haga sus veces, el 
+cronograma de mantenimientos 
+preventivos mensuales, con por lo 
+menos diez (10) días hábiles de 
+antelación al inicio de cada mes. 
+PERMANENTE No aplica 
+No aplica para el periodo del 
+presente informe, ya que no 
+se ha realizado la solicitud de 
+atención de mantenimiento 
+preventivos hasta no 
+estabilizar la disponibilidad 
+del sistema de videovigilancia. 
+No aplica 
+19 
+Cumplir con los requerimientos de 
+seguridad y salud en el trabajo 
+exigido por la ley. SALUD 
+OCUPACIONAL (Ley 1016 de 1989,  
+Por la cual se reglamenta la 
+organización, funcionamiento y 
+forma de los Programas de Salud 
+Ocupacional) y cualquier avance  
+PERMANENTE Cumplió 
+Se cumple con los 
+requerimientos de Seguridad 
+y Salud en el Trabajo exigidos 
+por la ley, soportados en el 
+Certificado de Cumplimiento 
+del Sistema de Gestión 
+expedido por la ARL, el cual 
+ratifica los porcentajes de 
+01SEP - 30SEP / 02.OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 19  / 
+OBLIGACIÓN 19 – Cumplir con los 
+requerimientos en SST 
+01 Certificados de accidentalidad 
+
+--- PÁGINA 26 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  26  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+acorde a la Ley 1443 de 2014 “Por 
+el cual se dictan disposiciones para 
+la implementación del Sistema de 
+Gestión de la Seguridad  
+y Salud en el Trabajo” 
+cumplimiento de ETB y sus 
+contratistas aliados.  
+Durante el mes de Septiembre 
+no se registran accidentes ni 
+incidentes de trabajo 
+relacionados a la ejecución del 
+contrato SC-1809-2024. 
+02 Certificados de cumplimiento 
+del SG-SST expedido por la ARL 
+ 
+20 
+Diseñar e implementar un 
+programa de seguridad y salud en 
+el trabajo que incluya lo 
+reglamentado por las normas 
+nacionales,  
+departamentales o distritales y 
+que apliquen para la gestión del 
+trabajo seguro, en condiciones de 
+riesgos de altura, riesgo eléctrico,  
+etc.  
+PERMANENTE Cumplió 
+Se obtiene aprobación al 
+programa de seguridad y 
+salud en el trabajo el 13 de 
+septiembre de 2025 
+mediante comunicado VVG-
+CCS-ETB-632-25, 
+ Se diseña e implementar un 
+Programa de SST conforme al 
+Decreto 1072 de 2015, la 
+Resolución 0312 de 2019 y 
+demás normas aplicables, 
+incluyendo procedimientos 
+seguros para trabajo en 
+alturas, como soporte de 
+dicha implementación, se 
+adjuntan los 
+preoperacionales y los 
+soportes de los controles 
+generados. 
+ 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECÍFICAS / OBLIGACIÓN 20 
+01 Preoperacionales 
+ 
+21 
+Actualizar de forma permanente 
+durante la ejecución del contrato y 
+directamente en el aplicativo (y/o 
+en el que la SDSCJ disponga  
+para tal fin), los atributos que 
+corresponden a los elementos de la 
+hoja de vida de los equipos objetos 
+del mantenimiento.  
+PERMANENTE Cumplió 
+Se tienen actualizadas loas 
+hojas de vida de los equipos 
+objetos del contrato. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 2.6 INFORME 
+ACTUALIZADO DE HOJAS DE VIDA 
+22 
+Entregar la relación de ubicación, 
+marcas, referencias y seriales de 
+los bienes utilizados en las visitas 
+de mantenimiento correctivo,  
+junto a toda la evidencia 
+fotográfica y soportes necesarios 
+para lograr la aprobación por parte 
+de la INTERVENTORIA o quien haga  
+sus veces, con el fin de tramitar 
+ingreso, dada de baja y/o 
+actualización de los bienes en el 
+Almacén de la SDSCJ. 
+PERMANENTE Cumplió 
+Se realiza la entrega de los 
+PDF unificados con la 
+información solicitada. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+11,13,22  
+CAPITULO 1.5 COMUNICADOS 
+23 
+Adelantar todos los trámites frente 
+al almacén de la SDSCJ para 
+mantener actualizado el inventario 
+del sistema de videovigilancia,  
+esta actividad deberá ser realizada 
+mensualmente bajo la aprobación 
+PERMANENTE No aplica 
+No se ha realizado 
+actualización con almacén de 
+SCJ de equipos nuevos ya que 
+no se ha culminado la 
+conciliación de bolsa. 
+No aplica 
+
+--- PÁGINA 27 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  27  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+de la INTERVENTORIA o quien haga 
+sus veces. 
+24 
+Contar con la capacidad técnica y 
+experiencia para instalar los 
+equipos que lleguen a ser 
+suministrados por la SDSCJ y que 
+hagan parte integral de un punto 
+de videovigilancia para las 
+arquitecturas descritas en el Anexo 
+No. 1.  
+PERMANENTE Cumplió 
+Se cuenta con la experiencia 
+en el personal operativo del 
+proyecto. 
+01SEP - 30SEP  /02 OBLIGACIONES 
+ESPECÍFICAS / OBLIGACIÓN 2, 24, 
+35 
+25 
+Entregar, dentro de los dos (2) días 
+hábiles siguientes al 
+requerimiento, estadísticas 
+actualizadas del sistema de 
+videovigilancia, las cuales podrán 
+ser requeridas por la SDSCJ en 
+cualquier momento de la ejecución 
+del contrato. La información 
+mínima que e l contratista deberá 
+tener disponible y actualizada es la 
+siguiente:  
+a. Estado del sistema de 
+videovigilancia por localidad, por 
+subsistema. 
+b. Cantidad de elementos 
+utilizados de la bolsa de repuestos 
+durante un periodo específico, 
+detallando fecha de ut ilización, 
+valor, punto o ubicación 
+relacionada con código SDSCJ y 
+ubicación (localidad y 
+georreferencia) 
+c. Cantidad de visitas de 
+mantenimiento ejecutadas 
+durante un periodo específico, 
+detallando fecha de ejecución, 
+valor, punto o ubicación 
+relacionada con código SDSCJ y 
+ubicación (localidad y 
+georreferencia). 
+PERMANENTE Cumplió 
+No se ha presentado 
+requerimiento de dicha 
+índole, sin embargo, se 
+genera el reporte del estado 
+del sistema cada 4 horas por 
+parte de la mesa de servicio. 
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 2.4 INFORME 
+CONSOLIDACIÓN DEL ESTADO DEL 
+SISTEMA 
+26 
+Realizar el soporte técnico de 
+PRIMER NIVEL PIVOT3 (entiéndase 
+por primer nivel: el servicio que se 
+encargará de liderar día a día, el 
+adecuado manejo de eventos 
+asociados con el sistema de 
+videovigilancia de la ciudad, 
+eventos que pueden ser incidentes 
+de funcionamiento, problemas 
+donde se esté incrementando la 
+criticidad de la situación, 
+administrar requerimientos o 
+solicitudes de información de la 
+Policía Metropolitana o de las 
+PERMANENTE No aplica 
+No se realizaron solicitudes 
+para soporte de primer nivel 
+PIVOT3 
+No aplica 
+
+--- PÁGINA 28 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  28  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+demás agencias involucradas en los 
+operativos de seguridad en cuanto 
+Almacenamiento y Procesamiento 
+(Pivot3)); de igual forma en caso de 
+materializarse alguna de las 
+siguientes eventualidades:  
+▪ Daños al Hardware por 
+manipulación indebida.  
+▪ Daños al Hardware por descargas 
+eléctricas. 
+▪ Daños al Hardware por 
+sobrecalentamiento del hardware  
+▪ Daños al Hardware por desastre 
+natural o vandalismo.  
+ Para lo cual el contratista deberá 
+suministrar, instalar y configurar 
+los repuestos dejándolos en 
+correcta oper ación sobre  
+la infraestructura actual.  
+27 
+Suministrar, como requisito para el 
+último pago, toda la información 
+histórica recopilada durante la 
+ejecución del contrato que  
+incluya, como mínimo:  
+a. Hoja de vida de todos y cada uno 
+de los puntos, ubicaciones y 
+subsistemas. 
+b. Listado de tickets abiertos 
+durante la ejecución del contrato, 
+detallando el punto o ubicación 
+con su diagnóstico, código SDSCJ,  
+ubicación (localidad y 
+georreferencia) y estado final.  
+c. Listado de elementos utilizados 
+de la bolsa de repuestos durante la 
+ejecución del contrato , detallando 
+fecha de utilización,  
+valor, punto o ubicación 
+relacionada con código SDSCJ y 
+ubicación (localidad y 
+georreferencia)  
+d. Listado de visitas de 
+mantenimiento ejecutadas 
+durante la ejecución del contrato, 
+detallando fecha de ejecución, 
+valor, punto  
+o ubicación relacionada con código 
+SDSCJ y ubicación (localidad y 
+georreferencia).  
+e. Resumen de la ejecución técnica, 
+administrativa y financiera, 
+derivada del contrato, que 
+sustente el uso de los recursos  
+económicos.  
+UNICA VEZ No aplica No aplica para el periodo del 
+presente informe. No aplica 
+
+--- PÁGINA 29 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  29  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+28 
+Realizar el seguimiento y reportar 
+diariamente a LA INTERVENTORIA 
+o quien haga sus veces, las fallas, 
+novedades o requerimientos sobre 
+un punto, ubicación o subsistema, 
+cuya indisponibilidad haya sido 
+atribuida al proveedor de 
+suministro eléctrico o de 
+conectividad.  
+PERMANENTE Cumplió 
+Se realizan escalamientos a 
+los terceros según sea 
+suministro eléctrico o 
+conectividad. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 2.5 ESCALAMIENTOS 
+29 
+Adelantar las acciones necesarias 
+con el personal que sea designado 
+para implementar licencias de 
+analítica que se instalarán en el 
+sistema de videovigilancia de la 
+ciudad, garantizando el correcto 
+funcionamiento del sistema de 
+videovigilancia independient e de  
+la instalación de las nuevas 
+analíticas. 
+PERMANENTE No aplica 
+No se han realizado 
+solicitudes ni designación por 
+parte de la SCJ para 
+implementar video analíticas. 
+No aplica 
+30 
+Presentar para la liquidación del 
+contrato, las certificaciones de PAZ 
+Y SALVO, de cada uno de los 
+trabajadores y proveedores. 
+UNICA VEZ No aplica No aplica para el periodo del 
+presente informe. No aplica 
+31 
+Adelantar las acciones necesarias 
+para el trámite del RMA (Return 
+Merchandise Authorization), 
+frente a cada uno de los 
+fabricantes de los bienes del 
+sistema de videovigilancia. 
+PERMANENTE Cumplió Se relacionan los tramites por 
+RMA antes los fabricantes 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 5. 1.3 EQUIPOS BAJO 
+TRÁMITE RMA 
+32 
+Mantener un stock de cámaras y de 
+bienes de mayor consumo o 
+rotación, que permitan dar 
+cumplimiento a los anexos del 
+presente documento.  
+PERMANENTE Cumplió 
+Se realizo revisión del stock 
+junto a la interventoria del 
+contrato, se adjuntas actas de 
+verificación del stock. 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 32 
+CAM-INV-M02-F01-inventario 
+mensual 28042025.pdf 
+CAM-INV-M02-F01-STOCK Mínimo 
+28042025.pdf 
+33 
+Disponer del personal necesario al 
+finalizar el contrato que permita 
+garantizar el empalme de 
+actividades con la SDSCJ y de esta 
+manera adelantar la correcta 
+entrega del contrato ya sea a SDSCJ 
+o a quién la entidad disponga. 
+UNICA VEZ No aplica No aplica para el periodo del 
+presente informe. No aplica 
+34 
+Responder por los actos contrarios 
+a la Ley y a lo estipulado en el 
+contrato, cometidos por el 
+personal a su cargo en virtud de la 
+ejecución contractual. 
+PERMANENTE No aplica 
+En el presente periodo NO se 
+realizaron actos contrarios a 
+la ley y a lo estipulado en el 
+contrato 
+No aplica 
+
+--- PÁGINA 30 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  30  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+35 
+Acatar las políticas de seguridad de 
+la información establecidas por la 
+SDSCJ.  
+PERMANENTE Cumplió Documentos de 
+confidencialidad 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+2,24,35/PERSONAL 
+/CONFIDENCIALIDAD 
+ 
+36 
+Al finalizar el contrato el 
+contratista deberá realizar una 
+entrega del inventario final 
+tramitado por el almacén de la 
+SDSCJ previa  
+aprobación de la INTERVENTORIA o 
+quien haga sus veces.  
+UNICA VEZ No aplica No aplica para el periodo del 
+presente informe. No aplica 
+37 
+Garantizar la actualización del 
+inventario de los componentes del 
+sistema de videovigilancia, 
+comprobando cantidades,  
+especificaciones técnicas, 
+certificaciones de garantía, valores 
+y demás, la cual se debe realizar 
+durante los primeros sesenta (60) 
+días calendario del contrato, y que 
+deben ser avalados por la 
+INTERVENTORÍA o quien haga sus 
+veces. 
+PERMANENTE Cumplió 
+Se realiza la actualización del 
+inventario de los 
+componentes del sistema de 
+videovigilancia 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 2.6 INFORME 
+ACTUALIZADO DE HOJAS DE VIDA 
+38 
+Concurrir a la liquidación del 
+contrato dentro de los plazos y 
+condiciones establecidos en el 
+mismo y de conformidad con lo 
+señalado  
+en los artículos 11 de la Ley 1150 de 
+2007 y 60 de la Ley 80 de 1993, 
+modificado por el artículo 217 del 
+Decreto Ley 019 de 2012.  
+UNCA VEZ No aplica No aplica para el periodo del 
+presente informe. No aplica 
+39 
+Todos los mantenimientos 
+preventivos y/o correctivos deben 
+incluir las acometidas eléctricas de 
+los puntos de videovigilancia, para 
+garantizar su operación y 
+funcionamiento.  
+PERMANENTE Cumplió 
+En el presente informe se 
+relacionan las acometidas 
+eléctricas realizadas 
+01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+CAPITULO 6 INFORME DE VISITAS 
+EJECUTADAS 
+40 
+En aquellos casos en que el 
+contratista deba subcontratar 
+algunas de las actividades 
+derivadas del contrato principal, no 
+podrá ni este ni el subcontratista, 
+contratar o vincular a las personas 
+naturales o jurídicas que hayan 
+participado en la elaboración de los  
+estudios, diseños y proyectos que 
+tengan relación directa con el 
+objeto del contrato principal. 
+PERMANENTE Cumplió Oficio aclaratorio 01SEP - 30SEP / 02 OBLIGACIONES 
+ESPECIFICAS/ OBLIGACIÓN 40 
+ 
+
+--- PÁGINA 31 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  31  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+41 
+Las demás obligaciones que se 
+deriven de la naturaleza del 
+contrato, el pliego de condiciones, 
+técnico y demás documentos que 
+se desarrollen en la ejecución del 
+contrato.  
+PERMANENTE Cumplió En el presente informe se 
+relaciona  
+01SEP - 30SEP / OBLIGACIONES 
+ESPECIFICAS / OBLIGACIÓN 
+1,9,10,14,15,21,25,28,31,37,39,41  
+INFORME MENSUAL SEPTIEMBRE 
+2025.PDF 
+ 
+Tabla 6. OBLIGACIONES ESPECÍFICAS DEL CONTRATISTA. 
+1.5.3. OBLIGACIONES ESPECÍFICAS EN MATERIA AMBIENTAL  
+A continuación, se relacionan las obligaciones específicas en materia ambiental y como se dio su 
+respectivo cumplimento durante el contrato SCJ-1809 de 2024  con el anexo que soporta la 
+observación descrita. 
+ 
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+1 
+Garantizar la gestión integral de los 
+residuos de construcción y demolición 
+(RCD) que se generen durante la 
+ejecución contractual,  
+dando cumplimiento a las obligaciones 
+que correspondan como gran o pequeño 
+generador de RCD (según aplique), de 
+acuerdo  
+con lo establecido en Decreto Distrital 
+507 del 31 de diciembre de 2023. En caso 
+de identificarse necesario, la entidad será 
+la encargada de realizar el registro y 
+obtener el respectivo PIN como 
+generador de RCD, para lo cual el 
+contratista debe entregar a la  
+interventoría, para revisión y aprobación, 
+la información requerida por el aplicativo 
+web de RCD de la Secretaría Distrital de 
+Ambiente y el Programa de Manejo 
+Ambiental de RCD, conforme a lo 
+estipulado en el citado decreto. 
+Permanente Cumplió 
+Durante la ejecución del 
+contrato y hasta el mes de 
+septiembre, no se han 
+generado Residuos de 
+Construcción y Demolición 
+(RCD), ni se tienen 
+contempladas actividades u 
+obras que los generen. Esta 
+condición se encuentra 
+soportada mediante la 
+Certificación de 
+cumplimiento de la 
+obligación la que ratifica la 
+No Aplicabilidad, firmada por 
+la responsable del Sistema de 
+Seguridad y Salud en el 
+Trabajo y Ambiente (SSTA) 
+con el respaldo del 
+Apoderado General de ETB, 
+conforme a lo establecido en 
+el Decreto Distrital 507 de 
+2023.  
+01AGO – 31AGO / 03 
+OBLIGACIONES 
+ESPECIFICAS EN MATERIA 
+AMBIENTAL / 
+OBLIGACIÓN 1 -Garantizar 
+la gestión integral de 
+(RCD). 
+ 
+Cumplimiento obli 1.pdf 
+ 
+2 
+Garantizar la gestión integral de los 
+residuos de aparatos eléctricos y 
+electrónicos (RAEE) que se generen a 
+partir de las actividades  
+de mantenimiento, de acuerdo con  lo 
+estipulado en el Decreto Nacional 284 de 
+2018 y la Resolución 851 de 2022, o 
+normas que lo  
+complementen, modifiquen o sustituyan. 
+Permanente Cumplió 
+Durante la ejecución del 
+contrato y hasta el mes de 
+septiembre, no se han 
+generado Residuos de 
+Aparatos Eléctricos y 
+Electrónicos (RAEE) 
+derivados de actividades de 
+mantenimiento. Esta 
+condición se encuentra 
+debidamente soportada 
+mediante Certificación de No 
+Aplicabilidad, firmada por la 
+responsable del Sistema de 
+Seguridad y Salud en el 
+01AGO – 31AGO / 03 
+OBLIGACIONES 
+ESPECIFICAS EN MATERIA 
+AMBIENTAL / 
+OBLIGACIÓN 2-Garantizar 
+la gestión integral de 
+(RAEE). 
+ 
+Cumplimiento obli 2.pdf 
+
+--- PÁGINA 32 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  32  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+Trabajo y Ambiente (SSTA), 
+en cumplimiento de lo 
+establecido en el Decreto 
+Nacional 284 de 2018 y la 
+Resolución 851 de 2022.  
+3 
+Asumir los costos que se incurra por el 
+transporte de los RAEE hasta el punto de 
+entrega que defina el almacén de la 
+SDSCJ.  
+Permanente Cumplió 
+Durante la ejecución del 
+contrato y hasta el mes de 
+septiembre , no se han 
+generado Residuos de 
+Aparatos Eléctricos y 
+Electrónicos (RAEE), por lo 
+tanto, no se ha incurrido en 
+costos asociados a su 
+transporte hacia el punto de 
+entrega definido por el 
+almacén de la SDSCJ. Esta 
+situación se encuentra 
+respaldada mediante  
+Certificación de No 
+Aplicabilidad, firmada por la 
+responsable del Sistema de 
+Seguridad y Salud en el 
+Trabajo y Ambiente (SSTA) 
+con respaldo del apoderado 
+general de ETB. 
+ 
+01AGO  – 31AGO / 03 
+OBLIGACIONES 
+ESPECIFICAS EN MATERIA 
+AMBIENTAL / 
+OBLIGACIÓN 3-Asumir los 
+costos por el transporte 
+de RAEE 
+Costos RAEE.pdf 
+4 
+Utilizar productos de limpieza 
+biodegradables en el mantenimiento de 
+los equipos, cuando esto sea viable 
+técnicamente, y presentar  
+sus fichas técnicas a la interventoría del 
+contrato.  
+Permanente Cumplió 
+Se garantiza el uso de 
+productos de limpieza 
+biodegradables en las 
+actividades de 
+mantenimiento de equipos, 
+cuando su aplicación ha sido 
+técnicamente viable. Las 
+respectivas fichas técnicas de 
+los productos utilizados se 
+entregan a la interventoría 
+del con trato como soporte 
+del cumplimiento de esta 
+disposición. 
+ 
+ 
+01AGO – 31AGO / 03 
+OBLIGACIONES 
+ESPECIFICAS EN MATERIA 
+AMBIENTAL / 
+OBLIGACIÓN 4 – Utilizar 
+productos de limpieza 
+biodegradables 
+5 
+Evitar el uso de elementos plásticos de un 
+solo uso, en las actividades que se 
+deriven de la ejecución del contrato, en 
+cumplimiento  
+de lo establecido en el Acuerdo Distrital 
+808 de 2021, Decreto Distrital 317 de 
+2021 y Ley 2232 de 2022.  
+Permanente Cumplió 
+En cumplimiento del 
+Acuerdo Distrital 808 de 
+2021, el Decreto Distrital 317 
+de 2021 y la Ley 2232 de 
+2022, se implementan 
+acciones para evitar el uso de 
+elementos plásticos de un 
+solo uso en las actividades 
+derivadas del contrato. 
+Adicionalmente, se 
+reemplazaron los vasos 
+plásticos por vasos de cartón 
+y de cerámica reutilizables, 
+conforme a la lógica 
+estipulada en la normativa. 
+Esta gestión se encuentra 
+soportada mediante 
+4.SEPTIEMBRE 2025 / 03 
+OBLIGACIONES 
+ESPECIFICAS EN MATERIA 
+AMBIENTAL / 
+OBLIGACIÓN 5 – Evitar el 
+uso de elementos 
+plásticos de un solo uso. 
+Plásticos de un solo uso. 
+
+--- PÁGINA 33 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  33  | 142  
+ÍTEM OBLIGACIÓN PERIODICIDAD 
+CUMPLIÓ/ 
+NO 
+CUMPLIÓ 
+OBSERVACIONES ANEXO 
+Certificación cumplimiento, 
+firmada por la responsable 
+SSTA, con respaldo del poder 
+otorgado por el apoderado 
+general de ETB 
+Tabla 7. OBLIGACIONES ESPECÍFICAS EN MATERIA AMBIENTAL 
+ 
+1.5.4. OBLIGACIONES ANEXOS 
+Dentro del contrato SCJ-1809-2024 existen anexos a los cuales se da cumplimiento de acuerdo con 
+la naturaleza de la operación y necesidad del sistema de videovigilancia, se relacionan anexo sobre 
+la sustentación del cumplimiento de los  anexos del contrato, en el cual se c ita el documento 
+contractual, numeral de anexo, descripción, observación contratista y el anexo si aplica. 
+Adjunto encontrará el anexo en la ruta: 01SEP - 30SEP\ANEXO OBLIGACIONES.XLSX 
+ 
+
+--- PÁGINA 34 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  34  | 142  
+1.6. COMUNICADOS CONTRATO SCJ-1809-2024 
+1.6.1. EMITIDOS CONTRATO SCJ-1809-2024 
+Los comunicados emitidos durante el mes de SEPTIEMBRE de 2025 se relacionan a continuación: 
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+1 1/09/2025 GSC-7027-2025 
+Respuesta comunicado VVG-CCS-ETB-723-25  Respuesta a comunicados GSC-6956 
+2025, GSC-6967-2025, GSC-6981-2025, GSC-6985 
+2025 y GSC-6990-2025 
+2 1/09/2025 GSC-7028-2025 Notificación inicio actividades con herramienta Officetrack 
+3 1/09/2025 GSC-7030-2025 INFORME QUINCENAL MESA DE SERVICIO DEL 16 AL 31 DE AGOSTO DE 2025 
+4 1/09/2025 GSC-7031-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI AV CHILE - CLL 72 CR 7, Ticket GLPI 
+No. 11361 - Contrato SCJ-1809-2024. 
+5 1/09/2025 GSC-7032-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI ÁLAMOS - TV 93 CL 64A, Ticket GLPI 
+No. 12111 - Contrato SCJ-1809-2024 
+6 1/09/2025 GSC-7033-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI ANTONIO JOSÉ DE SUCRE - CR 3 BIS 
+ESTE CLL 111 SUR, Ticket GLPI No. 11937 - Contrato SCJ-1809-2024. 
+7 1/09/2025 GSC-7034-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS 
+8 1/09/2025 GSC-7035-2025 Respuesta a Interventoría al comunicado 'VVG-CCS-ETB-724-25' del 30 de  agosto del 
+2025. 
+9 2/09/2025 GSC-6969-2025 Solicitud Mantenimiento Cámaras Fijas y Domos Colegio Porfirio Barba Jacob - 
+Contrato No. SCJ-1809-2024 
+10 2/09/2025 GSC-7020-2025 INFORME MENSUAL MARZO 2025 V4 
+11 2/09/2025 GSC-7036-2025 Respuesta al comunicado VVG-CCS-ETB-715-25 - Comunicados GSC-6961-2025 y GSC-
+6998-2025 
+12 2/09/2025 GSC-7037-2025 Informe semanal mesa de servicio del 26 de agosto al 01 de septiembre del 2025 – 
+Contrato SCJ-1809-2024 
+13 2/09/2025 GSC-7038-2025 Solicitud aprobación uso de bolsa de repuestos para 3 domos de Colegios - 
+CONTRATO SCJ-1809-2024. 
+14 2/09/2025 GSC-7039-2025 INFORME MENSUAL ENERO 2025 V7 
+15 2/09/2025 GSC-7040-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+16 2/09/2025 GSC-7041-2025 ALCANCE COMUNICADO  GSC-6885-2025 
+17 2/09/2025 GSC-7042-2025 ALCANCE GSC- 6980-2025 INGRESOS ELEMENTOS ALMACÉN MARZO 2025 
+18 2/09/2025 GSC-7043-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI CALDAS - CR 80 DG 38, Ticket GLPI 
+No. 11669 - Contrato SCJ-1809-2024. 
+19 2/09/2025 GSC-7044-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+20 2/09/2025 GSC-7045-2025 Notificación de personal activo mes de agosto 2025  Contrato SCJ-1809-2024 
+21 2/09/2025 GSC-7046-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI CENTENARIO - CLL 24 # 27 - 10 SUR, 
+Ticket GLPI No. 11649 - Contrato SCJ-1809-2024. 
+22 2/09/2025 GSC-7047-2025 BAJAS EQUIPOS NO OPERATIVOS AGOSTO  2025- CTO SCJ 1809-2024. 
+23 2/09/2025 GSC-7048-2025 Retiro equipos que no estén siendo parte activa del sistema de video vigilancia del CM 
+de Puente Aranda- Contrato SCJ-1809-2024 
+24 2/09/2025 GSC-7049-2025 Retiro equipos que no estén siendo parte activa del sistema de video vigilancia del CM 
+Ciudad Bolívar- Contrato SCJ-1809-2024. 
+25 2/09/2025 GSC-7050-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (29 DE AGOSTO DEL 2025) 
+– CONTRATO SCJ-1809-2024 
+26 2/09/2025 GSC-7051-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024. 
+27 3/09/2025 GSC-7052-2025 INFORME MENSUAL AGOSTO 2025 
+28 3/09/2025 GSC-7054-2025 FACTURACIÓN BOLSA DE REPUESTOS MARZO 2025 
+29 3/09/2025 GSC-7055-2025 INFORME UNIFICADO DE MANTENIMIENTO CORRECTIVO (COL-
+1947_VEINTIUN_ANGELES) - CONTRATO SCJ-1809-2024. 
+30 3/09/2025 GSC-7056-2025 Informes Unificados – Acometidas Eléctricas – Contrato SCJ-1809-2024 
+31 3/09/2025 GSC-7057-2025 INFORMES UNIFICADOS (6 UPS) - MANTENIMIENTOS CORRECTIVOS (29 DE AGOSTO 
+DEL 2025) – CONTRATO SCJ-1809-2024. 
+
+--- PÁGINA 35 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  35  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+32 3/09/2025 GSC-7058-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (29 DE AGOSTO Y 2 DE SEPTIEMBRE 
+DEL 2025)– CONTRATO SCJ-1809-2024. 
+33 3/09/2025 GSC-7059-2025 Alcance comunicado GSC-6977-2025 - BAJAS MAYO 2025- CTO SCJ 1809-
+2024 11/08/2025 
+34 3/09/2025 GSC-7060-2025 INFORMES UNIFICADOS MANTENIMIENTOS CORRECTIVOS 03/09/2025 
+35 3/09/2025 GSC-7061-2025 Cronograma Limpieza de Acrílicos septiembre 2025 
+36 3/09/2025 GSC-7062-2025 APROBACIÓN USO DE BOLSA DE REPUESTOS PARA 26 PUNTOS DE VIDEO VIGILANCIA 
+CONTRATO SCJ-1809-2024. 
+37 4/09/2025 GSC-7053-2025 PLAN DE COMUNICACIONES V5 
+38 4/09/2025 GSC-7063-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024. 
+39 4/09/2025 GSC-7065-2025 PLAN DE ACCIÓN ABRIL 2025 
+40 4/09/2025 GSC-7066-2025 ALCANCE COMUNICADO  GSC-6915-2025 bajas Marzo 
+41 4/09/2025 GSC-7067-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024. 
+42 5/09/2025 GSC-7068-2025 Solicitud aprobación Fichas Técnica disco Mecánico de 8TB - Contrato SCJ-1809-2024 
+43 5/09/2025 GSC-7069-2025 ALCANCE A LOS COMUNICADOS GSC-7050-2025 DEL 02/09/2025 Y GSC-7055-2025 
+DEL 03/09/2025 – CONTRATO SCJ-1809-2024. 
+44 5/09/2025 GSC-7070-2025 Respuesta al comunicado VVG-CCS-ETB-719-25 - Comunicados GSC-6930-2025 
+45 5/09/2025 GSC-7072-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (03 DE SEPTIEMBRE DEL 
+2025) – CONTRATO SCJ-1809-2024. 
+46 5/09/2025 GSC-7073-2025 Devolución VVG-CCS-ETB-731-255 Solicitud uso stock y/o Bolsa de Repuesto en 
+Subsistemas C4- Contrato SCJ-1809-2024 
+47 5/09/2025 GSC-7074-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024. 
+48 5/09/2025 GSC-7075-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024. 
+49 5/09/2025 GSC-7076-2025 Novedades Workstation Chapinero - Contrato SCJ-1809-2024 
+50 5/09/2025 GSC-7077-2025 Respuesta a Interventoría al comunicado 'VVG-CCS-ETB-722-25' del 30 de agosto del 
+2025. 
+51 5/09/2025 GSC-7078-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (2 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+52 6/09/2025 GSC-7087-2025 APROBACIÓN USO DE BOLSA 
+53 7/09/2025 GSC-7081-2025 APROBACIÓN USO DE BOLSA DE REPUESTOS PARA TRÁILERES DE VIDEO VIGILANCIA 
+CONTRATO SCJ-1809-2024. 
+54 8/09/2025 GSC-7079-2025 
+ALCANCE AL COMUNICADO: GSC-7078-2025 (8 DE SEPTIEMBRE) "INFORMES 
+UNIFICADOS - VISITAS DIAGNÓSTICAS (2 DE SEPTIEMBRE DEL 2025)– CONTRATO SCJ-
+1809-2024 
+55 8/09/2025 GSC-7080-2025 Mantenimiento correctivo, Col veintiún Ángeles - CRA 90 # 154A - 75, Ticket GLPI No. 
+12206 - Contrato SCJ-1809-2024. 
+56 8/09/2025 GSC-7082-2025 Mantenimiento correctivo, Col Brisas Del Diamante - Diagonal 69R Sur # 18N-06, 
+Ticket GLPI No. 12209 - Contrato SCJ-1809-2024. 
+57 8/09/2025 GSC-7083-2025 Mantenimiento correctivo, Col Atanasio Girardot - Cl 14 Sur # 28 - 16, Ticket GLPI No. 
+12208 - Contrato SCJ-1809-2024. 
+58 8/09/2025 GSC-7084-2025 Remisión de Documentos personal operativo para Revisión y Aprobación - SCJ-1809-
+2024. 
+59 8/09/2025 GSC-7085-2025 Respuesta al comunicado VVG-CCS-ETB-601-25 - Comunicado GSC-6694-2025 
+60 8/09/2025 GSC-7086-2025 Mantenimiento correctivo SSCJ, Col Juan Lozano Y Lozano, Ticket GLPI No. 11585 - 
+Contrato SCJ-1809-2024. 
+61 8/09/2025 GSC-7092-2025 INFORME MENSUAL MARZO 2025 V5 
+62 8/09/2025 GSC-7093-2025 Mantenimiento correctivo SSCJ, Col veintiún Ángeles - CRA 90 # 154A - 75, Ticket GLPI 
+No. 11631 - Contrato SCJ-1809-2024. 
+63 8/09/2025 GSC-7094-2025 Informes Unificados – Plan de Choque – Contrato SCJ-1809-2024 
+64 8/09/2025 GSC-7095-2025 INGRESOS ELEMENTOS ALMACÉN MAYO 2025 
+65 8/09/2025 GSC-7096-2025 Cumplimiento decreto 634 de 2023 durante el mes de Agosto 2025 - Contrato SCJ-
+1809-2024 
+66 8/09/2025 GSC-7097-2025 Mantenimiento correctivo SSCJ, Col Marco Fidel Suarez - Carrera 25 Sur # 52C - 92, 
+Ticket GLPI No. 7471 - Contrato SCJ-1809-2024. 
+
+--- PÁGINA 36 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  36  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+67 8/09/2025 GSC-7098-2025 INFORMES UNIFICADOS MANTENIMIENTOS CORRECTIVOS 08-09-2025 
+68 8/09/2025 GSC-7099-2025 Mantenimiento correctivo SSCJ, Col La Estancia San Isidro Labrador - Carrera 75D con 
+Calle 59, Ticket GLPI No. 7225 - Contrato SCJ-1809-2024. 
+69 8/09/2025 GSC-7100-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+70 8/09/2025 GSC-7101-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (3 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+71 8/09/2025 GSC-7102-2025 ALCANCE AL GSC-6479-2025 (4 DE JULIO DEL 2025) Y EN RESPUESTA A 
+INTERVENTORÍA AL COMUNICADO VVG-CCS-ETB-618-25 (11 DE AGOSTO DEL 2025). 
+72 9/09/2025 GSC-7103-2025 RESPUESTA A COMUNICADO VVG-CCS-ETB-733-25 RESPUESTA A COMUNICADO GSC-
+7027-2025 
+73 9/09/2025 GSC-7104-2025 Solicitud aprobación bolsa de repuesto SSCJ, E.P. RAFAEL URIBE URIBE - CLL 27 SUR # 
+24H - 39, GLPI ticket No. 7766 – Contrato SCJ-1809-2024 
+74 9/09/2025 GSC-7105-2025 INFORME SEMANAL MESA DE SERVICIO DEL 02 AL 08 DE SEPTIEMBRE DE 2025 
+75 9/09/2025 GSC-7106-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS 09-09-2025 
+76 9/09/2025 GSC-7107-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (05 DE SEPTIEMBRE DEL 
+2025) - CONTRATO SCJ-1809-2024. 
+77 9/09/2025 GSC-7108-2025 ALCANCE GSC-6976-2025 - BAJAS ABRIL 2025 
+78 9/09/2025 GSC-7109-2025 PUNTOS ENERGIZACIÓN SEPTIEMBRE CONTRATO SCJ-1809-2024. 
+79 9/09/2025 GSC-7112-2025 INGRESOS ELEMENTOS ALMACÉN ABRIL 2025 
+80 9/09/2025 GSC-7113-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+81 9/09/2025 GSC-7114-2025 APROBACIÓN USO DE BOLSA CORREDOR PRIORITARIO CONTRATO SCJ-1809-2024. 
+82 9/09/2025 GSC-7115-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS - CONTRATO SCJ-1809-204 
+83 9/09/2025 GSC-7116-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+84 9/09/2025 GSC-7117-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (4 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+85 9/09/2025 GSC-7118-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegios - Contrato SCJ-1809-2024. 
+86 9/09/2025 GSC-7119-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+87 9/09/2025 GSC-7120-2025 INFORMES DE REPARACIÓN DE LABORATORIO 
+88 9/09/2025 GSC-7121-2025 INFORME MENSUAL ABRIL 2025 V3 
+89 10/09/2025 GSC-7122-2025 Respuesta al comunicado VVG-CCS-ETB-749-25 - Comunicados GSC-7063-2025, GSC-
+7067-2025, GSC-7074-2025, GSC-7075-2025 y GSC-7098-2025.  
+90 10/09/2025 GSC-7123-2025 Respuesta al comunicado VVG-CCS-ETB-753-25 Respuesta a comunicados GSC-7025-
+2025, GSC-7044-2025, GSC-7051-2025 y GSC-7060-2025. 
+91 10/09/2025 GSC-7124-2025 Informes Unificados – Plan de Choque – Contrato SCJ-1809-2024 
+92 10/09/2025 GSC-7125-2025 INFORMES DE REPARACIÓN DE LABORATORIO 
+93 10/09/2025 GSC-7126-2025 VISITAS DIAGNÓSTICAS (5 DE SEPTIEMBRE DEL 2025)– CONTRATO SCJ-1809-2024. 
+94 10/09/2025 GSC-7127-2025 
+INFORME UNIFICADO - SERVICIO DE MANTENIMIENTO PREVENTIVO AL CENTRO DE 
+MONITOREO DE PUENTE ARANDA TICKET 11928 -  (5 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+95 11/09/2025 GSC-7128-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Andrés Bello, Ticket GLPI No. 
+7640 - Contrato SCJ-1809-2024. 
+96 11/09/2025 GSC-7129-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Ciudad De Bogotá, Ticket GLPI 
+No. 299 - Contrato SCJ-1809-2024. 
+97 11/09/2025 GSC-7130-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Codema, Ticket GLPI No. 386 - 
+Contrato SCJ-1809-2024. 
+98 11/09/2025 GSC-7131-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Jorge Eliecer Gaitán, Ticket GLPI 
+No. 290 - Contrato SCJ-1809-2024. 
+99 11/09/2025 GSC-7132-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Juan Lozano y Lozano, Ticket 
+GLPI No. 11585 - Contrato SCJ-1809-2024 
+100 11/09/2025 GSC-7133-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Las Américas, Ticket GLPI No. 
+378 - Contrato SCJ-1809-2024 
+101 11/09/2025 GSC-7134-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Tomas Carrasquilla, Ticket GLPI 
+No. 286 - Contrato SCJ-1809-2024. 
+
+--- PÁGINA 37 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  37  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+102 11/09/2025 GSC-7135-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+103 11/09/2025 GSC-7136-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Nuevo Chile, Ticket GLPI No. 
+365 - Contrato SCJ-1809-2024 
+104 11/09/2025 GSC-7137-2025 Respuesta a Interventoría al comunicado 'VVG-CCS-ETB-734-25' del 4 de septiembre 
+del 2025. 
+105 11/09/2025 GSC-7138-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (8 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+106 11/09/2025 GSC-7139-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Menorah, Ticket GLPI No. 390 - 
+Contrato SCJ-1809-2024. 
+107 11/09/2025 GSC-7140-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+108 11/09/2025 GSC-7141-2025 INFORMES DE REPARACIÓN DE LABORATORIO 
+109 11/09/2025 GSC-7142-2025 Remisión de Documentos personal operativo para Revisión y Aprobación - SCJ-1809-
+2024. 
+110 11/09/2025 GSC-7143-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Benjamín Herrera, Ticket GLPI 
+No. 416 - Contrato SCJ-1809-2024 
+111 11/09/2025 GSC-7144-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+112 12/09/2025 GSC-7145-2025 Solicitud aprobación Mantenimiento Correctivo Estadio El Campin- Contrato SCJ-1809-
+2024 
+113 12/09/2025 GSC-7146-2025 ALCANCE GSC-6983-2025 - BAJAS JUNIO 2025 
+114 12/09/2025 GSC-7147-2025 ALCANCE GSC-6801-2025 - BAJAS JULIO 2025 
+115 12/09/2025 GSC-7148-2025 Solicitud tramité de ingresos para  mantenimiento correctivo Estadio El Campin 
+septiembre 2025 - Contrato SCJ-1809-2024 
+116 12/09/2025 GSC-7149-2025 PUNTO PRIORIZADO ENERGIZACIÓN SEPTIEMBRE CONTRATO SCJ-1809-2024. 
+117 12/09/2025 GSC-7150-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS - CONTRATO SCJ-1809-204 
+118 12/09/2025 GSC-7151-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+119 12/09/2025 GSC-7152-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (9 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+120 15/09/2025 GSC-7064-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+121 15/09/2025 GSC-7088-2025 COTIZACIÓN ETB 0007 INCLUSIÓN BOLSA DE REPUESTOS ANEXO 2 -CONTRATO SCJ-
+1809-2024. 
+122 15/09/2025 GSC-7089-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+123 15/09/2025 GSC-7153-2025 INFORME MENSUAL FEBRERO 2025 V5 
+124 15/09/2025 GSC-7154-2025 INFORMES DE RESPUESTA DE GARANTÍA DE LABORATORIO 
+125 15/09/2025 GSC-7155-2025 Novedades Valores Públicos Estaciones de Policía ”– Contrato SCJ-1809-2024 
+126 15/09/2025 GSC-7156-2025 Solicitud de cambio por garantía de sillas – Sala de Monitoreo Puente Aranda y Sala de 
+Monitoreo Chapinero - Contrato SCJ-1809-2024 
+127 15/09/2025 GSC-7157-2025 ETB-PL-005 Plan De Comunicaciones V6 
+128 15/09/2025 GSC-7158-2025 APROBACIÓN USO DE BOLSA DE REPUESTOS PARA 33 PUNTOS DE VIDEO VIGILANCIA 
+CONTRATO SCJ-1809-2024. 
+129 15/09/2025 GSC-7159-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (10 y 11 DE SEPTIEMBRE 
+DEL 2025) - CONTRATO SCJ-1809-2024. 
+130 15/09/2025 GSC-7160-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (10,  11 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+131 15/09/2025 GSC-7161-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+132 16/09/2025 GSC-7162-2025 FACTURACIÓN SERVICIOS ENERO 2025 
+133 16/09/2025 GSC-7163-2025 INFORMES DE RESPUESTA DE GARANTÍA DE LABORATORIO 
+134 16/09/2025 GSC-7164-2025 Informe semanal mesa de servicio del 09 al 15 de septiembre del 2025 – Contrato SCJ-
+1809-2024 
+135 16/09/2025 GSC-7165-2025 INFORMES DE SINIESTRO DE LABORATORIO 
+136 16/09/2025 GSC-7166-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+137 16/09/2025 GSC-7167-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS - CONTRATO SCJ-1809-204 
+138 16/09/2025 GSC-7168-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+
+--- PÁGINA 38 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  38  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+139 16/09/2025 GSC-7169-2025 FACTURACIÓN SERVICIOS FEBRERO 2025 
+140 16/09/2025 GSC-7170-2025 
+ALCANCE AL COMUNICADO GSC-7127-2025 (10 DE SEPTIEMBRE DEL 2025): INFORME 
+UNIFICADO - SERVICIO DE MANTENIMIENTO PREVENTIVO AL CENTRO DE MONITOREO 
+DE PUENTE ARANDA TICKET 11928 -  (5 DE SEPTIEMBRE DEL 2025) – CONTRATO SCJ-
+1809-2024. 
+141 16/09/2025 GSC-7171-2025 INFORME UNIFICADO - SERVICIO DE MANTENIMIENTO PREVENTIVO  – CONTRATO 
+SCJ-1809-2024. 
+142 16/09/2025 GSC-7172-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (12  DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024. 
+143 16/09/2025 GSC-7173-2025 Novedad CAI La Libertad Contrato SCJ-1809-2024 
+144 16/09/2025 GSC-7174-2025 Devoluciones Mantenimiento Correctivo Subsistemas Contrato SCJ-1809-2024 
+145 16/09/2025 GSC-7175-2025 FACTURACIÓN SERVICIOS MARZO 2025 
+146 17/09/2025 GSC-7176-2025 Informe quincenal mesa de servicio del 01 al 15 de septiembre del 2025 – Contrato 
+SCJ-1809-2024 
+147 17/09/2025 GSC-7177-2025 Solicitud de entrega de nuevas Placas SDSCJ 
+148 17/09/2025 GSC-7178-2025 FACTURACIÓN BOLSA DE REPUESTOS ABRIL 2025 
+149 17/09/2025 GSC-7179-2025 INFORMES DE RESPUESTA DE GARANTÍA DE LABORATORIO 
+150 17/09/2025 GSC-7180-2025 INFORMES DE SINIESTRO DE LABORATORIO 
+151 17/09/2025 GSC-7181-2025 Respuesta al Comunicado VVG-CCS-ETB-750-25 – Comunicados GSC-7069-2025 
+152 17/09/2025 GSC-7182-2025 INFORME MENSUAL MAYO 2025 V2 
+153 17/09/2025 GSC-7183-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+154 17/09/2025 GSC-7184-2025 INFORMES DE REPARADO DE LABORATORIO 
+155 17/09/2025 GSC-7185-2025 APROBACIÓN USO DE BOLSA DE REPUESTOS PARA 16 PUNTOS DE VIDEO VIGILANCIA 
+CONTRATO SCJ-1809-2024. 
+156 17/09/2025 GSC-7186-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (15 DE SEPTIEMBRE DEL 2025)– 
+CONTRATO SCJ-1809-2024 
+157 17/09/2025 GSC-7187-2025 Solicitud aprobación bolsa de repuesto ESTADIO EL CAMPIN, Ticket GLPI No. 12653 – 
+Contrato SCJ-1809-2024. 
+158 17/09/2025 GSC-7188-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI SANTA BARBARA - CR 6 CL 116, 
+Ticket GLPI No. 12538 - Contrato SCJ-1809-2024. 
+159 17/09/2025 GSC-7189-2025 Solicitud aprobación bolsa de repuesto SSCJ, E.P. KENNEDY - CL 41D Sur # 78N - 2, 
+Ticket GLPI No. 12533 - Contrato SCJ-1809-2024. 
+160 17/09/2025 GSC-7190-2025 Solicitud aprobación bolsa de repuesto SSCJ, E.P. USAQUÉN - Cl. 165 # 8ª - 43, Ticket 
+GLPI No. 12535 - Contrato SCJ-1809-2024. 
+161 17/09/2025 GSC-7191-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+162 18/09/2025 GSC-7192-2025 Solicitud aprobación bolsa de repuestos SSCJ, Colegio Atanasio Girardot, Ticket GLPI 
+No. 12208 - Contrato SCJ-1809-2024 
+163 18/09/2025 GSC-7193-2025 Solicitud aprobación bolsa de repuesto SSCJ, CAI SALITRE - CR 25 CL 68D, Ticket GLPI 
+No. 12823 - Contrato SCJ-1809-2024. 
+164 18/09/2025 GSC-7194-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+165 18/09/2025 GSC-7195-2025 INFORMES DE RESPUESTA DE GARANTÍA DE LABORATORIO 
+166 18/09/2025 GSC-7196-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+167 18/09/2025 GSC-7197-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (16 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+168 18/09/2025 GSC-7198-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+169 19/09/2025 GSC-7199-2025 Respuesta al Comunicado VVG-CCS-ETB-771-25 – Comunicado  GSC-7094-2025 
+170 19/09/2025 GSC-7200-2025 INGRESOS ELEMENTOS ALMACÉN JUNIO 2025 
+171 19/09/2025 GSC-7201-2025 Alcance Comunicado GSC-7142-2025 - Técnico Electricista -  - Contrato SCJ-1809-2024. 
+172 19/09/2025 GSC-7202-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+173 19/09/2025 GSC-7203-2025 Solicitud aprobación bolsa de repuestos SSCJ Domo, E.P. ANTONIO NARIÑO - CRA. 24 
+No. 18 - 90 SUR - Ticket GLPI No. 12999 - Contrato SCJ-1809-2024 
+174 19/09/2025 GSC-7204-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+
+--- PÁGINA 39 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  39  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+175 19/09/2025 GSC-7205-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (16 DE SEPTIEMBRE DEL 2025) 2.0 – 
+CONTRATO SCJ-1809-2024. 
+176 19/09/2025 GSC-7206-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (17 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024 
+177 19/09/2025 GSC-7207-2025 Solicitud de respuesta a Informes de Mantenimiento subsistemas - Contrato SCJ-1809-
+2024 
+178 19/09/2025 GSC-7208-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+179 19/09/2025 GSC-7209-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+180 19/09/2025 GSC-7210-2025 Informe Unificados – Acometidas Eléctricas – Contrato SCJ-1809-2024. 
+181 22/09/2025 GSC-7211-2025 INFORMES DE REPARADO DE LABORATORIO 
+182 22/09/2025 GSC-7212-2025 Respuesta al Comunicado VVG-CCS-ETB-778-25 – Comunicados GSC-7181-2025. 
+183 22/09/2025 GSC-7213-2025 Respuesta al Comunicado VVG-CCS-ETB-781-25 – Comunicados GSC-7159-2025. 
+184 22/09/2025 GSC-7214-2025 Respuesta a Interventoría al comunicado 'VVG-CCS-ETB-668-25' del 22 de agosto de 
+2025 
+185 22/09/2025 GSC-7215-2025 Informes Unificados – Acometidas Eléctricas – Contrato SCJ-1809-2024. 
+186 22/09/2025 GSC-7216-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS - CONTRATO SCJ-1809-204 
+187 22/09/2025 GSC-7217-2025 Respuesta a Interventoría al comunicado 'VVG-CCS-ETB-773-25' del 18 de septiembre 
+del 2025 
+188 22/09/2025 GSC-7218-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+189 23/09/2025 GSC-7219-2025 INFORMES UNIFICADOS LIMPIEZA DE ACRÍLICOS 23-09-2025 
+190 23/09/2025 GSC-7220-2025 INFORME SEMANAL MESA DE SERVICIO 23-09-2025 
+191 23/09/2025 GSC-7221-2025 INFORMES DE REPARADO DE LABORATORIO 
+192 23/09/2025 GSC-7222-2025 INFORME MENSUAL ABRIL 2025 V4 
+193 23/09/2025 GSC-7223-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (17 Y 18 DE SEPTIEMBRE 
+DEL 2025) – CONTRATO SCJ-1809-2024. 
+194 23/09/2025 GSC-7224-2025 Informe Unificado – Acometida Eléctrica – Contrato SCJ-1809-2024. 
+195 23/09/2025 GSC-7225-2025 Respuesta al Comunicado VVG-CCS-ETB-787-25 – Comunicados GSC-7100-2025, GSC-
+7116-2025, GSC-7135-2025, GSC-7144-2025 y GSC-7161-2025 
+196 23/09/2025 GSC-7226-2025 Respuesta al Comunicado VVG-CCS-ETB-785-25 – Comunicados GSC-7072-2025 y GSC-
+7107-2025 
+197 23/09/2025 GSC-7227-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (18 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+198 23/09/2025 GSC-7228-2025 APROBACIÓN USO DE BOLSA DE REPUESTOS PARA 22 PUNTOS DE VIDEO VIGILANCIA 
+CONTRATO SCJ-1809-2024 
+199 23/09/2025 GSC-7229-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+200 23/09/2025 GSC-7230-2025 Novedades CAI tres reyes – Contrato SCJ-1809-2024 
+201 24/09/2025 GSC-7231-2025 INFORMES DE REPARADO DE LABORATORIO 
+202 24/09/2025 GSC-7232-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+203 24/09/2025 GSC-7233-2025 INFORME MENSUAL MAYO 2025 V3 
+204 24/09/2025 GSC-7234-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+205 24/09/2025 GSC-7235-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (19 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+206 24/09/2025 GSC-7236-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+207 25/09/2025 GSC-7237-2025 PLAN DE ACCIÓN MAYO 2025 
+208 25/09/2025 GSC-7238-2025 PLAN DE ACCIÓN JUNIO 2025 
+209 25/09/2025 GSC-7239-2025 INFORMES DE REPARADO DE LABORATORIO 
+210 25/09/2025 GSC-7240-2025 INFORMES UNIFICADOS MANTENIMIENTOS CORRECTIVOS 25-09-2025 
+211 25/09/2025 GSC-7241-2025 INFORMES UNIFICADOS MANTENIMIENTOS CORRECTIVOS 25-09-2025 
+212 25/09/2025 GSC-7242-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (23 Y 24 DE SEPTIEMBRE 
+DEL 2025) – CONTRATO SCJ-1809-2024. 
+
+--- PÁGINA 40 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  40  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+213 25/09/2025 GSC-7243-2025 Informe Unificado – Acometida Eléctrica – Contrato SCJ-1809-2024 
+214 25/09/2025 GSC-7244-2025 Aprobación fichas técnicas cámara fija - contrato SCJ -1809-2024– Contrato SCJ-1809-
+2024 
+215 25/09/2025 GSC-7245-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (22 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+216 26/09/2025 GSC-7246-2025 ALCANCE GSC-7112-2025 INGRESOS ELEMENTOS ALMACÉN ABRIL 2025 
+217 26/09/2025 GSC-7247-2025 INFORMES DE REPARADO DE LABORATORIO 
+218 26/09/2025 GSC-7248-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+219 26/09/2025 GSC-7249-2025 ALCANCE GSC-7095-2025 INGRESOS ELEMENTOS ALMACÉN MAYO 2025 
+220 26/09/2025 GSC-7250-2025 BAJAS ABRIL 2025 V2 
+221 26/09/2025 GSC-7251-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (23 Y 24 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+222 26/09/2025 GSC-7252-2025 Cronogramas Visita de Diagnóstico Subsistemas octubre 2025 – Contrato SCJ-1809-
+2024 
+223 26/09/2025 GSC-7253-2025 Solicitud aprobación uso de bolsa de repuestos para 7 domos de Colegios y 1 Domo 
+del Campin- CONTRATO SCJ-1809-2024 
+224 26/09/2025 GSC-7254-2025 Alcance “Solicitud aprobación uso de bolsa de repuestos para 7 domos de Colegios y 1 
+Domo del Campin- CONTRATO SCJ-1809-2024”. 
+225 26/09/2025 GSC-7255-2025 BAJAS MAYO 2025 V2 
+226 26/09/2025 GSC-7256-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 26-09-
+2025 
+227 27/09/2025 GSC-7257-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 26-09-
+2025 
+228 29/09/2025 GSC-7258-2025 Respuesta al Comunicado VVG-CCS-ETB-798-25 – Comunicados GSC-7191-2025, GSC-
+7196-2025, GSC-7209-2025 
+229 29/09/2025 GSC-7259-2025 Respuesta al Comunicado VVG-CCS-ETB-802-25 – Comunicados GSC-7198-2025 y GSC-
+7208-2025 
+230 29/09/2025 GSC-7260-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+231 29/09/2025 GSC-7261-2025 INFORME MENSUAL JUNIO 2025 V2 
+232 29/09/2025 GSC-7262-2025 FACTURACIÓN SERVICIOS ABRIL 2025 
+233 29/09/2025 GSC-7263-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+234 29/09/2025 GSC-7264-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+235 29/09/2025 GSC-7265-2025 INFORMES DE REPARADO DE LABORATORIO 
+236 29/09/2025 GSC-7266-2025 INFORMES UNIFICADOS - MANTENIMIENTOS CORRECTIVOS (24 DE SEPTIEMBRE DEL 
+2025)– CONTRATO SCJ-1809-2024. 
+237 29/09/2025 GSC-7267-2025 Informe Unificados – Acometidas Eléctricas – Contrato SCJ-1809-2024 
+238 30/09/2025 GSC-7090-2025 Alcance al Aprobación fichas técnicas cámara fija - contrato SCJ -1809-2024– Contrato 
+SCJ-1809-2024 
+239 30/09/2025 GSC-7091-2025 Informes unificados  - mantenimientos correctivos 30-09-2025 
+240 30/09/2025 GSC-7268-2025 INFORME SEMANAL MESA DE SERVICIO 
+241 30/09/2025 GSC-7269-2025 Respuesta al Comunicado VVG-CCS-ETB-824-25 – Comunicado GSC-7243-2025 
+242 30/09/2025 GSC-7270-2025 Respuesta al Comunicado VVG-CCS-ETB-820-25 – Comunicado GSC-7229-2025 y GSC-
+7236-2025 
+243 30/09/2025 GSC-7271-2025 Respuesta al Comunicado VVG-CCS-ETB-825-25 – Comunicado GSC-7242-2025. 
+244 30/09/2025 GSC-7272-2025 Alcance al comunicado GSC-7143-2025, Solicitud aprobación bolsa de repuestos SSCJ, 
+Colegio Benjamín Herrera, Ticket GLPI No. 416 - Contrato SCJ-1809-2024. 
+245 30/09/2025 GSC-7273-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+246 30/09/2025 GSC-7274-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024 
+247 30/09/2025 GSC-7275-2025 BAJA JUNIO 2025 V2 
+248 30/09/2025 GSC-7276-2025 Informe Unificado – Mantenimiento Correctivo – Contrato SCJ-1809-2024. 
+249 30/09/2025 GSC-7278-2025 FACTURACIÓN BOLSA DE REPUESTOS MAYO 2025 
+
+--- PÁGINA 41 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  41  | 142  
+ÍTEM FECHA CONSECUTIVO 
+ETB DESCRIPCIÓN 
+250 30/09/2025 GSC-7279-2025 FACTURACIÓN SERVICIOS MAYO 2025 
+251 30/09/2025 GSC-7280-2025 INFORMES DE DIAGNOSTICO DE LABORATORIO 
+252 30/09/2025 GSC-7281-2025 Informes Unificados – Mantenimientos Correctivos – Contrato SCJ-1809-2024. 
+253 30/09/2025 GSC-7282-2025 INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (25 DE SEPTIEMBRE DEL 2025) – 
+CONTRATO SCJ-1809-2024. 
+254 30/09/2025 GSC-7283-2025 INFORME UNIFICADO - MANTENIMIENTO CORRECTIVO (25 DE SEPTIEMBRE DEL 2025) 
+– CONTRATO SCJ-1809-2024. 
+255 30/09/2025 GSC-7284-2025 Respuesta a Interventoría al comunicado 'VVG-CCS-ETB-829-25 ' del 30 de septiembre 
+del 2025. 
+Tabla 8. COMUNICADOS EMITIDOS CONTRATO SCJ 1809 2024 
+Adjunto encontrará el detalle de cada detallando comunicados emitido en la ruta de acceso: 01SEP 
+- 30SEP \01 OBLIGACIONES GENERALES\OBLIGACIÓN 7 y 10\ COMUNICADOS EMITIDOS.
+
+--- PÁGINA 42 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  42  | 142  
+1.6.2. RECIBIDOS CONTRATO SCJ-1809-2024 
+Los comunicados recibidos durante el mes de SEPTIEMBRE de 2025 se relacionan a continuación: 
+ÍTEM FECHA CONSECUTIVO ETB DESCRIPCIÓN 
+1 01/09/2025 VVG-CCS-ETB-725-25 Remisión comunicado No.VVG-CCS-ETB-725-25 Cronograma Visita de 
+Diagnóstico Subsistemas septiembre 2025. Comunicado GSC-6972-2025 
+2 01/09/2025 VVG-CCS-ETB-726-25 Remisión comunicado No.VVG-CCS-ETB-726-25 Respuesta a comunicado 
+GSC-7010-2025 
+3 01/09/2025 VVG-CCS-ETB-727-25 Remisión comunicado No.VVG-CCS-ETB-727-25 Respuesta a comunicado 
+GSC-7022-2025 
+4 02/09/2025 VVG-CCS-ETB-728-25 
+Remisión comunicado No.VVG-CCS-ETB-728-25 Respuesta a comunicado 
+GSC-6954-2025 Informe Mensual de febrero 2025 v4 Contrato SCJ-1809-
+2024 
+5 02/09/2025 VVG-CCS-ETB-729-25 
+Remisión comunicado No.VVG-CCS-ETB-729-25 Respuesta a comunicado 
+GSC-6989—2025 Informe Mensual de abril 2025v.2. Contrato SCJ-1809-
+2024 
+6 04/09/2025 VVG-CCS-ETB-730-25 Remisión comunicado No.VVG-CCS-ETB-730-25 Respuesta a comunicados 
+GSC-7016-2025 
+7 04/09/2025 VVG-CCS-ETB-731-25 Remisión comunicado No.VVG-CCS-ETB-731-25 Respuesta a comunicados 
+GSC-6446-2025 
+8 04/09/2025 VVG-CCS-ETB-732-25 Remisión comunicado No.VVG-CCS-ETB-732-25 Respuesta a comunicados 
+GSC-7018-2025 
+9 04/09/2025 VVG-CCS-ETB-733-25 Remisión comunicado No.VVG-CCS-ETB-733-25 Respuesta a comunicados 
+GSC-7027-2025 
+10 04/09/2025 VVG-CCS-ETB-734-25 Remisión comunicado No.VVG-CCS-ETB-734-25 Respuesta a comunicados 
+GSC-7035-2025 
+11 04/09/2025 VVG-CCS-ETB-735-25 
+Remisión comunicado No.VVG-CCS-ETB-735-25 Respuesta a comunicado 
+GSC-6748-2025, GSC-6984-2025, GSC-6992-2025, GSC-6996-2025, GSC-
+7013-2025, GSC-7014-2025, GSC-7023-2025 
+12 04/09/2025 VVG-CCS-ETB-736-25 Remisión comunicado No.VVG-CCS-ETB-736-25 Respuesta a comunicados 
+GSC-7036-2025 
+13 04/09/2025 VVG-CCS-ETB-737-25 Remisión comunicado No. VVG-CCS-ETB-737-25 Respuesta a 
+comunicados GSC-7008-2025 y GSC-7019-2025 
+14 04/09/2025 VVG-CCS-ETB-738-25 Remisión comunicado No.VVG-CCS-ETB-739-25 Respuesta a comunicado 
+GSC-6689-2025 
+15 04/09/2025 VVG-CCS-ETB-739-25 Remisión comunicado No.VVG-CCS-ETB-739-25 Respuesta a comunicado 
+GSC-6689-2025 
+16 04/09/2025 VVG-CCS-ETB-740-25 Remisión comunicado No.VVG-CCS-ETB-740-25 Respuesta a comunicado 
+GSC-6714-2025 
+17 04/09/2025 VVG-CCS-ETB-741-25 Remisión comunicado No.VVG-CCS-ETB-741-25 Respuesta a comunicado 
+GSC-6736-2025 
+18 04/09/2025 VVG-CCS-ETB-742-25 Remisión comunicado No.VVG-CCS-ETB-742-25 Respuesta a comunicado 
+GSC-6764-2025 
+19 05/09/2025 VVG-CCS-ETB-743-25 Remisión comunicado No.VVG-CCS-ETB-743-25 Cronograma Limpieza de 
+Acrílicos septiembre 2025 - GSC-7061-2025 
+20 05/09/2025 VVG-CCS-ETB-744-25 Remisión comunicado No.VVG-CCS-ETB-744-25 Respuesta a comunicado 
+GSC-6940-2025 
+21 08/09/2025 VVG-CCS-ETB-745-25 
+Remisión comunicado No.VVG-CCS-ETB-745-25 Respuesta a comunicado 
+GSC-7020-2025 Informe Mensual de marzo 2025 v4 Contrato SCJ-1809-
+2024 
+22 09/09/2025 VVG-CCS-ETB-746-25 
+Remisión comunicado No.VVG-CCS-ETB-746-25 Respuesta a comunicado 
+GSC-7052-2025 Informe Mensual de agosto 2025 Contrato SCJ-1809-
+2024 
+23 09/09/2025 VVG-CCS-ETB-747-25 Remisión comunicado No. VVG-CCS-ETB-747-25 Respuesta a comunicado 
+GSC-7022-2025. 
+24 09/09/2025 VVG-CCS-ETB-748-25 Remisión comunicado No. VVG-CCS-ETB-748-25 Respuesta a comunicado 
+GSC-7010-2025 
+25 09/09/2025 VVG-CCS-ETB-749-25 
+Remisión comunicado No. VVG-CCS-ETB-749-25 Respuesta a 
+comunicados GSC-7063-2025, GSC-7067-2025, GSC-7074-2025, GSC-
+7075-2025 y GSC-7098-2025 
+26 09/09/2025 VVG-CCS-ETB-750-25 Remisión comunicado No. VVG-CCS-ETB-750-25 Respuesta a 
+comunicados GSC-7050-2025, GSC-7055-2025 y GSC-7069-2025 
+
+--- PÁGINA 43 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  43  | 142  
+27 09/09/2025 VVG-CCS-ETB-751-25 
+Remisión comunicado No. VVG-CCS-ETB-751-25 Respuesta a 
+comunicados GSC-6862-2025, GSC-6875-2025, GSC-6896-2025 y GSC-
+7057-2025 
+28 09/09/2025 VVG-CCS-ETB-752-25 Remisión comunicado No. VVG-CCS-ETB-752-25 Respuesta a 
+comunicados GSC-7058-2025, GSC-7078 y GSC-7079-2025 
+29 09/09/2025 VVG-CCS-ETB-753-25 
+Remisión comunicado No. VVG-CCS-ETB-753-25 Respuesta a 
+comunicados GSC-7025-2025, GSC-7044-2025, GSC-7051-2025 y GSC-
+7060-2025 
+30 09/09/2025 VVG-CCS-ETB-754-25 Remisión comunicado No. VVG-CCS-ETB-754-25 Respuesta a 
+comunicados GSC-7024-2025 
+31 12/09/2025 VVG-CCS-ETB-755-25 Remisión comunicado No.VVG-CCS-ETB-755-25 Respuesta a comunicado 
+GSC-7034-2025, GSC-7106-2025 y GSC-7115-2025 
+32 12/09/2025 VVG-CCS-ETB-756-25 Remisión comunicado No.VVG-CCS-ETB-756-25 Respuesta a comunicado 
+GSC-7056-2025. 
+33 12/09/2025 VVG-CCS-ETB-757-25 Remisión comunicado No.VVG-CCS-ETB-757-25 Respuesta a comunicado 
+GSC-7070-2025 y GSC-7077-2025 
+34 12/09/2025 VVG-CCS-ETB-758-25 Remisión comunicado No.VVG-CCS-ETB-758-25 Respuesta a comunicado 
+GSC-7102-2025 
+35 12/09/2025 VVG-CCS-ETB-759-25 Remisión comunicado No.VVG-CCS-ETB-759-25 Respuesta a comunicado 
+GSC-7137-2025 
+36 12/09/2025 VVG-CCS-ETB-760-25 Remisión comunicado No.VVG-CCS-ETB-760-25 Respuesta a comunicado 
+GSC-7085-2025, GSC-7122-2025 y GSC-7123-2025 
+37 12/09/2025 VVG-CCS-ETB-761-25 Remisión comunicado No.VVG-CCS-ETB-761-25 Respuesta a comunicado 
+GSC-7145-2025 
+38 12/09/2025 VVG-CCS-ETB-762-25 Remisión comunicado No.VVG-CCS-ETB-762-25 Visita de verificación de 
+inventarios – Stock - Contrato SCJ-1809-2024 
+39 15/09/2025 VVG-CCS-ETB-763-25 Remisión comunicado No.VVG-CCS-ETB-763-25 Respuesta a comunicado 
+GSC-7103-2025 
+40 15/09/2025 VVG-CCS-ETB-764-25 Remisión comunicado No.VVG-CCS-ETB-764-25 Respuesta a comunicado 
+GSC-7099-2025 
+41 16/09/2025 VVG-CCS-ETB-765-25 Remisión comunicado No.VVG-CCS-ETB-765-25 Aprobación Informe 
+Mensual de marzo 2025 V5 Contrato SCJ-1809-2024 
+42 16/09/2025 VVG-CCS-ETB-766-25 
+Remisión comunicado No.VVG-CCS-ETB-766-25 Respuesta a comunicado 
+GSC-7113-2025, GSC-7119-2025, GSC-7120-2025, GSC-7125-2025, GSC-
+7140-2025, GSC-7141-2025 
+43 16/09/2025 VVG-CCS-ETB-767-25 Remisión comunicado No.VVG-CCS-ETB-767-25 Aprobación Informe 
+Mensual de febrero 2025 v5 Contrato SCJ-1809-2024 
+44 16/09/2025 VVG-CCS-ETB-768-25 Remisión comunicado No.VVG-CCS-ETB-768-25 Aprobación Informe 
+Mensual de enero 2025 v7 Contrato SCJ-1809-2024 
+45 16/09/2025 VVG-CCS-ETB-769-25 
+Remisión comunicado No.VVG-CCS-ETB-769-25 Respuesta comunicado 
+GSC-7157-2025 ETB-PL-005 Plan de Comunicaciones V6 - Contrato SCJ-
+1809-2024 
+46 19/09/2025 VVG-CCS-ETB-770-25 Remisión comunicado NoVVG-CCS-ETB-770-25 Respuesta a comunicado 
+GSC-7129-2025. 
+47 19/09/2025 VVG-CCS-ETB-771-25 Remisión comunicado No. VVG-CCS-ETB-771-25 Respuesta a comunicado 
+GSC-7094-2025 
+48 19/09/2025 VVG-CCS-ETB-772-25 Remisión comunicado No.VVG-CCS-ETB-772-25 Respuesta a comunicado 
+GSC-7124-2025. 
+49 19/09/2025 VVG-CCS-ETB-773-25 Remisión comunicado No.VVG-CCS-ETB-773-25 Respuesta a comunicados 
+GSC-7101-2025, GSC-7117, GSC-7126-2025 y GSC-7138-2025 
+50 19/09/2025 VVG-CCS-ETB-774-25 
+Remisión comunicado No.VVG-CCS-ETB-774-25 Respuesta a comunicado 
+GSC-7201-2025 y GSC-7142-2025 ETB S.A E.S.P – Hoja de Vida Técnico 
+Electricista – Contrato SCJ-1809-2024 
+51 19/09/2025 VVG-CCS-ETB-775-25 
+Remisión comunicado No.VVG-CCS-ETB-775-25 Respuesta a comunicado 
+GSC-7184-2025, GSC-7179-2025, GSC-7183-2025, GSC-7151-2025, GSC-
+7064-2025, GSC-7166-2025 
+52 19/09/2025 VVG-CCS-ETB-776-25 
+Remisión comunicado No.VVG-CCS-ETB-776-25 Respuesta a comunicado 
+GSC-7121—2025 Informe Mensual de abril 2025v.3 Contrato SCJ-1809-
+2024 
+53 22/09/2025 VVG-CCS-ETB-777-25 Remisión comunicado No.VVG-CCS-ETB-777-25 Respuesta a comunicado 
+GSC-7199-2025 
+54 22/09/2025 VVG-CCS-ETB-778-25 Remisión comunicado No.VVG-CCS-ETB-778-25 Respuesta a comunicado 
+GSC-7181-2025 
+55 22/09/2025 VVG-CCS-ETB-779-25 Remisión comunicado No.VVG-CCS-ETB-779-25 Respuesta a comunicado 
+GSC-7188-2025 
+
+--- PÁGINA 44 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  44  | 142  
+56 22/09/2025 VVG-CCS-ETB-780-25 Remisión comunicado No.VVG-CCS-ETB-780-25 Respuesta a comunicados 
+GSC-7152-2025, GSC-7172-2025 y GSC-7186-2025 
+57 22/09/2025 VVG-CCS-ETB-781-25 Remisión comunicado No.VVG-CCS-ETB-781-25 Respuesta a comunicados 
+GSC-7159-2025 
+58 22/09/2025 VVG-CCS-ETB-782-25 Remisión comunicado No.VVG-CCS-ETB-782-25 Respuesta a comunicados 
+GSC-7132-2025 
+59 22/09/2025 VVG-CCS-ETB-783-25 Remisión comunicado No.VVG-CCS-ETB-783-25 Respuesta a comunicados 
+GSC-7089-2025 y GSC-7168-2025 
+60 22/09/2025 VVG-CCS-ETB-784-25 Remisión comunicado No.VVG-CCS-ETB-784-25 Respuesta a comunicado 
+GSC-7150-2025 y GSC-7167-2025 
+61 22/09/2025 VVG-CCS-ETB-785-25 Remisión comunicado No.VVG-CCS-ETB-785-25 Respuesta a comunicados 
+GSC-7072-2025 y GSC-7107-2025 
+62 22/09/2025 VVG-CCS-ETB-786-25 Remisión comunicado No.VVG-CCS-ETB-786-25 Respuesta a comunicado 
+GSC-7130-2025 
+63 22/09/2025 VVG-CCS-ETB-787-25 
+Remisión comunicado No.VVG-CCS-ETB-787-25 Respuesta a comunicados 
+GSC-7100-2025, GSC-7116-2025, GSC-7135-2025, GSC-7144-2025 y GSC-
+7161-2025 
+64 22/09/2025 VVG-CCS-ETB-788-25 Remisión comunicado No. VVG-CCS-ETB-788-25 Respuesta a comunicado 
+GSC-7128-2025 
+65 22/09/2025 VVG-CCS-ETB-789-25 Remisión comunicado No. VVG-CCS-ETB-789-25 Respuesta a comunicado 
+GSC-6988-2025 
+66 22/09/2025 VVG-CCS-ETB-790-25 Remisión comunicado No. VVG-CCS-ETB-790-25 Respuesta a comunicado 
+GSC-7037-2025 
+67 22/09/2025 VVG-CCS-ETB-791-25 
+Remisión comunicado No. VVG-CCS-ETB-791-25 Respuesta a comunicado 
+GSC-7182—2025 Informe Mensual de mayo 2025v.2 Contrato SCJ-1809-
+2024 
+68 23/09/2025 VVG-CCS-ETB-792-25 Remisión comunicado No. VVG-CCS-ETB-792-25 Respuesta a comunicado 
+GSC-7030-2025 
+69 23/09/2025 VVG-CCS-ETB-793-25 Remisión comunicado No. VVG-CCS-ETB-793-25 Auditoría Ambiental. 
+70 23/09/2025 VVG-CCS-ETB-794-25 Remisión comunicado No.VVG-CCS-ETB-794-25 Respuesta a comunicado 
+GSC-7105-2025 
+71 24/09/2025 VVG-CCS-ETB-795-25 
+Remisión comunicado No.VVG-CCS-ETB-795-25 Respuesta a comunicado 
+GSC-6914-2025, GSC-6997-2025, GSC-7040-2025, GSC-7041-2025, GSC-
+7154-2025, GSC-7163-2025, GSC-7194-2025, GSC-7195-2025, GSC-7202-
+2025, GSC-7211-2025 
+72 24/09/2025 VVG-CCS-ETB-796-25 
+Remisión comunicado No.VVG-CCS-ETB-796-25 Respuesta a comunicado 
+GSC-7214-2025, GSC-6997-2025, GSC-7040-2025, GSC-7041-2025, GSC-
+7154-2025, GSC-7163-2025, GSC-7194-2025, GSC-7195-2025, GSC-7202-
+2025, GSC-7211-2025 
+73 24/09/2025 VVG-CCS-ETB-797-25 
+Remisión comunicado No.VVG-CCS-ETB-797-25 Respuesta a comunicado 
+GSC-7213-2025, GSC-6997-2025, GSC-7040-2025, GSC-7041-2025, GSC-
+7154-2025, GSC-7163-2025, GSC-7194-2025, GSC-7195-2025, GSC-7202-
+2025, GSC-7211-2025 
+74 26/09/2025 VVG-CCS-ETB-798-25 Remisión comunicado No.VVG-CCS-ETB-798-25 Respuesta a comunicados 
+GSC-7191-2025, GSC-7196-2025 y GSC-7209-2025 
+75 26/09/2025 VVG-CCS-ETB-799-25 Remisión comunicado No.VVG-CCS-ETB-799-25 Respuesta a comunicados 
+GSC-7160-2025 y GSC-7205-2025 
+76 26/09/2025 VVG-CCS-ETB-800-25 Remisión comunicado No.VVG-CCS-ETB-800-25 Respuesta a comunicados 
+GSC-7197-2025 y GSC-7206-2025 
+77 26/09/2025 VVG-CCS-ETB-801-25 Remisión comunicado NoVVG-CCS-ETB-801-25 Respuesta a comunicados 
+GSC-7212-2025 
+78 26/09/2025 VVG-CCS-ETB-802-25 Remisión comunicado No. VVG-CCS-ETB-802-25 Respuesta a 
+comunicados GSC-7198-2025 y GSC-7208-2025 
+79 26/09/2025 VVG-CCS-ETB-803-25 Remisión comunicado No. VVG-CCS-ETB-803-25 Respuesta a 
+comunicados GSC-7210-2025, GSC-7215-2025 y GSC-7224-2025 
+80 26/09/2025 VVG-CCS-ETB-804-25 Remisión comunicado No. VVG-CCS-ETB-804-25 Respuesta a comunicado 
+GSC-7164-2025 
+81 26/09/2025 VVG-CCS-ETB-805-25 Remisión comunicado No. VVG-CCS-ETB-805-25 Respuesta a comunicado 
+GSC-7216-2025 y GSC-7219-2025 
+82 26/09/2025 VVG-CCS-ETB-806-25 Remisión comunicado No. VVG-CCS-ETB-806-25 Respuesta a 
+comunicados GSC-7217-2025 
+83 26/09/2025 VVG-CCS-ETB-807-25 Remisión comunicado No. VVG-CCS-ETB-807-25 Respuesta a 
+comunicados GSC-7176-2025 
+
+--- PÁGINA 45 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  45  | 142  
+84 26/09/2025 VVG-CCS-ETB-808-25 Remisión comunicado No. VVG-CCS-ETB-808-25 Respuesta a 
+comunicados GSC-7226-2025 
+85 26/09/2025 VVG-CCS-ETB-809-25 Remisión comunicado No. VVG-CCS-ETB-809-25 Respuesta a 
+comunicados GSC-7223-2025 
+86 26/09/2025 VVG-CCS-ETB-810-25 Remisión comunicado No. VVG-CCS-ETB-810-25 Respuesta a 
+comunicados GSC-7220-2025 
+87 26/09/2025 VVG-CCS-ETB-811-25 Remisión comunicado No. VVG-CCS-ETB-811-25 Respuesta a 
+comunicados GSC-7170-2025 y GSC-7171-2025 
+88 26/09/2025 VVG-CCS-ETB-812-25 Remisión comunicado No. VVG-CCS-ETB-812-25 Visita de verificación de 
+inventarios–Contrato SCJ-1809-2024 
+89 26/09/2025 VVG-CCS-ETB-813-25 Remisión comunicado No. VVG-CCS-ETB-813-25 Respuesta a comunicado 
+GSC-7082-2025 
+90 26/09/2025 VVG-CCS-ETB-814-25 Remisión comunicado No. VVG-CCS-ETB-814-25 Respuesta a comunicado 
+GSC-7083-2025 
+91 26/09/2025 VVG-CCS-ETB-815-25 Remisión comunicado No. VVG-CCS-ETB-815-25 Respuesta a comunicado 
+GSC-6995-2025 
+92 26/09/2025 VVG-CCS-ETB-816-25 Remisión comunicado No. VVG-CCS-ETB-816-25 Respuesta a comunicado 
+GSC-6994-2025. 
+93 29/09/2025 VVG-CCS-ETB-817-25 Remisión comunicado No. VVG-CCS-ETB-817-25 Cronograma Visita de 
+Diagnóstico Subsistemas octubre 2025. Comunicado GSC-7252-2025 
+94 29/09/2025 VVG-CCS-ETB-818-25 Remisión comunicado No. VVG-CCS-ETB-818-25 Respuesta a comunicado 
+GSC-6878-2025 
+95 29/09/2025 VVG-CCS-ETB-819-25 Remisión comunicado No. VVG-CCS-ETB-819-25 Verificación Fichas 
+técnica JOYSTICK SPC-7000– Comunicado GSC-6221-2025 
+96 29/09/2025 VVG-CCS-ETB-820-25 
+Remisión comunicado No. VVG-CCS-ETB-820-25 Respuesta a 
+comunicados GSC-7229-2025, GSC-7232-2025, GSC-7236-2025 y GSC-
+7240-2025 
+97 29/09/2025 VVG-CCS-ETB-821-25 Remisión comunicado No. VVG-CCS-ETB-821-25 Respuesta a 
+comunicados GSC-7227-2025, GSC-7235-2025 y GSC-7245-2025 
+98 29/09/2025 VVG-CCS-ETB-822-25 Remisión comunicado No. VVG-CCS-ETB-822-25 Respuesta a comunicado 
+GSC-7225-2025 
+99 29/09/2025 VVG-CCS-ETB-823-25 Remisión comunicado No. VVG-CCS-ETB-823-25 Respuesta a comunicado 
+GSC-7241-2025 
+100 29/09/2025 VVG-CCS-ETB-824-25 Remisión comunicado No. VVG-CCS-ETB-824-25 Respuesta a comunicado 
+GSC-7243-2025 
+101 29/09/2025 VVG-CCS-ETB-825-25 Remisión comunicado No. VVG-CCS-ETB-825-25 Respuesta a comunicado 
+GSC-7242-2025 
+102 30/09/2025 VVG-CCS-ETB-826-25 Remisión comunicado No. VVG-CCS-ETB-826-25 Verificación Fichas 
+técnica DISCO DURO 8TB– Comunicado GSC-7068-2025 
+103 30/09/2025 VVG-CCS-ETB-827-25 Remisión comunicado No. VVG-CCS-ETB-827-25 Respuesta a comunicado 
+GSC-7258-2025 y GSC-7259-2025 
+104 30/09/2025 VVG-CCS-ETB-828-25 Remisión comunicado No. VVG-CCS-ETB-828-25 Respuesta a comunicado 
+GSC-7251-2025. 
+105 30/09/2025 VVG-CCS-ETB-829-25 Remisión comunicado No.VVG-CCS-ETB-829-25 Respuesta a comunicados 
+GSC-7004-2025 y GSC-7266-2025 
+106 30/09/2025 VVG-CCS-ETB-830-25 Remisión comunicado No.VVG-CCS-ETB-830-25 Aprobación Informe 
+Mensual de abril 2025 v4 Contrato SCJ-1809-2024 
+107 30/09/2025 VVG-CCS-ETB-831-25 Remisión comunicado No. VVG-CCS-ETB-831-25 Aprobación Informe 
+Mensual de mayo 2025 v3 Contrato SCJ-1809-2024 
+108 30/09/2025 VVG-CCS-ETB-832-25 
+Remisión comunicado No. VVG-CCS-ETB-832-25 Respuesta a comunicado 
+GSC-6762-2025, GSC-7218-2025, GSC-7221-2025, GSC-7231-2025, GSC-
+7234-2025, GSC-7239-2025, GSC-7247-2025, GSC-7248-2025 
+Tabla 9. COMUNICADOS EMITIDOS CONTRATO SCJ 1809 2024 
+Adjunto encontrará el detalle de cada detallando comunicados recibidos en la ruta de acceso: 01SEP 
+- 30SEP \01 OBLIGACIONES GENERALES\OBLIGACIÓN 7 y 10\ COMUNICADOS RECIBIDOS 
+
+--- PÁGINA 46 ---
+EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P. 
+ 
+I N F O R M E  M E N S U A L                    C O N T R A T O  S C J - 1 8 0 9 - 2 0 2 4  
+P á g i n a  46  | 142  
+1.7. PERSONAL MÍNIMO REQUERIDO 
+ 
+Se mencionan a continuación el personal mínimo requerido que cumple con los requerimientos y 
+obligaciones del CONTRATO SCJ-1809-2024. 
+1. Coordinador contrato – Pablo Alejandro Bello. 
+2. Profesional Seguridad y Salud - Ivonne Hernández 
+3. Administrador Datacenter - William Fernando Olmos. 
+4. Coordinador mesa de servicio - Sergio Rodríguez. 
+5. Ingeniero Residente mesa de servicio. 
+• Ariza Dennis  
+• Leivin Carrillo  
+• Diego Díaz  
+• Raúl Ferro 
+• Amílcar Mercado  
+• Luis Muñoz  
+• Hernando Oliveros  
+• Luis Triana 
+6. Técnico electricista - Daniel Domínguez 
+ 
+Durante el periodo del mes de septiembre de 2025 no se presentaron aprobaciones ni cambios en 
+el personal mínimo requerido para la ejecución del contrato. 
+Adjunto encontrará el listado del personal empleado bajo el CONTRATO SCJ-1809-2024, detallando 
+sus respectivas funciones, cargos, antecedentes y certificaciones. Ruta de acceso 01SEP - 30SEP / 02 
+OBLIGACIONES ESPECIFICAS/OBLIGACIÓN 2,24,35/PERSONAL. 
+ 
+1.8. PERSONAL DE APOYO 
+ 
+Se cuenta con personal adicional de apoyo que permite cumplir con la ejecución contractual y dar 
+cumplimientos a todos los lineamientos y requerimientos del contrato. 
+7. Técnico Operaciones. 
+8. Técnico Motorizados. 
+9. Almacén 
+10. Documentales. 
+Adjunto encontrará el listado del personal empleado bajo el CONTRATO SCJ-1809-2024, detallando 
+sus respectivas funciones, cargos y evaluaciones de riesgos laborales. Ruta de acceso 01SEP - 30SEP 
+/ 01 OBLIGACIONES GENERALES/OBLIGACIÓN 2,5,6,9,13/ ANEXO OTROS / PERSONAL. Los cuales 
+cubren la totalidad de disponibilidad que requiere el proyecto.  

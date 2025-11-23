@@ -16,19 +16,35 @@ FUENTES_DIR = DATA_DIR / "fuentes"
 for dir_path in [TEMPLATES_DIR, DATA_DIR, OUTPUT_DIR, FIJOS_DIR, FUENTES_DIR]:
     dir_path.mkdir(parents=True, exist_ok=True)
 
-# Información del contrato (FIJO)
+# Información del contrato (FIJO) - Datos oficiales del contrato SCJ-1809-2024
 CONTRATO = {
     "numero": "SCJ-1809-2024",
+    "numero_proceso": "SECOP II SCJ-SIF-CD-480-2024",
     "entidad": "EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A. E.S.P.",
     "entidad_corto": "ETB",
-    "objeto": "MANTENIMIENTO PREVENTIVO, MANTENIMIENTO CORRECTIVO Y SOPORTE AL SISTEMA DE VIDEOVIGILANCIA DE BOGOTÁ D.C., CON DISPONIBILIDAD DE BOLSA DE REPUESTOS",
-    "contratista": "NOMBRE DEL CONTRATISTA",  # Ajustar
+    "nit_entidad": "899.999.115-8",
+    "razon_social": "EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A E.S.P. - ETB S.A E.S.P.",
+    "direccion": "NIZA, CALLE 126 60 32 | PISO 1",
+    "ciudad": "BOGOTÁ – COLOMBIA",
+    "telefono": "6012423499",
+    "objeto": "PRESTACIÓN DE LOS SERVICIOS DE ADMINISTRACIÓN, SOPORTE, MANTENIMIENTO PREVENTIVO, CORRECTIVO Y/O DE ACTUALIZACIÓN AL SISTEMA DE VIDEO VIGILANCIA DE BOGOTÁ D.C., CON DISPONIBILIDAD DE BOLSA DE REPUESTOS",
+    "objeto_corto": "MANTENIMIENTO PREVENTIVO, MANTENIMIENTO CORRECTIVO Y SOPORTE AL SISTEMA DE VIDEOVIGILANCIA DE BOGOTÁ D.C., CON DISPONIBILIDAD DE BOLSA DE REPUESTOS",
+    "contratista": "NOMBRE DEL CONTRATISTA",  # Ajustar según corresponda
     "nit_contratista": "XXX.XXX.XXX-X",
     "supervisor": "NOMBRE DEL SUPERVISOR",
     "interventor": "NOMBRE DEL INTERVENTOR",
-    "fecha_inicio": "2024-11-01",
-    "fecha_fin": "2025-10-31",
-    "valor_contrato": 0,  # Ajustar
+    "fecha_inicio": "2024-11-19",  # 19 de noviembre de 2024 (fecha acta de inicio)
+    "fecha_fin": "2025-11-18",  # 18 de noviembre de 2025
+    "fecha_suscripcion": "2024-10-31",  # 31 de octubre de 2024
+    "plazo_ejecucion": "DOCE (12) MESES",
+    "valor_inicial": 16450000000,  # $16.450.000.000
+    "adicion_1": 2000000000,  # $2.000.000.000
+    "valor_total": 18450000000,  # $18.450.000.000
+    "valor_contrato": 18450000000,  # Total del contrato
+    "vigencia_poliza_inicial_inicio": "2024-10-31",
+    "vigencia_poliza_inicial_fin": "2028-10-31",
+    "vigencia_poliza_acta_inicio": "2024-11-19",
+    "vigencia_poliza_acta_fin": "2028-11-19",
     "umbral_ans": 98.9,  # Porcentaje mínimo de disponibilidad
 }
 
