@@ -87,4 +87,13 @@ def get_periodo_texto(anio: int, mes: int) -> str:
     """Retorna el periodo en formato texto: 'Septiembre de 2025'"""
     return f"{MESES[mes]} de {anio}"
 
+# Configuración GLPI
+GLPI_API_URL = "https://glpi.etb.com.co/apirest.php"
+GLPI_API_TOKEN = "TU_TOKEN_AQUI"  # TODO: Configurar token real o usar variable de entorno
+
+# Lista de meses en español (para compatibilidad)
+MESES_LISTA = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+]
 
