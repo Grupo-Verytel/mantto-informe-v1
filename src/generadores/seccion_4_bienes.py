@@ -56,22 +56,35 @@ class GeneradorSeccion4(GeneradorSeccion):
         """Configura los estilos del documento"""
         if self.doc is None:
             return
+        
+        # Configurar márgenes (1.27 cm = 0.5 pulgadas)
+        sections = self.doc.sections
+        for section in sections:
+            section.top_margin = Cm(1.27)
+            section.bottom_margin = Cm(1.27)
+            section.left_margin = Cm(1.27)
+            section.right_margin = Cm(1.27)
+        
+        # Estilo normal
         style = self.doc.styles['Normal']
         style.font.name = 'Arial'
         style.font.size = Pt(11)
         
+        # Título Sección (4.)
         h1 = self.doc.styles['Heading 1']
         h1.font.name = 'Arial'
         h1.font.size = Pt(14)
         h1.font.bold = True
         h1.font.color.rgb = self.COLOR_AZUL_OSCURO
         
+        # Subsecciones (4.1-4.4)
         h2 = self.doc.styles['Heading 2']
         h2.font.name = 'Arial'
         h2.font.size = Pt(12)
         h2.font.bold = True
         h2.font.color.rgb = self.COLOR_AZUL_MEDIO
         
+        # Subtítulos
         h3 = self.doc.styles['Heading 3']
         h3.font.name = 'Arial'
         h3.font.size = Pt(11)
@@ -83,6 +96,14 @@ class GeneradorSeccion4(GeneradorSeccion):
         shading = OxmlElement('w:shd')
         shading.set(qn('w:fill'), color_hex)
         cell._tc.get_or_add_tcPr().append(shading)
+    
+    def _centrar_celda_vertical(self, cell):
+        """Centra verticalmente el contenido de una celda"""
+        tc = cell._element
+        tcPr = tc.get_or_add_tcPr()
+        vAlign = OxmlElement('w:vAlign')
+        vAlign.set(qn('w:val'), 'center')
+        tcPr.append(vAlign)
     
     def _numero_a_letras(self, numero: float, incluir_moneda: bool = True) -> str:
         """
@@ -113,6 +134,7 @@ class GeneradorSeccion4(GeneradorSeccion):
                     run.font.size = Pt(10)
                     run.font.color.rgb = RGBColor(255, 255, 255)
             self._set_cell_shading(hdr_cells[i], "1F4E79")
+            self._centrar_celda_vertical(hdr_cells[i])
         
         # Filas de datos
         for fila_datos in filas:
@@ -126,6 +148,7 @@ class GeneradorSeccion4(GeneradorSeccion):
                         paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
                     for run in paragraph.runs:
                         run.font.size = Pt(10)
+                self._centrar_celda_vertical(row_cells[i])
         
         # Fila de total (si se proporciona)
         if fila_total:
@@ -138,6 +161,7 @@ class GeneradorSeccion4(GeneradorSeccion):
                         run.bold = True
                         run.font.size = Pt(10)
                 self._set_cell_shading(row_cells[i], "D9E1F2")  # Azul claro
+                self._centrar_celda_vertical(row_cells[i])
         
         # Ajustar anchos
         if anchos:
@@ -199,8 +223,11 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
         items = entradas.get('items', [])
         valor_total = sum(item.get('valor_total', 0) for item in items)
         
-        # Párrafo introductorio (IA genera esto con template)
-        texto = f"""Se realiza el trámite de entradas al almacén SDSCJ en el mes de {mes} del {anio} bajo el comunicado {comunicado.get('numero', 'N/A')} "{comunicado.get('titulo', 'N/A')}" el {comunicado.get('fecha', 'N/A')}, para revisión y aprobación de la interventoría del contrato."""
+        # Párrafo introductorio según template del prompt
+        numero = comunicado.get('numero', 'N/A')
+        titulo = comunicado.get('titulo', 'N/A')
+        fecha = comunicado.get('fecha', 'N/A')
+        texto = f"""Se realiza el trámite de entradas al almacén SDSCJ en el mes de {mes} del {anio} bajo el comunicado {numero} "{titulo}" el {fecha}."""
         
         self._agregar_parrafo(texto)
         
@@ -235,16 +262,17 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
             self._agregar_tabla(
                 encabezados=["No.", "DESCRIPCIÓN", "CANT.", "UND", "VALOR UNIT.", "VALOR TOTAL"],
                 filas=filas,
-                anchos=[0.4, 2.5, 0.6, 0.5, 1.0, 1.2],
+                anchos=[0.4, 2.5, 0.5, 0.5, 1.0, 1.0],  # Según especificaciones del prompt
                 alineaciones=alineaciones,
                 fila_total=fila_total
             )
         
-        # Valor en letras
+        # Valor en letras según template del prompt
         if valor_total > 0:
             valor_letras = self._numero_a_letras(valor_total)
+            valor_numerico = self._formato_moneda(valor_total)
             self._agregar_parrafo(
-                f"El valor total de las entradas asciende a {valor_letras} ({self._formato_moneda(valor_total)}).",
+                f"El valor total de los elementos ingresados asciende a {valor_letras} ({valor_numerico}).",
                 negrita=True
             )
         
@@ -301,9 +329,18 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
             self._agregar_tabla(
                 encabezados=["No.", "DESCRIPCIÓN", "SERIAL", "CANT.", "MOTIVO", "VALOR"],
                 filas=filas,
-                anchos=[0.4, 2.0, 1.0, 0.5, 1.5, 1.0],
+                anchos=[0.4, 2.0, 1.0, 0.5, 1.5, 1.0],  # Según especificaciones del prompt
                 alineaciones=alineaciones,
                 fila_total=fila_total
+            )
+        
+        # Valor en letras (agregar según especificaciones)
+        if valor_total > 0:
+            valor_letras = self._numero_a_letras(valor_total)
+            valor_numerico = self._formato_moneda(valor_total)
+            self._agregar_parrafo(
+                f"El valor total de los equipos entregados asciende a {valor_letras} ({valor_numerico}).",
+                negrita=True
             )
         
         # Anexos
