@@ -107,6 +107,8 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 SHAREPOINT_SITE_URL = os.getenv("SHAREPOINT_SITE_URL", "")
 SHAREPOINT_CLIENT_ID = os.getenv("SHAREPOINT_CLIENT_ID", "")
 SHAREPOINT_CLIENT_SECRET = os.getenv("SHAREPOINT_CLIENT_SECRET", "")
+# Tenant ID de Azure AD (GUID) - Si no se proporciona, se extrae del dominio de SHAREPOINT_SITE_URL
+SHAREPOINT_TENANT_ID = os.getenv("SHAREPOINT_TENANT_ID", "")
 # Ruta base adicional en SharePoint (ej: "Documentos compartidos" o "Shared Documents" o carpeta base)
 SHAREPOINT_BASE_PATH = os.getenv("SHAREPOINT_BASE_PATH", "")
 

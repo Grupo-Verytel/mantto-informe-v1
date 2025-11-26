@@ -93,13 +93,23 @@ class ExtractorObservaciones:
         Soporta archivos locales y desde SharePoint
         
         Args:
-            ruta_archivo: Ruta al archivo (local o URL de SharePoint)
+            ruta_archivo: Ruta al archivo (local, Path, o URL de SharePoint)
             
         Returns:
             Texto extraído del archivo
         """
-        # Verificar si es URL de SharePoint
+        # Si es Path, convertir a string
+        if isinstance(ruta_archivo, Path):
+            ruta_archivo = str(ruta_archivo)
+        
+        # Verificar si es URL de SharePoint (solo URLs completas, no rutas relativas del servidor)
         if isinstance(ruta_archivo, str) and self.sharepoint_extractor.es_url_sharepoint(ruta_archivo):
+            print(f"[DEBUG] Detectada URL de SharePoint, descargando...")
+            return self._extraer_texto_desde_sharepoint(ruta_archivo)
+        
+        # Verificar si es ruta relativa del servidor (comienza con /sites/, /teams/, etc.)
+        if isinstance(ruta_archivo, str) and (ruta_archivo.startswith('/sites/') or ruta_archivo.startswith('/teams/') or ruta_archivo.startswith('/personal/')):
+            print(f"[DEBUG] Detectada ruta relativa del servidor, descargando desde SharePoint...")
             return self._extraer_texto_desde_sharepoint(ruta_archivo)
         
         # Convertir a Path si es string
@@ -107,23 +117,33 @@ class ExtractorObservaciones:
             ruta_archivo = Path(ruta_archivo)
         
         if not ruta_archivo.exists():
+            print(f"[WARNING] Archivo no existe: {ruta_archivo}")
             return ""
         
         extension = ruta_archivo.suffix.lower()
+        print(f"[DEBUG] Extrayendo texto de archivo local: {ruta_archivo} (extensión: {extension})")
         
         try:
             if extension == '.pdf' and PDF_DISPONIBLE:
-                return self._leer_pdf(ruta_archivo)
+                texto = self._leer_pdf(ruta_archivo)
+                print(f"[DEBUG] Texto extraído de PDF: {len(texto)} caracteres")
+                return texto
             elif extension in ['.docx', '.doc'] and DOCX_DISPONIBLE:
-                return self._leer_docx(ruta_archivo)
+                texto = self._leer_docx(ruta_archivo)
+                print(f"[DEBUG] Texto extraído de DOCX: {len(texto)} caracteres")
+                return texto
             elif extension == '.txt':
                 with open(ruta_archivo, 'r', encoding='utf-8') as f:
-                    return f.read()
+                    texto = f.read()
+                print(f"[DEBUG] Texto extraído de TXT: {len(texto)} caracteres")
+                return texto
             else:
                 print(f"[WARNING] Formato no soportado: {extension}")
                 return ""
         except Exception as e:
             print(f"[WARNING] Error al leer archivo {ruta_archivo}: {e}")
+            import traceback
+            traceback.print_exc()
             return ""
     
     def _extraer_texto_desde_sharepoint(self, url_sharepoint: str) -> str:
@@ -131,18 +151,21 @@ class ExtractorObservaciones:
         Extrae texto de un archivo desde SharePoint
         
         Args:
-            url_sharepoint: URL del archivo en SharePoint
+            url_sharepoint: URL del archivo en SharePoint o ruta relativa del servidor
             
         Returns:
             Texto extraído del archivo
         """
         print(f"[INFO] Descargando archivo desde SharePoint: {url_sharepoint}")
+        print(f"[DEBUG] Tipo de ruta: {'URL completa' if url_sharepoint.startswith('http') else 'Ruta relativa del servidor'}")
         
         # Descargar archivo temporalmente
         try:
             archivo_temp = self.sharepoint_extractor.descargar_archivo(url_sharepoint)
         except Exception as e:
             print(f"[ERROR] Error al descargar archivo desde SharePoint: {e}")
+            import traceback
+            traceback.print_exc()
             return ""
         
         if not archivo_temp:
@@ -153,18 +176,30 @@ class ExtractorObservaciones:
             print(f"[WARNING] Archivo descargado no existe: {archivo_temp}")
             return ""
         
-        print(f"[INFO] Archivo descargado exitosamente: {archivo_temp} (tamaño: {archivo_temp.stat().st_size} bytes)")
+        tamaño = archivo_temp.stat().st_size
+        print(f"[INFO] Archivo descargado exitosamente: {archivo_temp} (tamaño: {tamaño} bytes)")
+        
+        if tamaño == 0:
+            print(f"[WARNING] El archivo descargado está vacío (0 bytes)")
+            return ""
         
         # Guardar referencia para limpiar después
         self.archivos_temporales.append(archivo_temp)
         
         # Extraer texto del archivo descargado
         try:
-            texto = self.extraer_texto_archivo(archivo_temp)
+            # Pasar como Path, no como string, para que se lea como archivo local
+            texto = self.extraer_texto_archivo(str(archivo_temp))
             print(f"[INFO] Texto extraído del archivo: {len(texto)} caracteres")
+            if len(texto) > 0:
+                print(f"[DEBUG] Primeros 200 caracteres del texto: {texto[:200]}...")
+            else:
+                print(f"[WARNING] No se pudo extraer texto del archivo (archivo puede estar corrupto o ser imagen)")
             return texto
         except Exception as e:
             print(f"[ERROR] Error al extraer texto del archivo: {e}")
+            import traceback
+            traceback.print_exc()
             return ""
     
     def _leer_pdf(self, ruta: Path) -> str:
@@ -297,11 +332,15 @@ OBSERVACIÓN:"""
         if ruta_anexo and ruta_anexo != "-":
             # Convertir ruta relativa a Path absoluto
             # Las rutas vienen como: "01SEP - 30SEP / 01 OBLIGACIONES GENERALES/ OBLIGACIÓN 1,7,8,9,10,11,13,14 y 15/ Oficio Obli SEPTIEMBRE 2025.pdf"
+            print(f"[INFO] Procesando anexo para obligación {obligacion.get('item', 'N/A')}: {ruta_anexo}")
             ruta_completa = self._resolver_ruta_anexo(ruta_anexo)
             if ruta_completa:
-                print(f"[INFO] Extrayendo texto del anexo: {ruta_anexo}")
+                print(f"[INFO] Ruta resuelta: {ruta_completa}")
+                print(f"[INFO] Extrayendo texto del anexo...")
                 texto_anexo = self.extraer_texto_archivo(ruta_completa)
                 print(f"[INFO] Texto extraído: {len(texto_anexo)} caracteres")
+                if len(texto_anexo) == 0:
+                    print(f"[WARNING] No se pudo extraer texto del anexo (archivo puede estar vacío o corrupto)")
             else:
                 print(f"[WARNING] No se pudo resolver ruta del anexo: {ruta_anexo}")
         else:
@@ -375,12 +414,19 @@ OBSERVACIÓN:"""
         if self.sharepoint_extractor.site_url:
             # Si la ruta no es una URL completa, construir ruta relativa del servidor
             # Las rutas vienen como: "01SEP - 30SEP / 01 OBLIGACIONES GENERALES/ archivo.pdf"
-            # Necesitamos convertir a: "/sites/OPERACIONES/01SEP - 30SEP/01 OBLIGACIONES GENERALES/archivo.pdf"
+            # Necesitamos convertir a: "/sites/OPERACIONES/[base_path]/01SEP - 30SEP/01 OBLIGACIONES GENERALES/archivo.pdf"
             
             # Extraer la ruta base del sitio (ej: /sites/OPERACIONES)
             from urllib.parse import urlparse
             sitio_parsed = urlparse(self.sharepoint_extractor.site_url)
             sitio_path_parts = [p for p in sitio_parsed.path.split('/') if p]
+            
+            print(f"[DEBUG] Resolviendo ruta de SharePoint:")
+            print(f"  - Ruta original: {ruta_relativa}")
+            print(f"  - Ruta normalizada: {ruta_normalizada}")
+            print(f"  - Site URL: {self.sharepoint_extractor.site_url}")
+            print(f"  - Site path parts: {sitio_path_parts}")
+            print(f"  - Base path: {self.sharepoint_extractor.base_path}")
             
             # Construir ruta relativa del servidor
             if sitio_path_parts:
@@ -396,6 +442,7 @@ OBSERVACIÓN:"""
                     if base_path_clean:
                         # Dividir base_path en partes y agregar cada una
                         base_path_parts = [p for p in base_path_clean.split('/') if p]
+                        print(f"  - Base path parts: {base_path_parts}")
                         path_parts.extend(base_path_parts)
                 
                 # Agregar la ruta del archivo
