@@ -133,10 +133,10 @@ class GeneradorSeccion3(GeneradorSeccion):
                 for run in paragraph.runs:
                     run.font.color.rgb = self.COLOR_AMARILLO
             self._aplicar_sombreado_celda(cell, self.COLOR_AMARILLO_CLARO)
-        else:
+                    else:
             # Rojo: crítico
             for paragraph in cell.paragraphs:
-                for run in paragraph.runs:
+                    for run in paragraph.runs:
                     run.font.color.rgb = self.COLOR_ROJO
             self._aplicar_sombreado_celda(cell, self.COLOR_ROJO_CLARO)
     
@@ -222,7 +222,7 @@ class GeneradorSeccion3(GeneradorSeccion):
         run.font.size = Pt(10)
         run.font.color.rgb = self.COLOR_GRIS
         self.doc.add_paragraph()
-    
+        
     def _agregar_3_1_penalidad_ans(self):
         """Subsección 3.1 completa"""
         self.doc.add_heading("3.1. PENALIDAD DE ANS", level=2)
@@ -417,7 +417,7 @@ class GeneradorSeccion3(GeneradorSeccion):
                     for run in paragraph.runs:
                         run.font.size = Pt(9)
                 self._centrar_celda_vertical(row_cells[i])
-            
+        
             # Aplicar semáforo a la columna de disponibilidad
             self._aplicar_color_disponibilidad(row_cells[4], disponibilidad)
         
@@ -551,7 +551,7 @@ class GeneradorSeccion3(GeneradorSeccion):
             self._centrar_celda_vertical(hdr_cells[i])
         
         # Filas de datos
-        for h in historico:
+            for h in historico:
             row_cells = tabla.add_row().cells
             disponibilidad = h.get('disponibilidad', 0)
             cumple = disponibilidad >= self.UMBRAL_ANS
@@ -561,7 +561,7 @@ class GeneradorSeccion3(GeneradorSeccion):
                 f"{disponibilidad:.2f}%",
                 f"{self.UMBRAL_ANS}%",
                 "✓ Cumple" if cumple else "✗ No Cumple",
-                h.get('observaciones', '-')
+                    h.get('observaciones', '-')
             ]
             
             for i, texto in enumerate(fila):
@@ -685,9 +685,9 @@ class GeneradorSeccion3(GeneradorSeccion):
         
         # Agregar mes y año a los datos para compatibilidad
         if 'mes' not in self.datos:
-            self.datos['mes'] = config.MESES[self.mes]
+        self.datos['mes'] = config.MESES[self.mes]
         if 'anio' not in self.datos:
-            self.datos['anio'] = self.anio
+        self.datos['anio'] = self.anio
     
     def _datos_ejemplo(self) -> Dict[str, Any]:
         """Retorna datos de ejemplo para desarrollo"""

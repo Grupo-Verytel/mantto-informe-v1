@@ -3,10 +3,12 @@ Generador Sección 1: Información General del Contrato
 Tipo: 🟦 CONTENIDO FIJO (mayoría) + 🟩 EXTRACCIÓN (comunicados, personal)
 """
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import json
+import os
 from .base import GeneradorSeccion
 from src.utils.formato_moneda import formato_moneda_cop
+from src.ia.extractor_observaciones import get_extractor_observaciones
 import config
 
 class GeneradorSeccion1(GeneradorSeccion):
@@ -20,16 +22,42 @@ class GeneradorSeccion1(GeneradorSeccion):
     def template_file(self) -> str:
         return "seccion_1_info_general.docx"
     
-    def __init__(self, anio: int, mes: int):
+    def __init__(self, anio: int, mes: int, usar_llm_observaciones: bool = True):
         super().__init__(anio, mes)
         self.comunicados_emitidos: List[Dict] = []
         self.comunicados_recibidos: List[Dict] = []
         self.personal_minimo: List[Dict] = []
         self.personal_apoyo: List[Dict] = []
+        self.obligaciones_generales_raw: List[Dict] = []
+        self.obligaciones_especificas_raw: List[Dict] = []
+        self.obligaciones_ambientales_raw: List[Dict] = []
+        self.obligaciones_anexos_raw: List[Dict] = []
+        self.usar_llm_observaciones = usar_llm_observaciones
+        self.extractor_observaciones = None
+        if usar_llm_observaciones:
+            try:
+                # Obtener credenciales de SharePoint desde config (que ya carga del .env)
+                sharepoint_site_url = getattr(config, 'SHAREPOINT_SITE_URL', None) or os.getenv("SHAREPOINT_SITE_URL")
+                sharepoint_client_id = getattr(config, 'SHAREPOINT_CLIENT_ID', None) or os.getenv("SHAREPOINT_CLIENT_ID")
+                sharepoint_client_secret = getattr(config, 'SHAREPOINT_CLIENT_SECRET', None) or os.getenv("SHAREPOINT_CLIENT_SECRET")
+                sharepoint_base_path = getattr(config, 'SHAREPOINT_BASE_PATH', None) or os.getenv("SHAREPOINT_BASE_PATH")
+                
+                self.extractor_observaciones = get_extractor_observaciones(
+                    sharepoint_site_url=sharepoint_site_url,
+                    sharepoint_client_id=sharepoint_client_id,
+                    sharepoint_client_secret=sharepoint_client_secret,
+                    sharepoint_base_path=sharepoint_base_path
+                )
+            except Exception as e:
+                print(f"[WARNING] No se pudo inicializar extractor de observaciones: {e}")
+                self.usar_llm_observaciones = False
     
     def cargar_datos(self) -> None:
         """Carga datos fijos y variables de la sección 1"""
         # 1.1 - 1.5: Contenido fijo (ya está en config.CONTRATO)
+        
+        # 1.5: Obligaciones (EXTRACCIÓN + LLM para observaciones)
+        self._cargar_obligaciones()
         
         # 1.6: Comunicados (EXTRACCIÓN)
         self._cargar_comunicados()
@@ -72,6 +100,47 @@ class GeneradorSeccion1(GeneradorSeccion):
                     "adjuntos": "-"
                 }
             ]
+    
+    def _cargar_obligaciones(self) -> None:
+        """Carga obligaciones desde JSON y genera observaciones dinámicas con LLM"""
+        # Intentar cargar desde archivo JSON mensual
+        archivo_obligaciones = config.FUENTES_DIR / f"obligaciones_{self.mes}_{self.anio}.json"
+        if not archivo_obligaciones.exists():
+            archivo_obligaciones = config.FUENTES_DIR / f"obligaciones_{config.MESES[self.mes].lower()}_{self.anio}.json"
+        
+        if archivo_obligaciones.exists():
+            try:
+                with open(archivo_obligaciones, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    self.obligaciones_generales_raw = data.get("obligaciones_generales", [])
+                    self.obligaciones_especificas_raw = data.get("obligaciones_especificas", [])
+                    self.obligaciones_ambientales_raw = data.get("obligaciones_ambientales", [])
+                    self.obligaciones_anexos_raw = data.get("obligaciones_anexos", [])
+                    
+                    # Generar observaciones dinámicas si está habilitado
+                    if self.usar_llm_observaciones and self.extractor_observaciones:
+                        print("[INFO] Generando observaciones dinámicas desde anexos usando LLM...")
+                        self.obligaciones_generales_raw = [
+                            self.extractor_observaciones.procesar_obligacion(obl)
+                            for obl in self.obligaciones_generales_raw
+                        ]
+                        self.obligaciones_especificas_raw = [
+                            self.extractor_observaciones.procesar_obligacion(obl)
+                            for obl in self.obligaciones_especificas_raw
+                        ]
+                        self.obligaciones_ambientales_raw = [
+                            self.extractor_observaciones.procesar_obligacion(obl)
+                            for obl in self.obligaciones_ambientales_raw
+                        ]
+                        self.obligaciones_anexos_raw = [
+                            self.extractor_observaciones.procesar_obligacion(obl)
+                            for obl in self.obligaciones_anexos_raw
+                        ]
+            except Exception as e:
+                print(f"[WARNING] Error al cargar obligaciones desde {archivo_obligaciones}: {e}")
+        else:
+            print(f"[INFO] Archivo de obligaciones no encontrado: {archivo_obligaciones}")
+            # Las listas quedan vacías - se usarán datos fijos del texto
     
     def _cargar_personal(self) -> None:
         """Carga información del personal del contrato"""
@@ -406,24 +475,20 @@ class GeneradorSeccion1(GeneradorSeccion):
     
     def _formatear_obligaciones_generales(self) -> List[Dict]:
         """Formatea obligaciones generales para tabla con cumplimiento"""
-        # TODO: Cargar desde fuente de datos real (CSV/JSON/Excel)
-        # Por ahora retorna lista vacía - se debe cargar desde fuente externa
-        return []
+        # Retornar obligaciones cargadas (ya procesadas con observaciones)
+        return self.obligaciones_generales_raw
     
     def _formatear_obligaciones_especificas(self) -> List[Dict]:
         """Formatea obligaciones específicas para tabla con cumplimiento"""
-        # TODO: Cargar desde fuente de datos real
-        return []
+        return self.obligaciones_especificas_raw
     
     def _formatear_obligaciones_ambientales(self) -> List[Dict]:
         """Formatea obligaciones ambientales para tabla con cumplimiento"""
-        # TODO: Cargar desde fuente de datos real
-        return []
+        return self.obligaciones_ambientales_raw
     
     def _formatear_obligaciones_anexos(self) -> List[Dict]:
         """Formatea obligaciones anexos para tabla con cumplimiento"""
-        # TODO: Cargar desde fuente de datos real
-        return []
+        return self.obligaciones_anexos_raw
     
     def _obtener_ruta_acta_inicio(self) -> str:
         """Obtiene la ruta del acta de inicio (dinámico según mes)"""
