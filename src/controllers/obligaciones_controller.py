@@ -29,8 +29,11 @@ class ObligacionesController:
             "seccion": 1,  # Opcional, por defecto 1
             "subseccion": "1.5.1",  # Opcional: "1.5.1", "1.5.2", "1.5.3", "1.5.4"
             "regenerar_todas": false,  # Si true, regenera todas las observaciones
-            "guardar_json": true  # Si true, guarda el JSON actualizado
+            "user_id": 1  # Opcional: ID del usuario que realiza la operación
         }
+        
+        NOTA: El archivo JSON (obligaciones_{mes}_{anio}.json) es una PLANTILLA y NO se modifica.
+        Las observaciones procesadas se guardan SOLO en MongoDB.
         
         Si se especifica subseccion, solo procesa esa subsección.
         Si no se especifica, procesa todas las obligaciones.
@@ -41,7 +44,9 @@ class ObligacionesController:
             seccion = data.get("seccion", 1)
             subseccion = data.get("subseccion")
             regenerar_todas = data.get("regenerar_todas", False)
-            guardar_json = data.get("guardar_json", True)
+            # NOTA: guardar_json está deshabilitado porque el archivo JSON es una plantilla
+            # Las observaciones procesadas solo se guardan en MongoDB
+            guardar_json = False  # Siempre False para no modificar la plantilla
             
             if not anio or not mes:
                 raise HTTPException(
@@ -64,22 +69,14 @@ class ObligacionesController:
                 respuesta = {
                     "anio": anio,
                     "mes": mes,
-                    "seccion": seccion
+                    "seccion": seccion,
+                    "subseccion": subseccion
                 }
                 # Agregar las obligaciones con el nombre del tipo (no la subsección)
                 respuesta[tipo_obligacion] = obligaciones_procesadas.get(tipo_obligacion, [])
                 
-                # Guardar si se solicita (solo actualizar la subsección en el JSON)
-                if guardar_json:
-                    # Cargar JSON completo, actualizar solo la subsección, y guardar
-                    obligaciones_completas = self.service.cargar_obligaciones_desde_json(anio, mes)
-                    obligaciones_completas[tipo_obligacion] = obligaciones_procesadas.get(tipo_obligacion, [])
-                    self.service.guardar_obligaciones_procesadas(
-                        obligaciones_completas,
-                        anio=anio,
-                        mes=mes,
-                        crear_backup=True
-                    )
+                # NOTA: No se guarda en el archivo JSON porque es una plantilla
+                # Las observaciones procesadas solo se guardan en MongoDB
                 
                 # Guardar en MongoDB
                 try:
@@ -106,14 +103,8 @@ class ObligacionesController:
                     regenerar_todas=regenerar_todas
                 )
                 
-                # Guardar si se solicita
-                if guardar_json:
-                    self.service.guardar_obligaciones_procesadas(
-                        obligaciones_procesadas,
-                        anio=anio,
-                        mes=mes,
-                        crear_backup=True
-                    )
+                # NOTA: No se guarda en el archivo JSON porque es una plantilla
+                # Las observaciones procesadas solo se guardan en MongoDB
                 
                 # Guardar en MongoDB (sin subsección específica)
                 try:

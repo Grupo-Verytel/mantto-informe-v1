@@ -24,7 +24,7 @@ async def procesar_obligaciones(
         "seccion": 1,  # Opcional, por defecto 1
         "subseccion": "1.5.1",  # Opcional: "1.5.1", "1.5.2", "1.5.3", "1.5.4"
         "regenerar_todas": false,  # Si true, regenera todas las observaciones
-        "guardar_json": true  # Si true, guarda el JSON actualizado
+        "user_id": 1  # Opcional: ID del usuario que realiza la operación
     }
     
     Subsecciones disponibles:
@@ -34,13 +34,13 @@ async def procesar_obligaciones(
     - 1.5.4: Obligaciones de Anexos (verifica existencia de archivos en SharePoint)
     
     El proceso:
-    1. Carga obligaciones desde data/fuentes/obligaciones_{mes}_{anio}.json
+    1. Carga obligaciones desde data/fuentes/obligaciones_{mes}_{anio}.json (PLANTILLA - no se modifica)
     2. Si se especifica subseccion, solo procesa esa subsección
     3. Para cada obligación con regenerar_observacion=true:
        - Descarga anexo desde SharePoint (si aplica)
        - Extrae texto del anexo (PDF/Word/Excel)
        - Genera observación usando LLM
-    4. Guarda resultados en el mismo archivo JSON (con backup)
+    4. Guarda resultados SOLO en MongoDB (el archivo JSON es una plantilla y no se modifica)
     
     Respuesta:
     Si se especifica subseccion, retorna solo esa subsección:
