@@ -81,6 +81,22 @@ class ObligacionesController:
                         crear_backup=True
                     )
                 
+                # Guardar en MongoDB
+                try:
+                    user_id = data.get("user_id")  # Opcional, puede venir en el request
+                    documento_mongo = await self.service.guardar_obligaciones_en_mongodb(
+                        obligaciones=obligaciones_procesadas,
+                        anio=anio,
+                        mes=mes,
+                        seccion=seccion,
+                        subseccion=subseccion,
+                        user_id=user_id
+                    )
+                    respuesta["mongodb_id"] = str(documento_mongo.get("_id")) if documento_mongo else None
+                except Exception as e:
+                    logger.warning(f"No se pudo guardar en MongoDB: {e}")
+                    # No fallar la petición si MongoDB falla
+                
                 return respuesta
             else:
                 # Procesar todas las obligaciones (comportamiento anterior)
@@ -98,6 +114,21 @@ class ObligacionesController:
                         mes=mes,
                         crear_backup=True
                     )
+                
+                # Guardar en MongoDB (sin subsección específica)
+                try:
+                    user_id = data.get("user_id")  # Opcional, puede venir en el request
+                    documento_mongo = await self.service.guardar_obligaciones_en_mongodb(
+                        obligaciones=obligaciones_procesadas,
+                        anio=anio,
+                        mes=mes,
+                        seccion=seccion,
+                        subseccion=None,  # Todas las subsecciones
+                        user_id=user_id
+                    )
+                except Exception as e:
+                    logger.warning(f"No se pudo guardar en MongoDB: {e}")
+                    # No fallar la petición si MongoDB falla
                 
                 # Formatear respuesta con todas las obligaciones
                 respuesta = {

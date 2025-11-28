@@ -6,6 +6,7 @@ from typing import Dict, List, Any, Optional
 from pathlib import Path
 import config
 from src.ia.extractor_observaciones import get_extractor_observaciones
+from src.repositories.obligaciones_repository import ObligacionesRepository
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,6 +17,7 @@ class ObligacionesService:
     
     def __init__(self):
         self.extractor_observaciones = None
+        self.repository = ObligacionesRepository()
         self._inicializar_extractor()
     
     def _inicializar_extractor(self):
@@ -335,4 +337,46 @@ class ObligacionesService:
         except Exception as e:
             logger.error(f"Error al guardar obligaciones procesadas: {e}")
             raise
+    
+    async def guardar_obligaciones_en_mongodb(
+        self,
+        obligaciones: Dict[str, List[Dict]],
+        anio: int,
+        mes: int,
+        seccion: int,
+        subseccion: Optional[str] = None,
+        user_id: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """
+        Guarda las obligaciones procesadas en MongoDB
+        
+        Args:
+            obligaciones: Diccionario con obligaciones procesadas
+            anio: Año del informe
+            mes: Mes del informe (1-12)
+            seccion: Número de sección (1)
+            subseccion: Subsección opcional (ej: "1.5.1")
+            user_id: ID del usuario que realiza la operación
+            
+        Returns:
+            Documento guardado en MongoDB
+        """
+        try:
+            documento_guardado = await self.repository.guardar_obligaciones(
+                anio=anio,
+                mes=mes,
+                seccion=seccion,
+                subseccion=subseccion,
+                obligaciones_data=obligaciones,
+                user_id=user_id
+            )
+            if documento_guardado:
+                logger.info(f"Obligaciones guardadas en MongoDB para {anio}-{mes}, sección {seccion}, subsección {subseccion}")
+            else:
+                logger.info(f"MongoDB no está disponible. Obligaciones procesadas correctamente pero no guardadas en MongoDB.")
+            return documento_guardado
+        except Exception as e:
+            logger.warning(f"Error al guardar obligaciones en MongoDB: {e}")
+            # No lanzar excepción, solo registrar warning
+            return None
 

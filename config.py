@@ -119,3 +119,7 @@ MESES_LISTA = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ]
 
+# Configuración MongoDB
+MONGODB_URI = os.getenv("MONGODB_URI", "")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "")
+
