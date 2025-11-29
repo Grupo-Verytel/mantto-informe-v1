@@ -47,22 +47,28 @@ class ComunicadosEmitidosService:
             self.sharepoint_extractor = None
             self.extractor_observaciones = None
     
-    def obtener_ruta_carpeta_comunicados(self, anio: int, mes: int) -> str:
+    def obtener_ruta_carpeta_comunicados(self, anio: int, mes: int, tipo: str = "emitidos") -> str:
         """
-        Construye la ruta de la carpeta de comunicados emitidos en SharePoint
+        Construye la ruta de la carpeta de comunicados en SharePoint
         
         Args:
             anio: Año del informe
             mes: Mes del informe (1-12)
+            tipo: Tipo de comunicados ("emitidos" o "recibidos")
             
         Returns:
             Ruta de la carpeta en formato SharePoint
         """
         mes_abrev = config.MESES[mes].upper()[:3]
-        ruta = f"11. 01{mes_abrev} - 30{mes_abrev} / 01 OBLIGACIONES GENERALES / OBLIGACIÓN 7 y 10 / COMUNICADOS EMITIDOS"
-        logger.info(f"[DEBUG] Ruta construida para comunicados: '{ruta}'")
+        
+        if tipo == "recibidos":
+            ruta = f"11. 01{mes_abrev} - 30{mes_abrev} / 01 OBLIGACIONES GENERALES / OBLIGACIÓN 7 y 10 / COMUNICADOS RECIBIDOS"
+        else:  # emitidos por defecto
+            ruta = f"11. 01{mes_abrev} - 30{mes_abrev} / 01 OBLIGACIONES GENERALES / OBLIGACIÓN 7 y 10 / COMUNICADOS EMITIDOS"
+        
+        logger.info(f"[DEBUG] Ruta construida para comunicados {tipo}: '{ruta}'")
         logger.info(f"[DEBUG] Mes: {mes}, Mes abreviado: {mes_abrev}, Año: {anio}")
-        print(f"[DEBUG] Ruta construida para comunicados: '{ruta}'")
+        print(f"[DEBUG] Ruta construida para comunicados {tipo}: '{ruta}'")
         return ruta
     
     def extraer_radicado_desde_nombre(self, nombre_archivo: str) -> Optional[str]:
@@ -92,33 +98,24 @@ class ComunicadosEmitidosService:
         nombre_sin_ext = nombre_archivo.rsplit('.', 1)[0] if '.' in nombre_archivo else nombre_archivo
         return nombre_sin_ext if nombre_sin_ext else None
     
-    def procesar_comunicados_emitidos(
+    def procesar_comunicados(
         self,
         anio: int,
         mes: int,
+        tipo: str = "emitidos",
         regenerar_todas: bool = False
     ) -> List[Dict[str, Any]]:
         """
-        Procesa los comunicados emitidos desde SharePoint
+        Procesa los comunicados (emitidos o recibidos) desde SharePoint
         
         Args:
             anio: Año del informe
             mes: Mes del informe (1-12)
+            tipo: Tipo de comunicados ("emitidos" o "recibidos")
             regenerar_todas: Si True, regenera toda la información incluso si ya existe
             
         Returns:
-            Lista de comunicados procesados con:
-            [
-                {
-                    "item": 1,
-                    "radicado": "GSC-7444-2025",
-                    "fecha": "23/09/2025",
-                    "asunto": "INGRESOS ELEMENTOS ALMACÉN SEPTIEMBRE 2025",
-                    "nombre_archivo": "GSC-7444-2025.pdf",
-                    "ruta_completa": "ruta/completa/archivo.pdf"
-                },
-                ...
-            ]
+            Lista de comunicados procesados
         """
         if not self.sharepoint_extractor:
             logger.warning("SharePoint extractor no disponible")
@@ -128,10 +125,10 @@ class ComunicadosEmitidosService:
             logger.warning("Extractor de observaciones no disponible")
             return []
         
-        # Obtener ruta de la carpeta
-        ruta_carpeta = self.obtener_ruta_carpeta_comunicados(anio, mes)
-        logger.info(f"[INFO] Listando archivos en carpeta: '{ruta_carpeta}'")
-        print(f"[INFO] Listando archivos en carpeta: '{ruta_carpeta}'")
+        # Obtener ruta de la carpeta según el tipo
+        ruta_carpeta = self.obtener_ruta_carpeta_comunicados(anio, mes, tipo=tipo)
+        logger.info(f"Listando archivos en carpeta: {ruta_carpeta}")
+        print(f"[INFO] Listando archivos en carpeta: {ruta_carpeta}")
         
         # Listar archivos en la carpeta
         archivos = self.sharepoint_extractor.listar_archivos_en_carpeta(ruta_carpeta)
@@ -195,6 +192,8 @@ class ComunicadosEmitidosService:
             
             except Exception as e:
                 logger.error(f"Error al procesar archivo {nombre_archivo}: {e}")
+                import traceback
+                traceback.print_exc()
                 # Continuar con el siguiente archivo
             
             comunicado = {
@@ -208,8 +207,46 @@ class ComunicadosEmitidosService:
             
             comunicados.append(comunicado)
         
-        logger.info(f"Se procesaron {len(comunicados)} comunicados emitidos")
+        logger.info(f"Se procesaron {len(comunicados)} comunicados {tipo}")
         return comunicados
+    
+    def procesar_comunicados_emitidos(
+        self,
+        anio: int,
+        mes: int,
+        regenerar_todas: bool = False
+    ) -> List[Dict[str, Any]]:
+        """
+        Procesa los comunicados emitidos desde SharePoint
+        
+        Args:
+            anio: Año del informe
+            mes: Mes del informe (1-12)
+            regenerar_todas: Si True, regenera toda la información incluso si ya existe
+            
+        Returns:
+            Lista de comunicados procesados
+        """
+        return self.procesar_comunicados(anio, mes, tipo="emitidos", regenerar_todas=regenerar_todas)
+    
+    def procesar_comunicados_recibidos(
+        self,
+        anio: int,
+        mes: int,
+        regenerar_todas: bool = False
+    ) -> List[Dict[str, Any]]:
+        """
+        Procesa los comunicados recibidos desde SharePoint
+        
+        Args:
+            anio: Año del informe
+            mes: Mes del informe (1-12)
+            regenerar_todas: Si True, regenera toda la información incluso si ya existe
+            
+        Returns:
+            Lista de comunicados procesados
+        """
+        return self.procesar_comunicados(anio, mes, tipo="recibidos", regenerar_todas=regenerar_todas)
     
     async def guardar_comunicados_en_mongodb(
         self,
@@ -218,6 +255,7 @@ class ComunicadosEmitidosService:
         mes: int,
         seccion: int = 1,
         subseccion: str = "1.6.1",
+        tipo: str = "emitidos",
         user_id: Optional[int] = None
     ) -> Optional[Dict[str, Any]]:
         """
@@ -241,6 +279,7 @@ class ComunicadosEmitidosService:
                 mes=mes,
                 seccion=seccion,
                 subseccion=subseccion,
+                tipo=tipo,
                 user_id=user_id
             )
             return documento

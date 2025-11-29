@@ -106,7 +106,8 @@ async def root():
         "docs": "/docs",
         "endpoints": {
             "obligaciones": "/api/obligaciones/procesar",
-            "comunicados": "/api/comunicados/emitidos",
+            "comunicados_emitidos": "/api/comunicados/emitidos",
+            "comunicados_recibidos": "/api/comunicados/recibidos",
             "swagger": "/docs",
             "redoc": "/redoc"
         }

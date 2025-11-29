@@ -49,6 +49,7 @@ class ComunicadosRepository:
         mes: int,
         seccion: int = 1,
         subseccion: str = "1.6.1",
+        tipo: str = "emitidos",
         user_id: Optional[int] = None
     ) -> Optional[Dict[str, Any]]:
         """
@@ -71,12 +72,13 @@ class ComunicadosRepository:
         
         try:
             # Crear documento para MongoDB
+            campo_comunicados = f"comunicados_{tipo}"
             documento = {
                 "anio": anio,
                 "mes": mes,
                 "seccion": seccion,
                 "subseccion": subseccion,
-                "comunicados_emitidos": comunicados,
+                campo_comunicados: comunicados,
                 "fecha_actualizacion": datetime.utcnow(),
                 "user_id": user_id
             }
