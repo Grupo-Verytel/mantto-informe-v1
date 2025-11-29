@@ -74,13 +74,20 @@ try:
 except Exception as e:
     logger.warning(f"No se pudieron incluir rutas de comunicados: {e}")
 
+try:
+    from src.routes import seccion1_routes
+    app.include_router(seccion1_routes.router)
+    logger.info("✓ Rutas de sección 1 incluidas")
+except Exception as e:
+    logger.warning(f"No se pudieron incluir rutas de sección 1: {e}")
+
 # Intentar incluir otras rutas si existen
 try:
     from src.routes import section1_routes
     app.include_router(section1_routes.router, prefix="/api")
-    logger.info("✓ Rutas de sección 1 incluidas")
+    logger.info("✓ Rutas de sección 1 (legacy) incluidas")
 except ImportError:
-    logger.info("Rutas de sección 1 no disponibles")
+    logger.info("Rutas de sección 1 (legacy) no disponibles")
 
 try:
     from src.routes import section2_routes
@@ -108,6 +115,8 @@ async def root():
             "obligaciones": "/api/obligaciones/procesar",
             "comunicados_emitidos": "/api/comunicados/emitidos",
             "comunicados_recibidos": "/api/comunicados/recibidos",
+            "seccion1_generar": "/api/seccion1/generar",
+            "seccion1_descargar": "/api/seccion1/descargar",
             "swagger": "/docs",
             "redoc": "/redoc"
         }

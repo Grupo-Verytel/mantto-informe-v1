@@ -26,7 +26,7 @@ class GeneradorSeccion1(GeneradorSeccion):
     def template_file(self) -> str:
         return "seccion_1_info_general.docx"
     
-    def __init__(self, anio: int, mes: int, usar_llm_observaciones: bool = True):
+    def __init__(self, anio: int, mes: int, usar_llm_observaciones: bool = True, cargar_desde_mongodb: bool = False):
         super().__init__(anio, mes)
         self.comunicados_emitidos: List[Dict] = []
         self.comunicados_recibidos: List[Dict] = []
@@ -37,6 +37,7 @@ class GeneradorSeccion1(GeneradorSeccion):
         self.obligaciones_ambientales_raw: List[Dict] = []
         self.obligaciones_anexos_raw: List[Dict] = []
         self.usar_llm_observaciones = usar_llm_observaciones
+        self.cargar_desde_mongodb = cargar_desde_mongodb
         self.extractor_observaciones = None
         if usar_llm_observaciones:
             try:
@@ -70,9 +71,13 @@ class GeneradorSeccion1(GeneradorSeccion):
         self._cargar_personal()
     
     def _cargar_comunicados(self) -> None:
-        """Carga comunicados emitidos y recibidos del mes"""
-        # TODO: Conectar con SharePoint o cargar de Excel
-        # Por ahora, cargar de archivo JSON si existe
+        """Carga comunicados emitidos y recibidos del mes desde MongoDB o archivo JSON"""
+        if self.cargar_desde_mongodb:
+            # Cargar desde MongoDB (se hace de forma asíncrona, este método se llama desde el servicio)
+            # Los datos ya deben estar cargados en self.comunicados_emitidos y self.comunicados_recibidos
+            return
+        
+        # Cargar desde archivo JSON (comportamiento original)
         archivo_comunicados = config.FUENTES_DIR / f"comunicados_{self.mes}_{self.anio}.json"
         
         if archivo_comunicados.exists():
@@ -106,8 +111,13 @@ class GeneradorSeccion1(GeneradorSeccion):
             ]
     
     def _cargar_obligaciones(self) -> None:
-        """Carga obligaciones desde JSON y genera observaciones dinámicas con LLM"""
-        # Intentar cargar desde archivo JSON mensual
+        """Carga obligaciones desde MongoDB o JSON y genera observaciones dinámicas con LLM"""
+        if self.cargar_desde_mongodb:
+            # Cargar desde MongoDB (se hace de forma asíncrona, este método se llama desde el servicio)
+            # Los datos ya deben estar cargados en las listas raw
+            return
+        
+        # Cargar desde archivo JSON (comportamiento original)
         archivo_obligaciones = config.FUENTES_DIR / f"obligaciones_{self.mes}_{self.anio}.json"
         if not archivo_obligaciones.exists():
             archivo_obligaciones = config.FUENTES_DIR / f"obligaciones_{config.MESES[self.mes].lower()}_{self.anio}.json"
@@ -435,9 +445,9 @@ class GeneradorSeccion1(GeneradorSeccion):
         """Formatea comunicados emitidos para tabla (ÍTEM, FECHA, CONSECUTIVO ETB, DESCRIPCIÓN)"""
         return [
             {
-                "item": i+1,
+                "item": com.get("item", i+1),
                 "fecha": com.get("fecha", ""),
-                "consecutivo": com.get("numero", ""),
+                "consecutivo": com.get("numero", com.get("radicado", "")),
                 "descripcion": com.get("asunto", "")
             }
             for i, com in enumerate(self.comunicados_emitidos)
@@ -447,9 +457,9 @@ class GeneradorSeccion1(GeneradorSeccion):
         """Formatea comunicados recibidos para tabla (ÍTEM, FECHA, CONSECUTIVO ETB, DESCRIPCIÓN)"""
         return [
             {
-                "item": i+1,
+                "item": com.get("item", i+1),
                 "fecha": com.get("fecha", ""),
-                "consecutivo": com.get("numero", ""),
+                "consecutivo": com.get("numero", com.get("radicado", "")),
                 "descripcion": com.get("asunto", "")
             }
             for i, com in enumerate(self.comunicados_recibidos)
