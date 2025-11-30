@@ -529,7 +529,12 @@ class GeneradorSeccion5(GeneradorSeccion):
                 run.font.name = 'Calibri'
                 parrafo_obj.alignment = WD_ALIGN_PARAGRAPH.LEFT
                 
-                logger.info(f"Párrafo creado en lugar de la tabla: '{texto[:50]}...'")
+                # Agregar indentación al párrafo
+                from docx.shared import Inches
+                parrafo_obj.paragraph_format.left_indent = Inches(0.5)  # Indentación de 0.5 pulgadas
+                parrafo_obj.paragraph_format.first_line_indent = Inches(0.5)  # Indentación de primera línea
+                
+                logger.info(f"Párrafo creado en lugar de la tabla con indentación: '{texto[:50]}...'")
             else:
                 # Si no encontramos el índice, intentar eliminar de otra forma
                 logger.warning("No se encontró índice de tabla, usando método alternativo")
@@ -546,7 +551,11 @@ class GeneradorSeccion5(GeneradorSeccion):
                     run.font.size = Pt(11)
                     run.font.name = 'Calibri'
                     parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT
-                    logger.info(f"Párrafo agregado: '{texto[:50]}...'")
+                    # Agregar indentación
+                    from docx.shared import Inches
+                    parrafo.paragraph_format.left_indent = Inches(0.5)
+                    parrafo.paragraph_format.first_line_indent = Inches(0.5)
+                    logger.info(f"Párrafo agregado con indentación: '{texto[:50]}...'")
                 except Exception as e:
                     logger.error(f"Error al eliminar tabla: {str(e)}")
                     # Fallback: limpiar la tabla y dejar el texto en una celda fusionada
@@ -578,6 +587,10 @@ class GeneradorSeccion5(GeneradorSeccion):
                     run.font.size = Pt(11)
                     run.font.name = 'Calibri'
                     parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                    # Agregar indentación
+                    from docx.shared import Inches
+                    parrafo.paragraph_format.left_indent = Inches(0.5)
+                    parrafo.paragraph_format.first_line_indent = Inches(0.5)
             
             return
         
@@ -600,7 +613,11 @@ class GeneradorSeccion5(GeneradorSeccion):
                 run = parrafo.add_run(texto)
                 run.font.size = Pt(11)
                 run.font.name = 'Calibri'
-                logger.info(f"Párrafo reemplazado con texto: '{texto[:50]}...'")
+                # Agregar indentación
+                from docx.shared import Inches
+                parrafo.paragraph_format.left_indent = Inches(0.5)
+                parrafo.paragraph_format.first_line_indent = Inches(0.5)
+                logger.info(f"Párrafo reemplazado con texto e indentación: '{texto[:50]}...'")
                 return
         
         logger.warning(f"No se encontró marcador '{marcador}' para reemplazar con texto")
