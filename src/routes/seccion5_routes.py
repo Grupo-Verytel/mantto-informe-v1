@@ -68,3 +68,39 @@ async def obtener_datos_laboratorio(data: Dict[str, Any]) -> Dict[str, Any]:
     """
     return await controller.obtener_datos(data)
 
+
+@router.post("/generar")
+async def generar_seccion5(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Genera el documento de la sección 5 desde MongoDB
+    
+    Body esperado:
+    {
+        "anio": 2025,
+        "mes": 9,
+        "output_path": "ruta/opcional/archivo.docx"  # Opcional
+    }
+    
+    Retorna:
+    {
+        "success": true,
+        "message": "Sección 5 generada exitosamente",
+        "file_path": "ruta/completa/archivo.docx",
+        "anio": 2025,
+        "mes": 9
+    }
+    
+    La lógica es:
+    1. Carga datos de laboratorio desde MongoDB (colección "laboratorio")
+    2. Calcula las cantidades según los estados:
+       - REINTEGRADOS AL INVENTARIO: suma de registros con ESTADO = "OPERATIVO", "REPARADO" o "REPARADO CAMPO"
+       - NO OPERATIVOS: suma de registros con ESTADO = "IRREPARABLE"
+       - ESTADO DE GARANTÍA: suma de registros con ESTADO = "ESTADO DE GARANTÍA"
+       - PENDIENTE POR PARTE: suma de registros con ESTADO = "PENDIENTE POR PARTE"
+       - TOTAL: suma de todos los anteriores
+    3. Genera el documento Word usando el template con Jinja2
+    4. Reemplaza la tabla dinámica usando el marcador {{ TABLA_MARKER_REPORTE_LABORATORIO }}
+    5. Guarda el archivo en el directorio de salida
+    """
+    return await controller.generar_seccion5(data)
+

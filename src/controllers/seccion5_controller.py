@@ -150,4 +150,78 @@ class Seccion5Controller:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error al obtener datos de laboratorio: {str(e)}"
             )
+    
+    async def generar_seccion5(
+        self,
+        data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Genera el documento de la sección 5 desde MongoDB
+        
+        Body esperado:
+        {
+            "anio": 2025,
+            "mes": 9,
+            "output_path": "ruta/opcional/archivo.docx"  # Opcional
+        }
+        
+        Retorna:
+        {
+            "success": true,
+            "message": "Sección 5 generada exitosamente",
+            "file_path": "ruta/completa/archivo.docx",
+            "anio": 2025,
+            "mes": 9
+        }
+        """
+        try:
+            anio = data.get("anio")
+            mes = data.get("mes")
+            output_path_str = data.get("output_path")
+            
+            if not anio or not mes:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="anio y mes son requeridos"
+                )
+            
+            if mes < 1 or mes > 12:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="mes debe estar entre 1 y 12"
+                )
+            
+            # Determinar ruta de salida
+            output_path = None
+            if output_path_str:
+                from pathlib import Path
+                output_path = Path(output_path_str)
+            
+            # Generar sección 5
+            archivo_generado = await self.service.generar_seccion5(
+                anio=anio,
+                mes=mes,
+                output_path=output_path
+            )
+            
+            return {
+                "success": True,
+                "message": "Sección 5 generada exitosamente",
+                "file_path": str(archivo_generado),
+                "anio": anio,
+                "mes": mes
+            }
+        
+        except FileNotFoundError as e:
+            logger.error(f"Error al generar sección 5: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Template no encontrado: {str(e)}"
+            )
+        except Exception as e:
+            logger.error(f"Error al generar sección 5: {str(e)}", exc_info=True)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error al generar sección 5: {str(e)}"
+            )
 

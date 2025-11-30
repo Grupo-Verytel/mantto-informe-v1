@@ -380,4 +380,80 @@ class Seccion5Service:
             Documento con los datos de laboratorio o None si no existe
         """
         return await self.laboratorio_repo.obtener_datos_laboratorio(anio, mes)
+    
+    async def cargar_datos_desde_mongodb(
+        self,
+        anio: int,
+        mes: int,
+        generador
+    ) -> None:
+        """
+        Carga datos desde MongoDB y los asigna al generador
+        
+        Args:
+            anio: Año del informe
+            mes: Mes del informe
+            generador: Instancia del generador de sección 5
+        """
+        try:
+            logger.info(f"Cargando datos de laboratorio desde MongoDB para {anio}-{mes}...")
+            
+            documento = await self.laboratorio_repo.obtener_datos_laboratorio(anio, mes)
+            
+            if documento:
+                datos_laboratorio = documento.get("datos_laboratorio", [])
+                generador.datos_laboratorio_raw = datos_laboratorio
+                logger.info(f"Datos de laboratorio cargados: {len(datos_laboratorio)} registros")
+            else:
+                logger.warning(f"No se encontraron datos de laboratorio para {anio}-{mes}")
+                generador.datos_laboratorio_raw = []
+                
+        except Exception as e:
+            logger.error(f"Error al cargar datos desde MongoDB: {e}")
+            import traceback
+            traceback.print_exc()
+            generador.datos_laboratorio_raw = []
+    
+    async def generar_seccion5(
+        self,
+        anio: int,
+        mes: int,
+        output_path: Optional[Path] = None
+    ) -> Path:
+        """
+        Genera el documento de la sección 5 desde MongoDB
+        
+        Args:
+            anio: Año del informe
+            mes: Mes del informe (1-12)
+            output_path: Ruta donde guardar el documento. Si None, usa directorio de salida por defecto
+            
+        Returns:
+            Path al archivo generado
+        """
+        from src.generadores.seccion_5_laboratorio import GeneradorSeccion5
+        import config
+        
+        # Crear generador
+        generador = GeneradorSeccion5(
+            anio=anio,
+            mes=mes,
+            cargar_desde_mongodb=True
+        )
+        
+        # Cargar datos desde MongoDB
+        await self.cargar_datos_desde_mongodb(anio, mes, generador)
+        
+        # Determinar ruta de salida
+        if output_path is None:
+            output_path = config.OUTPUT_DIR / f"seccion_5_{anio}_{mes:02d}.docx"
+        
+        # Asegurar que el directorio existe
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Generar y guardar el documento
+        generador.guardar(output_path)
+        
+        logger.info(f"Sección 5 generada exitosamente en: {output_path}")
+        return output_path
 

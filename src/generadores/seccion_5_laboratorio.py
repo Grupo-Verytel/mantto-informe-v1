@@ -1,645 +1,348 @@
 """
-Generador Sección 5: Informe de Laboratorio
-Tipo: 🟩 GENERACIÓN PROGRAMÁTICA (python-docx)
-
-Subsecciones:
-- 5.1 Actividades Generales del Laboratorio
-  - 5.1.1 Equipos Reintegrados al Inventario
-  - 5.1.2 Equipos con Concepto de No Operatividad
-  - 5.1.3 Equipos en Proceso de Garantía (RMA)
-- 5.2 Equipos Pendientes por Repuestos
+Generador Sección 5: Laboratorio
+Tipo: 🟩 EXTRACCIÓN (datos desde MongoDB)
 """
-from docx import Document
-from docx.shared import Inches, Pt, Cm, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
-from docx.oxml.ns import qn
-from docx.oxml import OxmlElement
+from io import BytesIO
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from datetime import datetime
-import json
+from typing import Dict, Any, List, Optional
 from .base import GeneradorSeccion
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docxtpl import DocxTemplate
 import config
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GeneradorSeccion5(GeneradorSeccion):
-    """Genera la Sección 5: Informe de Laboratorio usando python-docx"""
-    
-    # Colores corporativos
-    COLOR_AZUL_OSCURO = RGBColor(31, 78, 121)   # Encabezados tabla equipos reparados
-    COLOR_AZUL_MEDIO = RGBColor(46, 117, 182)   # Títulos de subsecciones
-    COLOR_GRIS = RGBColor(64, 64, 64)           # Subtítulos
-    COLOR_ROJO = RGBColor(192, 0, 0)            # Tabla equipos no operativos
-    COLOR_AMARILLO = RGBColor(255, 165, 0)       # Tabla equipos en RMA
+    """Genera la sección 5: Laboratorio"""
     
     @property
     def nombre_seccion(self) -> str:
-        return "5. INFORME DE LABORATORIO"
+        return "5. LABORATORIO"
     
     @property
     def template_file(self) -> str:
-        return "seccion_5_laboratorio.docx"  # No se usa, pero debe existir para compatibilidad
+        return "seccion_5_laboratorio.docx"
     
-    def __init__(self, anio: int, mes: int):
+    def __init__(self, anio: int, mes: int, cargar_desde_mongodb: bool = True):
         super().__init__(anio, mes)
-        self.datos: Dict[str, Any] = {}
-        self.doc: Optional[Document] = None
+        self.cargar_desde_mongodb = cargar_desde_mongodb
+        self.datos_laboratorio_raw: List[Dict] = []
+        self.reporte_laboratorio: List[Dict] = []
     
     def cargar_datos(self) -> None:
-        """Carga los datos de la sección 5 desde JSON"""
-        archivo = config.FUENTES_DIR / f"laboratorio_{self.mes}_{self.anio}.json"
-        
-        if archivo.exists():
-            try:
-                with open(archivo, 'r', encoding='utf-8') as f:
-                    self.datos = json.load(f)
-            except Exception as e:
-                print(f"[WARNING] Error al cargar datos desde {archivo}: {e}")
-                self.datos = self._datos_ejemplo()
-        else:
-            print(f"[WARNING] Archivo de datos no encontrado: {archivo}")
-            self.datos = self._datos_ejemplo()
-        
-        # Agregar mes y año si no están
-        if 'mes' not in self.datos:
-            self.datos['mes'] = config.MESES[self.mes]
-        if 'anio' not in self.datos:
-            self.datos['anio'] = self.anio
+        """Carga datos de laboratorio desde MongoDB"""
+        # Los datos se cargan desde MongoDB de forma asíncrona
+        # Este método se llama desde el servicio después de cargar los datos
+        pass
     
-    def _datos_ejemplo(self) -> Dict[str, Any]:
-        """Retorna datos de ejemplo para desarrollo"""
-        return {
-            "mes": config.MESES[self.mes],
-            "anio": self.anio,
-            "estadisticas": {
-                "equipos_recibidos": 15,
-                "equipos_reparados": 8,
-                "equipos_no_reparables": 3,
-                "equipos_rma": 4
+    def _calcular_cantidades_por_estado(self) -> List[Dict[str, Any]]:
+        """
+        Calcula las cantidades según los estados de los registros de laboratorio
+        
+        Returns:
+            Lista de diccionarios con el reporte de laboratorio:
+            [
+                {"reporte": "REINTEGRADOS AL INVENTARIO", "cantidad": 10},
+                {"reporte": "NO OPERATIVOS", "cantidad": 5},
+                ...
+            ]
+        """
+        if not self.datos_laboratorio_raw:
+            logger.warning("No hay datos de laboratorio para calcular cantidades")
+            return []
+        
+        # Estados para REINTEGRADOS AL INVENTARIO
+        estados_reintegrados = ["OPERATIVO", "REPARADO", "REPARADO CAMPO"]
+        
+        # Contar registros por estado
+        cantidad_reintegrados = 0
+        cantidad_no_operativos = 0
+        cantidad_garantia = 0
+        cantidad_pendiente_parte = 0
+        
+        for registro in self.datos_laboratorio_raw:
+            estado = str(registro.get("estado", "")).strip().upper()
+            
+            # REINTEGRADOS AL INVENTARIO
+            if estado in estados_reintegrados:
+                cantidad_reintegrados += 1
+            
+            # NO OPERATIVOS
+            elif estado == "IRREPARABLE":
+                cantidad_no_operativos += 1
+            
+            # ESTADO DE GARANTÍA
+            elif estado == "ESTADO DE GARANTÍA":
+                cantidad_garantia += 1
+            
+            # PENDIENTE POR PARTE
+            elif estado == "PENDIENTE POR PARTE":
+                cantidad_pendiente_parte += 1
+        
+        # Calcular total
+        total = cantidad_reintegrados + cantidad_no_operativos + cantidad_garantia + cantidad_pendiente_parte
+        
+        # Construir lista de reporte
+        reporte = [
+            {
+                "reporte": "REINTEGRADOS AL INVENTARIO",
+                "cantidad": cantidad_reintegrados
             },
-            "equipos_reparados": [
-                {
-                    "tipo_equipo": "Cámara PTZ Domo",
-                    "serial": "CAM-PTZ-2023-0145",
-                    "diagnostico": "Motor de pan/tilt averiado",
-                    "reparacion": "Reemplazo motor completo y calibración",
-                    "fecha_ingreso": "05/09/2024",
-                    "fecha_salida": "18/09/2024"
-                },
-                {
-                    "tipo_equipo": "Cámara IP 4MP",
-                    "serial": "CAM-2023-0789",
-                    "diagnostico": "Falla en fuente de poder",
-                    "reparacion": "Reemplazo de fuente y verificación de voltaje",
-                    "fecha_ingreso": "08/09/2024",
-                    "fecha_salida": "15/09/2024"
-                }
-            ],
-            "equipos_no_operativos": [
-                {
-                    "tipo_equipo": "Cámara PTZ Bullet",
-                    "serial": "CAM-2019-0234",
-                    "diagnostico": "Placa principal quemada",
-                    "justificacion": "Daño irreversible, costo > 80% del equipo nuevo",
-                    "fecha_concepto": "12/09/2024"
-                }
-            ],
-            "equipos_rma_proceso": [
-                {
-                    "tipo_equipo": "Cámara IP 8MP",
-                    "serial": "CAM-2023-0789",
-                    "fabricante": "Hikvision",
-                    "fecha_solicitud": "02/09/2024",
-                    "estado_tramite": "Aprobado - Esperando reposición",
-                    "dias_espera": 28
-                }
-            ],
-            "equipos_pendientes_parte": [
-                {
-                    "tipo_equipo": "Cámara PTZ Exterior",
-                    "serial": "CAM-2023-0345",
-                    "parte_requerida": "Motor de pan/tilt completo",
-                    "fecha_solicitud": "10/09/2024",
-                    "estado_gestion": "En proceso de compra"
-                }
-            ],
-            "resumen_partes_requeridas": [
-                {
-                    "parte": "Motor de pan/tilt",
-                    "cantidad": 1,
-                    "estado": "En proceso de compra"
-                }
-            ]
-        }
-    
-    def _configurar_estilos(self):
-        """Configura los estilos del documento"""
-        if self.doc is None:
-            return
-        
-        # Configurar márgenes (1.27 cm = 0.5 pulgadas)
-        sections = self.doc.sections
-        for section in sections:
-            section.top_margin = Cm(1.27)
-            section.bottom_margin = Cm(1.27)
-            section.left_margin = Cm(1.27)
-            section.right_margin = Cm(1.27)
-        
-        # Estilo normal
-        style = self.doc.styles['Normal']
-        style.font.name = 'Arial'
-        style.font.size = Pt(11)
-        
-        # Título Sección (5.)
-        h1 = self.doc.styles['Heading 1']
-        h1.font.name = 'Arial'
-        h1.font.size = Pt(14)
-        h1.font.bold = True
-        h1.font.color.rgb = self.COLOR_AZUL_OSCURO
-        
-        # Subsecciones (5.1, 5.2)
-        h2 = self.doc.styles['Heading 2']
-        h2.font.name = 'Arial'
-        h2.font.size = Pt(12)
-        h2.font.bold = True
-        h2.font.color.rgb = self.COLOR_AZUL_MEDIO
-        
-        # Subtítulos (5.1.1, 5.1.2, etc.)
-        h3 = self.doc.styles['Heading 3']
-        h3.font.name = 'Arial'
-        h3.font.size = Pt(11)
-        h3.font.bold = True
-        h3.font.color.rgb = self.COLOR_GRIS
-    
-    def _aplicar_sombreado_celda(self, cell, color: RGBColor):
-        """
-        Aplica color de fondo a celda de tabla
-        RGBColor es una tupla (r, g, b) que se puede acceder con índices
-        """
-        shading_elm = OxmlElement('w:shd')
-        # RGBColor es una tupla, acceder con índices
-        r = color[0]
-        g = color[1]
-        b = color[2]
-        
-        hex_color = f'{r:02X}{g:02X}{b:02X}'
-        shading_elm.set(qn('w:fill'), hex_color)
-        cell._element.get_or_add_tcPr().append(shading_elm)
-    
-    def _centrar_celda_vertical(self, cell):
-        """Centra verticalmente el contenido de una celda"""
-        tc = cell._element
-        tcPr = tc.get_or_add_tcPr()
-        vAlign = OxmlElement('w:vAlign')
-        vAlign.set(qn('w:val'), 'center')
-        tcPr.append(vAlign)
-    
-    def _agregar_parrafo(self, texto: str, justificado: bool = True, negrita: bool = False, 
-                        tamano: int = 11):
-        """Agrega un párrafo de texto"""
-        p = self.doc.add_paragraph()
-        run = p.add_run(texto)
-        run.bold = negrita
-        run.font.name = 'Arial'
-        run.font.size = Pt(tamano)
-        if justificado:
-            p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        p.paragraph_format.space_after = Pt(6)
-        return p
-    
-    def _agregar_titulo_seccion(self):
-        """Título principal: 5. INFORME DE LABORATORIO"""
-        self.doc.add_heading("5. INFORME DE LABORATORIO", level=1)
-    
-    def _agregar_introduccion(self):
-        """Párrafo introductorio de la sección"""
-        mes = self.datos.get('mes', config.MESES[self.mes])
-        anio = self.datos.get('anio', self.anio)
-        
-        texto = (
-            f"Durante el mes de {mes} de {anio}, el laboratorio técnico ha realizado "
-            f"actividades de diagnóstico, reparación y soporte técnico especializado "
-            f"para los equipos de la red de videovigilancia. A continuación se presenta "
-            f"el detalle de las actividades ejecutadas y el estado de los equipos en proceso."
-        )
-        self._agregar_parrafo(texto)
-    
-    def _agregar_5_1_actividades_generales(self):
-        """Subsección 5.1 completa"""
-        self.doc.add_heading("5.1. ACTIVIDADES GENERALES DEL LABORATORIO", level=2)
-        
-        # Párrafo introductorio
-        estadisticas = self.datos.get('estadisticas', {})
-        equipos_recibidos = estadisticas.get('equipos_recibidos', 0)
-        equipos_reparados = estadisticas.get('equipos_reparados', 0)
-        equipos_no_reparables = estadisticas.get('equipos_no_reparables', 0)
-        equipos_rma = estadisticas.get('equipos_rma', 0)
-        
-        texto = (
-            f"Durante el periodo reportado, el laboratorio recibió un total de "
-            f"{equipos_recibidos} equipos para diagnóstico y reparación, de los cuales "
-            f"{equipos_reparados} fueron reparados exitosamente y reintegrados al inventario "
-            f"operativo. Se identificaron {equipos_no_reparables} equipos como no reparables "
-            f"que requieren reposición, y {equipos_rma} equipos fueron gestionados bajo "
-            f"proceso de garantía (RMA) con los fabricantes."
-        )
-        self._agregar_parrafo(texto)
-        self.doc.add_paragraph()  # Espacio
-        
-        # Subsecciones
-        self._agregar_5_1_1_reintegrados()
-        self._agregar_5_1_2_no_operativos()
-        self._agregar_5_1_3_rma()
-    
-    def _agregar_5_1_1_reintegrados(self):
-        """Equipos reintegrados al inventario"""
-        self.doc.add_heading("5.1.1. Equipos Reintegrados al Inventario", level=3)
-        
-        equipos = self.datos.get('equipos_reparados', [])
-        
-        if not equipos:
-            self._agregar_parrafo(
-                "No se registraron equipos reintegrados durante este periodo."
-            )
-            return
-        
-        self._agregar_parrafo(
-            "Los siguientes equipos fueron diagnosticados, reparados y reintegrados "
-            "al inventario disponible para su instalación en campo:"
-        )
-        self.doc.add_paragraph()  # Espacio
-        
-        self._crear_tabla_equipos_reparados(equipos)
-    
-    def _agregar_5_1_2_no_operativos(self):
-        """Equipos con concepto de no operatividad"""
-        self.doc.add_heading("5.1.2. Equipos con Concepto de No Operatividad", level=3)
-        
-        equipos = self.datos.get('equipos_no_operativos', [])
-        
-        if not equipos:
-            self._agregar_parrafo(
-                "No se registraron equipos con concepto de no operatividad durante este periodo."
-            )
-            return
-        
-        self._agregar_parrafo(
-            "Los siguientes equipos fueron diagnosticados como no reparables debido a "
-            "daños irreversibles en componentes críticos, obsolescencia tecnológica o "
-            "costo de reparación superior al valor del equipo:"
-        )
-        self.doc.add_paragraph()  # Espacio
-        
-        self._crear_tabla_equipos_no_operativos(equipos)
-    
-    def _agregar_5_1_3_rma(self):
-        """Equipos en proceso de garantía"""
-        self.doc.add_heading("5.1.3. Equipos en Proceso de Garantía (RMA)", level=3)
-        
-        equipos = self.datos.get('equipos_rma_proceso', [])
-        
-        if not equipos:
-            self._agregar_parrafo(
-                "No se registraron equipos en proceso de garantía (RMA) durante este periodo."
-            )
-            return
-        
-        self._agregar_parrafo(
-            "Los siguientes equipos se encuentran bajo proceso de garantía con los "
-            "fabricantes, esperando autorización de RMA, reposición o reparación por "
-            "parte del proveedor:"
-        )
-        self.doc.add_paragraph()  # Espacio
-        
-        self._crear_tabla_equipos_rma(equipos)
-    
-    def _agregar_5_2_pendiente_por_parte(self):
-        """Equipos pendientes por repuestos"""
-        self.doc.add_heading("5.2. EQUIPOS PENDIENTES POR REPUESTOS", level=2)
-        
-        equipos = self.datos.get('equipos_pendientes_parte', [])
-        
-        if not equipos:
-            self._agregar_parrafo(
-                "No se registraron equipos pendientes por repuestos durante este periodo."
-            )
-            return
-        
-        self._agregar_parrafo(
-            "Los siguientes equipos se encuentran en espera de repuestos o partes "
-            "específicas para completar su reparación. Se detalla el estado de gestión "
-            "de cada componente requerido:"
-        )
-        self.doc.add_paragraph()  # Espacio
-        
-        self._crear_tabla_pendientes_parte(equipos)
-        
-        # Tabla resumen de partes
-        resumen = self.datos.get('resumen_partes_requeridas', [])
-        if resumen:
-            self.doc.add_paragraph()  # Espacio
-            self._agregar_parrafo("Resumen de partes requeridas:", negrita=True)
-            self._crear_resumen_partes_requeridas(resumen)
-    
-    def _crear_tabla_equipos_reparados(self, equipos: List[Dict]):
-        """Tabla 5.1.1 - Equipos Reintegrados"""
-        encabezados = [
-            "Tipo de Equipo", "Serial", "Diagnóstico", 
-            "Reparación Realizada", "Fecha Ingreso", "Fecha Salida"
+            {
+                "reporte": "NO OPERATIVOS",
+                "cantidad": cantidad_no_operativos
+            },
+            {
+                "reporte": "ESTADO DE GARANTÍA",
+                "cantidad": cantidad_garantia
+            },
+            {
+                "reporte": "PENDIENTE POR PARTE",
+                "cantidad": cantidad_pendiente_parte
+            },
+            {
+                "reporte": "TOTAL",
+                "cantidad": total
+            }
         ]
-        anchos = [Cm(3.5), Cm(3.0), Cm(4.0), Cm(4.0), Cm(2.5), Cm(2.5)]
         
-        tabla = self.doc.add_table(rows=1, cols=len(encabezados))
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
+        logger.info(f"Cantidades calculadas: Reintegrados={cantidad_reintegrados}, "
+                   f"No Operativos={cantidad_no_operativos}, "
+                   f"Garantía={cantidad_garantia}, "
+                   f"Pendiente={cantidad_pendiente_parte}, "
+                   f"Total={total}")
         
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_AZUL_OSCURO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for equipo in equipos:
-            row_cells = tabla.add_row().cells
-            fila = [
-                equipo.get('tipo_equipo', ''),
-                equipo.get('serial', ''),
-                equipo.get('diagnostico', ''),
-                equipo.get('reparacion', ''),
-                equipo.get('fecha_ingreso', ''),
-                equipo.get('fecha_salida', '')
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = str(texto) if texto else ""
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i >= 4 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-        
-        # Ajustar anchos
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
-    
-    def _crear_tabla_equipos_no_operativos(self, equipos: List[Dict]):
-        """Tabla 5.1.2 - Equipos No Operativos"""
-        encabezados = [
-            "Tipo de Equipo", "Serial", "Diagnóstico",
-            "Justificación No Reparable", "Fecha Concepto"
-        ]
-        anchos = [Cm(3.0), Cm(3.0), Cm(4.5), Cm(5.0), Cm(2.5)]
-        
-        tabla = self.doc.add_table(rows=1, cols=len(encabezados))
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_ROJO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for equipo in equipos:
-            row_cells = tabla.add_row().cells
-            fila = [
-                equipo.get('tipo_equipo', ''),
-                equipo.get('serial', ''),
-                equipo.get('diagnostico', ''),
-                equipo.get('justificacion', ''),
-                equipo.get('fecha_concepto', '')
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = str(texto) if texto else ""
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i == 4 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-        
-        # Ajustar anchos
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
-    
-    def _crear_tabla_equipos_rma(self, equipos: List[Dict]):
-        """Tabla 5.1.3 - Equipos en RMA"""
-        encabezados = [
-            "Tipo de Equipo", "Serial", "Fabricante",
-            "Fecha Solicitud RMA", "Estado Trámite", "Tiempo Esperando (días)"
-        ]
-        anchos = [Cm(3.0), Cm(2.8), Cm(2.8), Cm(2.5), Cm(3.5), Cm(2.4)]
-        
-        tabla = self.doc.add_table(rows=1, cols=len(encabezados))
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(0, 0, 0)  # Negro para fondo amarillo
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_AMARILLO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for equipo in equipos:
-            row_cells = tabla.add_row().cells
-            fila = [
-                equipo.get('tipo_equipo', ''),
-                equipo.get('serial', ''),
-                equipo.get('fabricante', ''),
-                equipo.get('fecha_solicitud', ''),
-                equipo.get('estado_tramite', ''),
-                str(equipo.get('dias_espera', ''))
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = str(texto) if texto else ""
-                for paragraph in row_cells[i].paragraphs:
-                    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-        
-        # Ajustar anchos
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
-    
-    def _crear_tabla_pendientes_parte(self, equipos: List[Dict]):
-        """Tabla 5.2 - Equipos Pendientes por Repuestos"""
-        encabezados = [
-            "Tipo de Equipo", "Serial", "Parte/Repuesto Requerido",
-            "Fecha Solicitud", "Estado de Gestión"
-        ]
-        anchos = [Cm(3.0), Cm(3.0), Cm(4.5), Cm(2.5), Cm(4.0)]
-        
-        tabla = self.doc.add_table(rows=1, cols=len(encabezados))
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_AZUL_MEDIO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for equipo in equipos:
-            row_cells = tabla.add_row().cells
-            fila = [
-                equipo.get('tipo_equipo', ''),
-                equipo.get('serial', ''),
-                equipo.get('parte_requerida', ''),
-                equipo.get('fecha_solicitud', ''),
-                equipo.get('estado_gestion', '')
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = str(texto) if texto else ""
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i == 3 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-        
-        # Ajustar anchos
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
-    
-    def _crear_resumen_partes_requeridas(self, resumen: List[Dict]):
-        """Tabla Resumen de Partes Requeridas"""
-        encabezados = ["Repuesto/Parte", "Cantidad Requerida", "Estado"]
-        anchos = [Cm(6.0), Cm(3.0), Cm(5.0)]
-        
-        tabla = self.doc.add_table(rows=1, cols=len(encabezados))
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_GRIS)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for parte in resumen:
-            row_cells = tabla.add_row().cells
-            fila = [
-                parte.get('parte', ''),
-                str(parte.get('cantidad', '')),
-                parte.get('estado', '')
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = str(texto) if texto else ""
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i == 1 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-        
-        # Ajustar anchos
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
+        return reporte
     
     def procesar(self) -> Dict[str, Any]:
-        """Procesa los datos y retorna el contexto (no se usa en generación programática)"""
-        return {}
+        """Procesa los datos y retorna el contexto para el template"""
+        # Calcular cantidades por estado
+        self.reporte_laboratorio = self._calcular_cantidades_por_estado()
+        
+        # Agregar marcador de tabla al contexto
+        contexto = {
+            "TABLA_MARKER_REPORTE_LABORATORIO": "[[TABLA_REPORTE_LABORATORIO]]",
+            "reporte_laboratorio": self.reporte_laboratorio
+        }
+        
+        return contexto
     
-    def generar(self) -> Document:
+    def generar(self):
         """
-        Genera el documento completo de la Sección 5
-        Sobrescribe el método de la clase base para usar python-docx directamente
+        Genera la sección completa con tablas dinámicas
         """
-        # Cargar datos si no se han cargado
-        if not self.datos:
-            self.cargar_datos()
+        # Cargar contexto base
+        self.contexto = self.cargar_contexto_base()
         
-        # Crear documento
-        self.doc = Document()
-        self._configurar_estilos()
+        # Cargar datos específicos
+        self.cargar_datos()
         
-        # Generar contenido
-        self._agregar_titulo_seccion()
-        self._agregar_introduccion()
-        self._agregar_5_1_actividades_generales()
-        self._agregar_5_2_pendiente_por_parte()
+        # Procesar y agregar al contexto
+        datos_seccion = self.procesar()
+        self.contexto.update(datos_seccion)
         
-        # Separador fin de sección
-        self.doc.add_paragraph()
-        p = self.doc.add_paragraph("═" * 60)
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        # Renderizar template con Jinja2
+        if not self.template_path.exists():
+            raise FileNotFoundError(f"Template no encontrado: {self.template_path}")
         
-        p = self.doc.add_paragraph("Fin Sección 5 - Informe de Laboratorio")
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.runs[0].italic = True
-        p.runs[0].font.color.rgb = RGBColor(128, 128, 128)
+        doc_template = DocxTemplate(self.template_path)
+        doc_template.render(self.contexto)
         
-        return self.doc
+        # Guardar el DocxTemplate a BytesIO para evitar problemas de XML
+        buffer = BytesIO()
+        doc_template.save(buffer)
+        buffer.seek(0)
+        
+        # Abrir como Document de python-docx para manipulación de tablas
+        doc = Document(buffer)
+        
+        # Reemplazar tabla de reporte de laboratorio
+        self._reemplazar_tabla_por_marcador(
+            doc,
+            "TABLA_REPORTE_LABORATORIO",
+            self.reporte_laboratorio,
+            self._crear_tabla_reporte_laboratorio
+        )
+        
+        return doc
+    
+    def _reemplazar_tabla_por_marcador(self, doc: Document, marcador: str, datos: list, metodo_creacion) -> None:
+        """
+        Busca una tabla en el documento usando un marcador único y la reemplaza con datos.
+        
+        Args:
+            doc: Documento de python-docx
+            marcador: Nombre del marcador (ej: "TABLA_REPORTE_LABORATORIO")
+            datos: Lista de datos para llenar la tabla
+            metodo_creacion: Método que crea/llena la tabla
+        """
+        # El marcador se renderiza como [[TABLA_XXX]] después de procesar Jinja2
+        marcador_renderizado = f"[[{marcador}]]"
+        
+        # Variaciones del marcador que pueden aparecer
+        marcador_variaciones = [
+            marcador_renderizado,  # Después de procesar Jinja2: [[TABLA_XXX]]
+            f"{{{{ TABLA_MARKER_{marcador.replace('TABLA_', '')} }}}}",  # En el template original
+            f"TABLA_MARKER_{marcador.replace('TABLA_', '')}",  # Variable de Jinja2 sin renderizar
+            marcador.upper(),  # Nombre del marcador en mayúsculas
+        ]
+        
+        # Normalizar el marcador para búsqueda
+        marcador_busqueda = marcador.upper().replace("TABLA_", "")
+        logger.info(f"Buscando tabla con marcador: {marcador_renderizado} (variaciones: {marcador_variaciones})")
+        
+        tabla_encontrada = None
+        tabla_idx = None
+        celda_con_marcador = None
+        
+        # Buscar el marcador en todas las tablas del documento
+        for idx, tabla in enumerate(doc.tables):
+            # Buscar en todas las celdas de la tabla
+            for fila_idx, fila in enumerate(tabla.rows):
+                for celda_idx, celda in enumerate(fila.cells):
+                    # Obtener todo el texto de la celda (incluyendo párrafos)
+                    texto_celda = ""
+                    for parrafo in celda.paragraphs:
+                        texto_celda += parrafo.text
+                    
+                    texto_celda_upper = texto_celda.upper()
+                    
+                    # Verificar si contiene el marcador renderizado [[TABLA_XXX]]
+                    encontro_marcador = marcador_renderizado.upper() in texto_celda_upper
+                    
+                    # Si no se encuentra, buscar por variaciones
+                    if not encontro_marcador:
+                        for variacion in marcador_variaciones:
+                            if variacion.upper() in texto_celda_upper:
+                                encontro_marcador = True
+                                break
+                    
+                    # También buscar por el nombre del marcador sin prefijos
+                    if not encontro_marcador and marcador_busqueda in texto_celda_upper:
+                        encontro_marcador = True
+                    
+                    if encontro_marcador:
+                        tabla_encontrada = tabla
+                        tabla_idx = idx
+                        celda_con_marcador = (fila_idx, celda_idx)
+                        logger.info(f"Marcador encontrado en tabla {idx}, fila {fila_idx}, celda {celda_idx}")
+                        logger.debug(f"Texto de la celda: '{texto_celda[:100]}...'")
+                        break
+                
+                if tabla_encontrada:
+                    break
+            
+            if tabla_encontrada:
+                break
+        
+        if tabla_encontrada and tabla_idx is not None:
+            # Limpiar el marcador si está en el encabezado (fila 0)
+            if celda_con_marcador:
+                fila_idx, celda_idx = celda_con_marcador
+                if fila_idx == 0:
+                    # Si el marcador está en el encabezado, limpiarlo
+                    celda = tabla_encontrada.rows[0].cells[celda_idx]
+                    for parrafo in celda.paragraphs:
+                        parrafo.clear()
+            
+            # Llamar al método de creación para reemplazar la tabla
+            logger.info(f"Reemplazando tabla {tabla_idx} con {len(datos)} elementos")
+            try:
+                metodo_creacion(doc, tabla_encontrada)
+                logger.info(f"Tabla '{marcador}' procesada correctamente")
+            except Exception as e:
+                logger.error(f"Error al procesar tabla '{marcador}': {str(e)}")
+                import traceback
+                traceback.print_exc()
+        else:
+            logger.warning(f"No se encontró tabla con marcador '{marcador}'")
+            logger.info(f"Asegúrate de agregar '{{{{ TABLA_MARKER_{marcador.replace('TABLA_', '')} }}}}' en la primera celda de datos de la tabla en el template")
+            logger.debug(f"Marcador buscado: {marcador_variaciones}")
+    
+    def _crear_tabla_reporte_laboratorio(self, doc: Document, tabla_existente) -> None:
+        """
+        Reemplaza el contenido de la tabla existente con los datos del reporte de laboratorio
+        
+        Args:
+            doc: Documento de python-docx
+            tabla_existente: Tabla existente en el documento
+        """
+        logger.info(f"Reemplazando tabla de reporte de laboratorio con {len(self.reporte_laboratorio)} filas")
+        
+        # Limpiar todas las filas excepto el encabezado (fila 0)
+        num_filas_originales = len(tabla_existente.rows)
+        while len(tabla_existente.rows) > 1:
+            tbl = tabla_existente._tbl
+            tbl.remove(tabla_existente.rows[-1]._tr)
+        
+        logger.info(f"Tabla limpiada: {num_filas_originales} filas -> {len(tabla_existente.rows)} fila(s) (encabezado)")
+        
+        # Obtener número de columnas
+        num_cols = len(tabla_existente.columns)
+        logger.info(f"Tabla tiene {num_cols} columnas")
+        
+        # Verificar/actualizar encabezados
+        if len(tabla_existente.rows) > 0:
+            encabezados_esperados = ["REPORTE LABORATORIO", "CANTIDAD"]
+            primera_fila = tabla_existente.rows[0]
+            
+            # Actualizar encabezados si no coinciden
+            for i, header_text in enumerate(encabezados_esperados):
+                if i < num_cols and i < len(primera_fila.cells):
+                    celda = primera_fila.cells[i]
+                    texto_actual = celda.text.strip().upper()
+                    if texto_actual != header_text.upper():
+                        celda.text = header_text
+                        # Formatear encabezado
+                        for parrafo in celda.paragraphs:
+                            for run in parrafo.runs:
+                                run.font.bold = True
+                                run.font.size = Pt(10)
+                            parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        
+        # Agregar filas con los datos
+        for item in self.reporte_laboratorio:
+            fila = tabla_existente.add_row()
+            celdas = fila.cells
+            
+            # Columna 1: REPORTE LABORATORIO
+            if len(celdas) > 0:
+                celda_reporte = celdas[0]
+                celda_reporte.text = item.get("reporte", "")
+                # Formatear celda
+                for parrafo in celda_reporte.paragraphs:
+                    parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                    for run in parrafo.runs:
+                        run.font.size = Pt(10)
+                        run.font.name = 'Calibri'
+            
+            # Columna 2: CANTIDAD
+            if len(celdas) > 1:
+                celda_cantidad = celdas[1]
+                cantidad = item.get("cantidad", 0)
+                celda_cantidad.text = str(cantidad)
+                # Formatear celda
+                for parrafo in celda_cantidad.paragraphs:
+                    parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    for run in parrafo.runs:
+                        run.font.size = Pt(10)
+                        run.font.name = 'Calibri'
+                        # Si es TOTAL, poner en negrita
+                        if item.get("reporte", "").upper() == "TOTAL":
+                            run.font.bold = True
+        
+        logger.info(f"Tabla actualizada: {len(tabla_existente.rows)} filas totales (1 encabezado + {len(self.reporte_laboratorio)} datos)")
     
     def guardar(self, output_path: Path) -> None:
         """
-        Genera y guarda la sección
-        Sobrescribe el método de la clase base para usar python-docx
+        Genera y guarda la sección, asegurando que los cambios en las tablas se guarden correctamente
         """
-        if self.doc is None:
-            self.generar()
+        doc = self.generar()
         
-        self.doc.save(str(output_path))
-        print(f"[OK] {self.nombre_seccion} guardada en: {output_path}")
+        # Guardar el documento
+        doc.save(str(output_path))
+        logger.info(f"{self.nombre_seccion} guardada en: {output_path}")

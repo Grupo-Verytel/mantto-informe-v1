@@ -126,6 +126,7 @@ async def root():
             "seccion1_descargar": "/api/seccion1/descargar",
             "seccion5_procesar_excel": "/api/seccion5/procesar-excel",
             "seccion5_obtener_datos": "/api/seccion5/obtener-datos",
+            "seccion5_generar": "/api/seccion5/generar",
             "swagger": "/docs",
             "redoc": "/redoc"
         }
