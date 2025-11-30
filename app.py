@@ -103,6 +103,13 @@ try:
 except ImportError:
     logger.info("Rutas de autenticación no disponibles")
 
+try:
+    from src.routes import seccion5_routes
+    app.include_router(seccion5_routes.router)
+    logger.info("✓ Rutas de sección 5 (laboratorio) incluidas")
+except Exception as e:
+    logger.warning(f"No se pudieron incluir rutas de sección 5: {e}")
+
 
 @app.get("/", tags=["Root"])
 async def root():
@@ -117,6 +124,8 @@ async def root():
             "comunicados_recibidos": "/api/comunicados/recibidos",
             "seccion1_generar": "/api/seccion1/generar",
             "seccion1_descargar": "/api/seccion1/descargar",
+            "seccion5_procesar_excel": "/api/seccion5/procesar-excel",
+            "seccion5_obtener_datos": "/api/seccion5/obtener-datos",
             "swagger": "/docs",
             "redoc": "/redoc"
         }
