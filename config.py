@@ -4,14 +4,13 @@ Configuración global del generador de informes ETB
 from pathlib import Path
 from datetime import datetime
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
-
-
-### CONEXION A MONGODB ###
-MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB = os.getenv("MONGO_DB")
+# Cargar variables de entorno desde .env
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    print("[WARNING] python-dotenv no está instalado. Las variables de entorno deben configurarse manualmente.")
 
 # Rutas base
 BASE_DIR = Path(__file__).parent
@@ -20,6 +19,7 @@ DATA_DIR = BASE_DIR / "data"
 OUTPUT_DIR = BASE_DIR / "output"
 FIJOS_DIR = DATA_DIR / "fijos"
 FUENTES_DIR = DATA_DIR / "fuentes"
+INFORMES_APROBADOS_DIR = BASE_DIR / "informesAprobados"
 
 # Crear directorios si no existen
 for dir_path in [TEMPLATES_DIR, DATA_DIR, OUTPUT_DIR, FIJOS_DIR, FUENTES_DIR]:
@@ -98,11 +98,28 @@ def get_periodo_texto(anio: int, mes: int) -> str:
 
 # Configuración GLPI
 GLPI_API_URL = "https://glpi.etb.com.co/apirest.php"
-GLPI_API_TOKEN = "TU_TOKEN_AQUI"  # TODO: Configurar token real o usar variable de entorno
+GLPI_API_TOKEN = os.getenv("GLPI_API_TOKEN", "TU_TOKEN_AQUI")
+
+# Configuración OpenAI (LLM)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+# Configuración SharePoint (solo App Registration - username/password deprecado)
+SHAREPOINT_SITE_URL = os.getenv("SHAREPOINT_SITE_URL", "")
+SHAREPOINT_CLIENT_ID = os.getenv("SHAREPOINT_CLIENT_ID", "")
+SHAREPOINT_CLIENT_SECRET = os.getenv("SHAREPOINT_CLIENT_SECRET", "")
+# Tenant ID de Azure AD (GUID) - Si no se proporciona, se extrae del dominio de SHAREPOINT_SITE_URL
+SHAREPOINT_TENANT_ID = os.getenv("SHAREPOINT_TENANT_ID", "")
+# Ruta base adicional en SharePoint (ej: "Documentos compartidos" o "Shared Documents" o carpeta base)
+SHAREPOINT_BASE_PATH = os.getenv("SHAREPOINT_BASE_PATH", "")
 
 # Lista de meses en español (para compatibilidad)
 MESES_LISTA = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ]
+
+# Configuración MongoDB
+MONGODB_URI = os.getenv("MONGODB_URI", "")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "")
 

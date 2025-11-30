@@ -222,7 +222,7 @@ class GeneradorSeccion3(GeneradorSeccion):
         run.font.size = Pt(10)
         run.font.color.rgb = self.COLOR_GRIS
         self.doc.add_paragraph()
-    
+        
     def _agregar_3_1_penalidad_ans(self):
         """Subsección 3.1 completa"""
         self.doc.add_heading("3.1. PENALIDAD DE ANS", level=2)
@@ -417,7 +417,7 @@ class GeneradorSeccion3(GeneradorSeccion):
                     for run in paragraph.runs:
                         run.font.size = Pt(9)
                 self._centrar_celda_vertical(row_cells[i])
-            
+        
             # Aplicar semáforo a la columna de disponibilidad
             self._aplicar_color_disponibilidad(row_cells[4], disponibilidad)
         
