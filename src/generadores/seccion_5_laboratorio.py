@@ -35,6 +35,7 @@ class GeneradorSeccion5(GeneradorSeccion):
         self.reintegrados_inventario: List[Dict] = []
         self.no_operativos: List[Dict] = []
         self.estado_garantia: List[Dict] = []
+        self.pendiente_parte: List[Dict] = []
     
     def cargar_datos(self) -> None:
         """Carga datos de laboratorio desde MongoDB"""
@@ -190,6 +191,29 @@ class GeneradorSeccion5(GeneradorSeccion):
         logger.info(f"Registros ESTADO DE GARANTÍA encontrados: {len(garantia)}")
         return garantia
     
+    def _filtrar_pendiente_parte(self) -> List[Dict[str, Any]]:
+        """
+        Filtra los registros que corresponden a PENDIENTE POR PARTE
+        
+        Returns:
+            Lista de registros con ESTADO = "PENDIENTE POR PARTE"
+        """
+        if not self.datos_laboratorio_raw:
+            logger.warning("No hay datos de laboratorio para filtrar")
+            return []
+        
+        # Estado para PENDIENTE POR PARTE
+        estado_pendiente = "PENDIENTE POR PARTE"
+        
+        pendiente = []
+        for registro in self.datos_laboratorio_raw:
+            estado = str(registro.get("estado", "")).strip().upper()
+            if estado == estado_pendiente:
+                pendiente.append(registro)
+        
+        logger.info(f"Registros PENDIENTE POR PARTE encontrados: {len(pendiente)}")
+        return pendiente
+    
     def _generar_texto_sin_garantia(self) -> str:
         """
         Genera el texto que se muestra cuando no hay registros de garantía
@@ -199,6 +223,16 @@ class GeneradorSeccion5(GeneradorSeccion):
         """
         nombre_mes = config.MESES.get(self.mes, "MES").upper()
         return f"Bajo el trámite de RMA (Return Merchandise Authorization) para el periodo de corte comprendido del mes {nombre_mes} DE {self.anio}, no se tramita equipos bajo el proceso de garantía"
+    
+    def _generar_texto_sin_pendiente_parte(self) -> str:
+        """
+        Genera el texto que se muestra cuando no hay registros de pendiente por parte
+        
+        Returns:
+            Texto formateado con el mes y año
+        """
+        nombre_mes = config.MESES.get(self.mes, "MES").upper()
+        return f"Bajo el trámite de PENDIENTE POR PARTE para el periodo de corte comprendido del mes de {nombre_mes} DE {self.anio}, no se tramita equipos bajo el proceso de pendiente por parte."
     
     def procesar(self) -> Dict[str, Any]:
         """Procesa los datos y retorna el contexto para el template"""
@@ -214,21 +248,28 @@ class GeneradorSeccion5(GeneradorSeccion):
         # Filtrar registros ESTADO DE GARANTÍA
         self.estado_garantia = self._filtrar_estado_garantia()
         
+        # Filtrar registros PENDIENTE POR PARTE
+        self.pendiente_parte = self._filtrar_pendiente_parte()
+        
         # Agregar marcadores de tabla al contexto
         contexto = {
             "TABLA_MARKER_REPORTE_LABORATORIO": "[[TABLA_REPORTE_LABORATORIO]]",
             "TABLA_MARKER_CONCEPTO_TECNICO": "[[TABLA_CONCEPTO_TECNICO]]",
             "TABLA_MARKER_CONCEPTO_TECNICO_NO_OPERATIVO": "[[TABLA_CONCEPTO_TECNICO_NO_OPERATIVO]]",
             "TABLA_MARKER_GARANTIA": "[[TABLA_GARANTIA]]",  # Marcador para la tabla de garantía
+            "TABLA_MARKER_PENDIENTE_PARTE": "[[TABLA_PENDIENTE_PARTE]]",  # Marcador para la tabla de pendiente por parte
             "reporte_laboratorio": self.reporte_laboratorio,
             "reintegrados_inventario": self.reintegrados_inventario,
             "no_operativos": self.no_operativos,
             "estado_garantia": self.estado_garantia,
+            "pendiente_parte": self.pendiente_parte,
             "hay_garantia": len(self.estado_garantia) > 0,  # Variable booleana para condicionales
-            "texto_sin_garantia": self._generar_texto_sin_garantia()
+            "hay_pendiente_parte": len(self.pendiente_parte) > 0,  # Variable booleana para condicionales
+            "texto_sin_garantia": self._generar_texto_sin_garantia(),
+            "texto_sin_pendiente_parte": self._generar_texto_sin_pendiente_parte()
         }
         
-        logger.info(f"Contexto generado: hay_garantia={contexto['hay_garantia']}, registros_garantia={len(self.estado_garantia)}")
+        logger.info(f"Contexto generado: hay_garantia={contexto['hay_garantia']}, registros_garantia={len(self.estado_garantia)}, hay_pendiente_parte={contexto['hay_pendiente_parte']}, registros_pendiente_parte={len(self.pendiente_parte)}")
         
         return contexto
     
@@ -292,6 +333,15 @@ class GeneradorSeccion5(GeneradorSeccion):
             self.estado_garantia,
             self._crear_tabla_garantia,
             self._generar_texto_sin_garantia() if not self.estado_garantia else None
+        )
+        
+        # Reemplazar tabla/sección de PENDIENTE POR PARTE (con lógica condicional)
+        self._reemplazar_tabla_o_texto_por_marcador(
+            doc,
+            "TABLA_PENDIENTE_PARTE",
+            self.pendiente_parte,
+            self._crear_tabla_pendiente_parte,
+            self._generar_texto_sin_pendiente_parte() if not self.pendiente_parte else None
         )
         
         return doc
@@ -1022,6 +1072,115 @@ class GeneradorSeccion5(GeneradorSeccion):
                     run.font.name = 'Calibri'
         
         logger.info(f"Tabla actualizada: {len(tabla_existente.rows)} filas totales (1 encabezado + {len(self.estado_garantia)} datos)")
+    
+    def _crear_tabla_pendiente_parte(self, doc: Document, tabla_existente) -> None:
+        """
+        Reemplaza el contenido de la tabla existente con los datos de PENDIENTE POR PARTE
+        
+        Args:
+            doc: Documento de python-docx
+            tabla_existente: Tabla existente en el documento
+        """
+        logger.info(f"Reemplazando tabla de pendiente por parte con {len(self.pendiente_parte)} registros")
+        
+        # Limpiar todas las filas excepto el encabezado (fila 0)
+        num_filas_originales = len(tabla_existente.rows)
+        while len(tabla_existente.rows) > 1:
+            tbl = tabla_existente._tbl
+            tbl.remove(tabla_existente.rows[-1]._tr)
+        
+        logger.info(f"Tabla limpiada: {num_filas_originales} filas -> {len(tabla_existente.rows)} fila(s) (encabezado)")
+        
+        # Obtener número de columnas
+        num_cols = len(tabla_existente.columns)
+        logger.info(f"Tabla tiene {num_cols} columnas")
+        
+        # Verificar/actualizar encabezados
+        if len(tabla_existente.rows) > 0:
+            encabezados_esperados = ["ID", "FECHA", "PUNTO", "EQUIPO", "SERIAL", "ESTADO"]
+            primera_fila = tabla_existente.rows[0]
+            
+            # Si la tabla tiene menos de 6 columnas, intentar agregar columnas faltantes
+            if num_cols < 6:
+                logger.warning(f"La tabla tiene solo {num_cols} columnas, se necesitan 6. Intentando agregar columnas...")
+                from docx.shared import Inches
+                columnas_faltantes = 6 - num_cols
+                for i in range(columnas_faltantes):
+                    tabla_existente.add_column(Inches(1.5))
+                    logger.info(f"Columna {num_cols + i + 1} agregada")
+                num_cols = len(tabla_existente.columns)
+                logger.info(f"Tabla ahora tiene {num_cols} columnas")
+            
+            # Actualizar encabezados si no coinciden
+            for i, header_text in enumerate(encabezados_esperados):
+                if i < num_cols and i < len(primera_fila.cells):
+                    celda = primera_fila.cells[i]
+                    texto_actual = celda.text.strip().upper()
+                    if texto_actual != header_text.upper():
+                        celda.text = header_text
+                        # Formatear encabezado
+                        for parrafo in celda.paragraphs:
+                            for run in parrafo.runs:
+                                run.font.bold = True
+                                run.font.size = Pt(10)
+                            parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        
+        # Mapeo de campos de los registros a las columnas
+        mapeo_columnas = {
+            0: 'id',
+            1: 'fecha',
+            2: 'punto',
+            3: 'equipo',
+            4: 'serial',
+            5: 'estado'
+        }
+        
+        # Agregar filas con los datos
+        for idx, registro in enumerate(self.pendiente_parte, start=1):
+            fila = tabla_existente.add_row()
+            celdas = fila.cells
+            
+            # Llenar cada celda según el mapeo
+            for i in range(min(num_cols, 6)):
+                campo = mapeo_columnas.get(i, '')
+                
+                # Para la columna ID (índice 0), usar el consecutivo en lugar del ID del registro
+                if i == 0:
+                    valor = str(idx)  # Consecutivo empezando desde 1
+                else:
+                    valor = registro.get(campo, '')
+                
+                if i < len(celdas):
+                    # Limpiar contenido existente de la celda
+                    celdas[i].text = ''
+                    # Agregar el nuevo texto
+                    parrafo = celdas[i].paragraphs[0] if celdas[i].paragraphs else celdas[i].add_paragraph()
+                    parrafo.clear()
+                    run = parrafo.add_run(str(valor) if valor else '')
+                    
+                    # Aplicar formato según la columna
+                    if i == 0:  # ID
+                        parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                        run.font.size = Pt(10)
+                    elif i == 1:  # FECHA
+                        parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                        run.font.size = Pt(10)
+                    elif i == 2:  # PUNTO
+                        parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                        run.font.size = Pt(10)
+                    elif i == 3:  # EQUIPO
+                        parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                        run.font.size = Pt(10)
+                    elif i == 4:  # SERIAL
+                        parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                        run.font.size = Pt(10)
+                    elif i == 5:  # ESTADO
+                        parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                        run.font.size = Pt(10)
+                    
+                    run.font.name = 'Calibri'
+        
+        logger.info(f"Tabla actualizada: {len(tabla_existente.rows)} filas totales (1 encabezado + {len(self.pendiente_parte)} datos)")
     
     def guardar(self, output_path: Path) -> None:
         """
