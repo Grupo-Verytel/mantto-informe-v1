@@ -1,12 +1,13 @@
 """
 Servicio para manejo de tokens JWT
 """
-import os
 import jwt
 from typing import Dict, Any, Optional
 from datetime import datetime, timedelta
 from fastapi import HTTPException, status
 import logging
+
+import config
 
 logger = logging.getLogger(__name__)
 
@@ -15,10 +16,10 @@ class JWTService:
     """Servicio para generar y validar tokens JWT"""
     
     def __init__(self):
-        # Obtener secreto desde variables de entorno
-        self.secret_key = os.getenv("JWT_SECRET", "default-secret-key-change-in-production")
-        self.algorithm = os.getenv("JWT_ALGORITHM", "HS256")
-        self.token_expiration = int(os.getenv("JWT_EXPIRES_IN_HOURS", "24"))
+        # Obtener configuración desde config.py
+        self.secret_key = config.JWT_SECRET
+        self.algorithm = config.JWT_ALGORITHM
+        self.token_expiration = config.JWT_EXPIRES_IN_HOURS
     
     def verify_token(self, token: str) -> Dict[str, Any]:
         """
@@ -114,5 +115,6 @@ class JWTService:
         
         token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
         return token
+
 
 

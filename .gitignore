@@ -33,10 +33,6 @@ env/
 *.swo
 *~
 
-# Output
-output/
-*.docx
-!templates/*.docx
 
 # Data temporal
 data/fuentes/*.xlsx

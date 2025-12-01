@@ -1,0 +1,15 @@
+# Ejemplo de configuración MongoDB para .env
+# Copia estas líneas a tu archivo .env
+
+# MongoDB Local (si tienes MongoDB instalado localmente)
+MONGO_URI=mongodb://localhost:27017
+MONGO_DB=informes_etb
+
+# O si usas MongoDB Atlas (cloud):
+# MONGO_URI=mongodb+srv://usuario:password@cluster.mongodb.net/?retryWrites=true&w=majority
+# MONGO_DB=informes_etb
+
+# O si MongoDB requiere autenticación local:
+# MONGO_URI=mongodb://usuario:password@localhost:27017
+# MONGO_DB=informes_etb
+
