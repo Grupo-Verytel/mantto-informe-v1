@@ -68,6 +68,35 @@ class GeneradorSeccion2:
         ruta = f"01{mes_abrev} – {ultimo_dia:02d}{mes_abrev}"
         
         return ruta
+    
+    def _construir_fecha_mes(self, mes: int, anio: int) -> str:
+        """
+        Construye la fecha en formato '01 al 31 de OCTUBRE DE 2025' basándose en el mes y año.
+        
+        Args:
+            mes: Número del mes (1-12)
+            anio: Año (ej: 2025)
+            
+        Returns:
+            String en formato '01 al 31 de OCTUBRE DE 2025'
+        """
+        # Nombres de meses completos en mayúsculas
+        meses_completos = {
+            1: "ENERO", 2: "FEBRERO", 3: "MARZO", 4: "ABRIL",
+            5: "MAYO", 6: "JUNIO", 7: "JULIO", 8: "AGOSTO",
+            9: "SEPTIEMBRE", 10: "OCTUBRE", 11: "NOVIEMBRE", 12: "DICIEMBRE"
+        }
+        
+        # Obtener el último día del mes
+        ultimo_dia = calendar.monthrange(anio, mes)[1]
+        
+        # Obtener el nombre del mes en mayúsculas
+        mes_nombre = meses_completos.get(mes, "")
+        
+        # Construir la fecha en el formato solicitado
+        fecha = f"01 al {ultimo_dia:02d} de {mes_nombre} DE {anio}"
+        
+        return fecha
 
     def _seccion_2(self, data: Dict[str, Any]):       
      
@@ -159,11 +188,25 @@ class GeneradorSeccion2:
         
         return content_data
     
-    def _seccion_2_4_tickets(self, data: Dict[str, Any]):
+    async def _seccion_2_4_tickets(self, data: Dict[str, Any]):
         content = data.get("content", {})
+        anio = data.get("anio")
+        mes = data.get("mes")
+        
+        # Obtener datos desde GLPI si no están en el content
+        table_2 = content.get("table_2", [])
+        if not table_2 and anio and mes:
+            try:
+                from src.services.glpi_service import get_glpi_service
+                glpi_service = await get_glpi_service()
+                table_2 = await glpi_service.get_estado_tickets_por_subsistema(anio, mes)
+            except Exception as e:
+                logger.warning(f"Error al obtener table_2 desde GLPI MySQL para sección 2.4: {e}. Usando datos de content.")
+                table_2 = content.get("table_2", [])
+        
         content_data = {
-            "anio": data.get("anio"),
-            "mes": data.get("mes"),
+            "anio": anio,
+            "mes": mes,
             "user_id": data.get("user_id"),
             "name_file": data.get("name_file"),
             "section_id": data.get("section_id"),
@@ -171,7 +214,7 @@ class GeneradorSeccion2:
             "content": {
                 "table_1": content.get("table_1", []),
                 "name_document": content.get("name_document", ""),
-                "table_2": content.get("table_2", []),
+                "table_2": table_2,
             },
         }
         
@@ -582,11 +625,17 @@ class GeneradorSeccion2:
         if mes and anio:
             route_21 = self._construir_ruta_mes(mes, anio)
         
+        # Construir la fecha en formato '01 al 31 de OCTUBRE DE 2025'
+        date_month = ""
+        if mes and anio:
+            date_month = self._construir_fecha_mes(mes, anio)
+        
         # Inicializar contexto base
         contexto = {
             "mes": mes_nombre,
             "anio": anio,
             "mes_numero": mes,
+            "date_month": date_month
         }
         
         # Sección 2 (index[0]) - INFORME DE MESA DE SERVICIO
@@ -636,14 +685,69 @@ class GeneradorSeccion2:
                 # Asignar el total de diagnósticos al contexto
                 contexto["diagnostico_21"] = str(int(total_diagnostico)) if total_diagnostico == int(total_diagnostico) else str(total_diagnostico)
                 
+                # Calcular el total general (suma de la columna "total")
+                total_general = 0
+                try:
+                    for item in table_2_data:
+                        valor = item.get("total", "")
+                        if valor:
+                            if isinstance(valor, str):
+                                valor_limpio = valor.replace(",", "").replace(" ", "").strip()
+                                if valor_limpio:
+                                    total_general += float(valor_limpio)
+                            else:
+                                total_general += float(valor)
+                except (ValueError, TypeError):
+                    pass
+                
+                # Guardar el total general para reutilizarlo en total_24
+                contexto["_total_general_table_2"] = int(total_general) if total_general == int(total_general) else total_general
+                
+                # Encontrar el subsistema con el mayor total
+                mayor_subsistema = None
+                mayor_total = 0
+                try:
+                    for item in table_2_data:
+                        valor_total = item.get("total", "")
+                        if valor_total:
+                            # Convertir a número
+                            if isinstance(valor_total, str):
+                                valor_limpio = valor_total.replace(",", "").replace(" ", "").strip()
+                                if valor_limpio:
+                                    total_num = float(valor_limpio)
+                                else:
+                                    continue
+                            else:
+                                total_num = float(valor_total)
+                            
+                            # Comparar con el mayor encontrado hasta ahora
+                            if total_num > mayor_total:
+                                mayor_total = total_num
+                                nombre_subsistema = item.get("subsistema", "")
+                                mayor_subsistema = {
+                                    "nombre": nombre_subsistema if nombre_subsistema else "N/A",
+                                    "total": int(total_num) if total_num == int(total_num) else total_num
+                                }
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Error al encontrar mayor subsistema: {e}")
+                
+                # Guardar el mayor subsistema para reutilizarlo
+                contexto["_mayor_subsistema_table_2"] = mayor_subsistema
+                
                 # Agregar fila de totales (columna 0 es SUBSISTEMA donde pondremos "TOTAL")
-                contexto["table_21_2"] = self._preparar_datos_tabla(
+                table_21_2_preparada = self._preparar_datos_tabla(
                     table_2_data, headers_21_2, campos_21_2, 
                     agregar_totales=True, columna_total_texto=0
                 )
+                contexto["table_21_2"] = table_21_2_preparada
+                # Guardar table_2_data preparada para reutilizarla en table_24_1
+                contexto["_table_2_data_preparada"] = table_21_2_preparada
             else:
                 contexto["table_21_2"] = []
-                contexto["diagnostico_21"] = "0"            
+                contexto["diagnostico_21"] = "0"
+                contexto["_table_2_data_preparada"] = []
+                contexto["_total_general_table_2"] = 0
+                contexto["_mayor_subsistema_table_2"] = None            
         # Sección 2.2 (index[2]) - HERRAMIENTAS DE TRABAJO
         if len(index) > 2:
             content_22 = index[2].get("content", {})
@@ -671,9 +775,34 @@ class GeneradorSeccion2:
         # Sección 2.4 (index[4]) - INFORME CONSOLIDADO DEL ESTADO DE LOS TICKETS ADMINISTRATIVOS
         if len(index) > 4:
             content_24 = index[4].get("content", {})
-            contexto["table_24_1"] = content_24.get("table_1", [])
+            # table_24_1 usa los mismos datos que table_21_2 (table_2_data preparada)
+            contexto["table_24_1"] = contexto.get("_table_2_data_preparada", [])
+            # total_24 es el total general de la tabla (suma de la columna "total")
+            contexto["total_24"] = contexto.get("_total_general_table_2", 0)
+            # mayor_subsistema_21: subsistema con mayor total en formato "nombre total con total tickets"
+            mayor_subsistema_info = contexto.get("_mayor_subsistema_table_2")
+            if mayor_subsistema_info:
+                nombre = mayor_subsistema_info["nombre"]
+                total = mayor_subsistema_info["total"]
+                contexto["mayor_subsistema_21"] = f"{nombre} {total} con {total} tickets"
+            else:
+                contexto["mayor_subsistema_21"] = ""
             contexto["name_document_24"] = content_24.get("name_document", "")
-            contexto["table_24_2"] = content_24.get("table_2", [])
+            
+            # Preparar datos de tabla table_24_2 en formato lista de listas
+            table_24_2_data = content_24.get("table_2", [])
+            if table_24_2_data:
+                headers_24_2 = ["SUBSISTEMAS", "CERRADO", "EN CURSO (ASIGNADA)", "EN CURSO (PLANIFICADA)", 
+                               "EN ESPERA", "RESUELTAS", "TOTAL"]
+                campos_24_2 = ["subsistema", "cerrado", "en_curso_asignada", "en_curso_planificada",
+                              "en_espera", "resueltas", "total"]
+                # Agregar fila de totales (columna 0 es SUBSISTEMAS donde pondremos "TOTAL")
+                contexto["table_24_2"] = self._preparar_datos_tabla(
+                    table_24_2_data, headers_24_2, campos_24_2,
+                    agregar_totales=True, columna_total_texto=0
+                )
+            else:
+                contexto["table_24_2"] = []
         
         # Sección 2.5 (index[5]) - ESCALAMIENTOS
         if len(index) > 5:
@@ -736,6 +865,10 @@ class GeneradorSeccion2:
             contexto_tablas["table_21_2_placeholder"] = "[[TABLE_21_2]]"
         if contexto.get("table_23_1"):
             contexto_tablas["table_23_1_placeholder"] = "[[TABLE_23_1]]"
+        if contexto.get("table_24_1"):
+            contexto_tablas["table_24_1_placeholder"] = "[[TABLE_24_1]]"
+        if contexto.get("table_24_2"):
+            contexto_tablas["table_24_2_placeholder"] = "[[TABLE_24_2]]"
         
         # Renderizar el template con las variables básicas
         template.render(contexto_tablas)
@@ -756,6 +889,12 @@ class GeneradorSeccion2:
         
         if contexto.get("table_23_1"):
             self._reemplazar_placeholder_con_tabla(doc, "[[TABLE_23_1]]", contexto["table_23_1"])
+        
+        if contexto.get("table_24_1"):
+            self._reemplazar_placeholder_con_tabla(doc, "[[TABLE_24_1]]", contexto["table_24_1"])
+        
+        if contexto.get("table_24_2"):
+            self._reemplazar_placeholder_con_tabla(doc, "[[TABLE_24_2]]", contexto["table_24_2"])
         
         # Guardar el documento final
         doc.save(str(output_path))

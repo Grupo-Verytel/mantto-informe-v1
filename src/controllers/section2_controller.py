@@ -57,7 +57,7 @@ class Section2Controller:
             elif id_section == "2.3":
                 data_section = await self.generador._seccion_2_3_visitas_diagnostico(data)
             elif id_section == "2.4":
-                data_section = self.generador._seccion_2_4_tickets(data)
+                data_section = await self.generador._seccion_2_4_tickets(data)
             elif id_section == "2.5":
                 data_section = self.generador._seccion_2_5_escalamientos(data)
             elif id_section == "2.5.1":

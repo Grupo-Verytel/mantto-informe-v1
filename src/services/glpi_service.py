@@ -147,6 +147,65 @@ class GLPIService:
         except Exception as e:
             logger.error(f"Error al ejecutar query MySQL GLPI para visitas de diagnóstico: {str(e)}")
             raise
+    
+    async def get_estado_tickets_por_subsistema(self, anio: int, mes: int) -> List[Dict[str, Any]]:
+        """
+        Obtiene el estado de los tickets por subsistema agrupados por estado.
+        
+        Args:
+            anio: Año (ej: 2025)
+            mes: Mes (1-12)
+            
+        Returns:
+            Lista de tickets por subsistema con sus estados
+        """
+        if not self.pool:
+            await self.connect()
+        
+        query = """
+        SELECT 
+            l.building AS subsistema,
+            SUM(CASE WHEN t.status = 1 THEN 1 ELSE 0 END) AS nuevo,
+            SUM(CASE WHEN t.status = 2 THEN 1 ELSE 0 END) AS en_curso_asignada,
+            SUM(CASE WHEN t.status = 3 THEN 1 ELSE 0 END) AS en_curso_planificada,
+            SUM(CASE WHEN t.status = 4 THEN 1 ELSE 0 END) AS en_espera,
+            SUM(CASE WHEN t.status = 5 THEN 1 ELSE 0 END) AS resueltas,
+            SUM(CASE WHEN t.status = 6 THEN 1 ELSE 0 END) AS cerrado,
+            COUNT(*) AS total
+        FROM glpi_tickets t
+        INNER JOIN glpi_locations l ON l.id = t.locations_id
+        WHERE t.is_deleted = 0
+          AND l.building IS NOT NULL
+          AND l.building != ''
+          AND YEAR(t.date) = %s
+          AND MONTH(t.date) = %s
+        GROUP BY l.building
+        ORDER BY l.building ASC
+        """
+        
+        try:
+            async with self.pool.acquire() as conn:
+                async with conn.cursor(aiomysql.DictCursor) as cursor:
+                    await cursor.execute(query, (anio, mes))
+                    results = await cursor.fetchall()
+                    
+                    formatted_results = []
+                    for row in results:
+                        formatted_results.append({
+                            "subsistema": str(row.get("subsistema", "")),
+                            "cerrado": str(row.get("cerrado", 0)),
+                            "en_curso_asignada": str(row.get("en_curso_asignada", 0)),
+                            "en_curso_planificada": str(row.get("en_curso_planificada", 0)),
+                            "en_espera": str(row.get("en_espera", 0)),
+                            "resueltas": str(row.get("resueltas", 0)),
+                            "total": str(row.get("total", 0))
+                        })
+                    
+                    return formatted_results
+                    
+        except Exception as e:
+            logger.error(f"Error al ejecutar query MySQL GLPI para estado de tickets: {str(e)}")
+            raise
 
 
 _glpi_service_instance: Optional[GLPIService] = None
