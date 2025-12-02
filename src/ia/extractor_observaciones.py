@@ -86,6 +86,7 @@ class ExtractorObservaciones:
             base_path=sharepoint_base_path
         )
         self.archivos_temporales = []  # Para limpiar archivos descargados
+        self.cache_archivos_descargados = {}  # Cache de archivos descargados por ruta normalizada
     
     def extraer_texto_archivo(self, ruta_archivo: str) -> str:
         """
@@ -503,11 +504,35 @@ Retorna únicamente el JSON, sin explicaciones ni texto adicional."""
         # Verificar si debe revisar el anexo o usar observación por defecto
         revisar_anexo = obligacion.get("revisaranexo", True)  # Por defecto True para mantener compatibilidad
         
+        # Normalizar la ruta para usar como clave del cache (antes de cualquier procesamiento)
+        ruta_cache_key = None
+        if ruta_anexo and ruta_anexo != "-" and ruta_anexo.lower() != "no aplica":
+            ruta_cache_key = ruta_anexo.strip().lower()
+        
+        # Si no debe revisar anexo, verificar si el archivo ya está en cache
+        # Si no está en cache, intentar descargarlo para que otros items puedan reutilizarlo
         if not revisar_anexo:
             # Si no debe revisar anexo, usar observación por defecto
             default_observaciones = obligacion.get("defaultobservaciones", "")
             if default_observaciones:
                 print(f"[INFO] Obligación {obligacion.get('item', 'N/A')}: Usando observación por defecto (revisaranexo=false)")
+                
+                # Aún así, intentar descargar el archivo al cache si no está ya descargado
+                # Esto permite que otros items que sí necesitan el archivo puedan reutilizarlo
+                if ruta_cache_key and ruta_cache_key not in self.cache_archivos_descargados:
+                    print(f"[INFO] Pre-descargando archivo al cache para reutilización por otros items...")
+                    try:
+                        ruta_completa_temp = self._resolver_ruta_anexo(ruta_anexo, anio=anio, mes=mes)
+                        if ruta_completa_temp and isinstance(ruta_completa_temp, str):
+                            if self.sharepoint_extractor.es_url_sharepoint(ruta_completa_temp) or ruta_completa_temp.startswith('/sites/') or ruta_completa_temp.startswith('/teams/'):
+                                archivo_temp = self.sharepoint_extractor.descargar_archivo(ruta_completa_temp)
+                                if archivo_temp and archivo_temp.exists():
+                                    self.cache_archivos_descargados[ruta_cache_key] = archivo_temp
+                                    self.archivos_temporales.append(archivo_temp)
+                                    print(f"[INFO] Archivo pre-descargado y guardado en cache para reutilización")
+                    except Exception as e:
+                        print(f"[DEBUG] No se pudo pre-descargar archivo (no crítico): {e}")
+                
                 obligacion_actualizada = obligacion.copy()
                 obligacion_actualizada["observaciones"] = default_observaciones
                 obligacion_actualizada["observacion_generada_llm"] = False
@@ -531,34 +556,71 @@ Retorna únicamente el JSON, sin explicaciones ni texto adicional."""
                 archivo_temp_descargado = None
                 es_sharepoint = False
                 
-                if isinstance(ruta_completa, str):
+                # Normalizar la ruta para usar como clave del cache
+                ruta_cache_key = ruta_anexo.strip().lower()
+                print(f"[DEBUG] Clave de cache para archivo: '{ruta_cache_key}'")
+                print(f"[DEBUG] Archivos en cache: {list(self.cache_archivos_descargados.keys())}")
+                
+                # Verificar si ya tenemos el archivo en el cache
+                if ruta_cache_key in self.cache_archivos_descargados:
+                    archivo_cache = self.cache_archivos_descargados[ruta_cache_key]
+                    if archivo_cache.exists():
+                        print(f"[INFO] Archivo encontrado en cache, reutilizando: {ruta_anexo}")
+                        print(f"[DEBUG] Ruta del archivo en cache: {archivo_cache}")
+                        archivo_existe = True
+                        archivo_temp_descargado = archivo_cache
+                        ruta_completa = str(archivo_temp_descargado)
+                    else:
+                        # El archivo del cache ya no existe, eliminarlo del cache
+                        print(f"[WARNING] Archivo del cache ya no existe, eliminando del cache")
+                        del self.cache_archivos_descargados[ruta_cache_key]
+                else:
+                    print(f"[DEBUG] Archivo NO encontrado en cache, se intentará descargar")
+                
+                if not archivo_existe and isinstance(ruta_completa, str):
                     # Si es URL de SharePoint o ruta relativa, verificar existencia primero
                     if self.sharepoint_extractor.es_url_sharepoint(ruta_completa) or ruta_completa.startswith('/sites/') or ruta_completa.startswith('/teams/'):
                         es_sharepoint = True
-                        # Para SharePoint, verificar existencia sin descargar primero
-                        print(f"[INFO] Verificando existencia del archivo en SharePoint...")
-                        # Intentar verificar con el método optimizado
+                        # Para SharePoint, intentar descargar directamente primero
+                        # Si la descarga falla, entonces el archivo no existe
+                        print(f"[INFO] Intentando descargar archivo desde SharePoint para verificar existencia...")
                         try:
-                            archivo_existe = self.sharepoint_extractor.verificar_archivo_existe(ruta_anexo)
-                        except Exception as e:
-                            print(f"[WARNING] Error al verificar archivo en SharePoint: {e}")
-                            # Fallback: intentar descargar para verificar
-                            archivo_temp_descargado = self.sharepoint_extractor.descargar_archivo(ruta_completa)
-                            archivo_existe = archivo_temp_descargado is not None and archivo_temp_descargado.exists()
-                        
-                        if archivo_existe:
-                            print(f"[INFO] Archivo existe en SharePoint, descargando...")
-                            # Descargar el archivo para extraer texto
+                            # Intentar descargar directamente (más confiable que verificar)
                             archivo_temp_descargado = self.sharepoint_extractor.descargar_archivo(ruta_completa)
                             if archivo_temp_descargado and archivo_temp_descargado.exists():
+                                archivo_existe = True
+                                # Guardar en cache para reutilización
+                                self.cache_archivos_descargados[ruta_cache_key] = archivo_temp_descargado
                                 # Guardar referencia para limpiar después
                                 self.archivos_temporales.append(archivo_temp_descargado)
                                 # Usar el archivo descargado para extraer texto
                                 ruta_completa = str(archivo_temp_descargado)
+                                print(f"[INFO] Archivo descargado exitosamente y guardado en cache: {ruta_anexo}")
                             else:
-                                print(f"[WARNING] No se pudo descargar el archivo aunque existe")
+                                print(f"[WARNING] No se pudo descargar el archivo desde SharePoint: {ruta_anexo}")
                                 archivo_existe = False
-                        else:
+                        except Exception as e:
+                            print(f"[WARNING] Error al descargar archivo desde SharePoint: {e}")
+                            # Fallback: intentar verificar existencia con método alternativo
+                            try:
+                                archivo_existe = self.sharepoint_extractor.verificar_archivo_existe(ruta_anexo)
+                                if archivo_existe:
+                                    # Si existe pero no se pudo descargar, intentar de nuevo
+                                    print(f"[INFO] Archivo existe según verificación, intentando descargar nuevamente...")
+                                    archivo_temp_descargado = self.sharepoint_extractor.descargar_archivo(ruta_completa)
+                                    if archivo_temp_descargado and archivo_temp_descargado.exists():
+                                        archivo_existe = True
+                                        self.cache_archivos_descargados[ruta_cache_key] = archivo_temp_descargado
+                                        self.archivos_temporales.append(archivo_temp_descargado)
+                                        ruta_completa = str(archivo_temp_descargado)
+                                        print(f"[INFO] Archivo descargado exitosamente en segundo intento: {ruta_anexo}")
+                                    else:
+                                        archivo_existe = False
+                            except Exception as e2:
+                                print(f"[WARNING] Error al verificar archivo en SharePoint: {e2}")
+                                archivo_existe = False
+                        
+                        if not archivo_existe:
                             print(f"[WARNING] El archivo no existe en SharePoint: {ruta_anexo}")
                     else:
                         # Archivo local
@@ -771,13 +833,16 @@ Retorna únicamente el JSON, sin explicaciones ni texto adicional."""
     
     def limpiar_archivos_temporales(self):
         """Limpia archivos temporales descargados de SharePoint"""
-        for archivo in self.archivos_temporales:
+        # Limpiar archivos únicos (sin duplicados)
+        archivos_unicos = set(self.archivos_temporales)
+        for archivo in archivos_unicos:
             try:
                 if archivo.exists():
                     archivo.unlink()
             except Exception as e:
                 print(f"[WARNING] Error al eliminar archivo temporal {archivo}: {e}")
         self.archivos_temporales.clear()
+        self.cache_archivos_descargados.clear()
 
 
 # Singleton
