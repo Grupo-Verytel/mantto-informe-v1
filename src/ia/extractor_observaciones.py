@@ -257,48 +257,73 @@ class ExtractorObservaciones:
             return self._generar_observacion_fallback(obligacion, cumplio)
         
         try:
-            # Construir contexto de informes aprobados
+            # Construir contexto de informes aprobados con énfasis en observaciones específicas
             contexto_informes = ""
             if informes_aprobados_contexto:
-                contexto_informes = "\n\nCONTEXTO DE INFORMES APROBADOS ANTERIORES:\n"
+                contexto_informes = "\n\n═══════════════════════════════════════════════════════════\n"
+                contexto_informes += "OBSERVACIONES DE INFORMES APROBADOS ANTERIORES (REFERENCIA PRINCIPAL):\n"
+                contexto_informes += "═══════════════════════════════════════════════════════════\n"
+                contexto_informes += "IMPORTANTE: Estas son las observaciones REALES y APROBADAS de meses anteriores.\n"
+                contexto_informes += "DEBES generar una observación CASI IDÉNTICA en tono, estilo y estructura.\n"
+                contexto_informes += "Usa estas observaciones como PLANTILLA y solo adapta detalles del anexo actual.\n\n"
+                
                 for i, texto_informe in enumerate(informes_aprobados_contexto[:3], 1):
                     # Extraer solo la sección relevante de cada informe (sección 1.5.1)
-                    # Limitar a 2000 caracteres por informe para no exceder tokens
-                    texto_limite = texto_informe[:2000] if len(texto_informe) > 2000 else texto_informe
-                    contexto_informes += f"\n--- Informe Aprobado {i} ---\n{texto_limite}\n"
+                    # Aumentar límite para capturar más contexto de observaciones
+                    texto_limite = texto_informe[:3000] if len(texto_informe) > 3000 else texto_informe
+                    contexto_informes += f"--- OBSERVACIONES DEL INFORME APROBADO {i} (MES ANTERIOR) ---\n"
+                    contexto_informes += f"{texto_limite}\n"
+                    contexto_informes += f"--- FIN OBSERVACIONES INFORME {i} ---\n\n"
             
-            prompt = f"""Eres un asistente que genera observaciones de cumplimiento contractual para informes técnicos.
+            prompt = f"""Eres un asistente experto en generar observaciones de cumplimiento contractual para informes técnicos. Tu objetivo principal es mantener la CONSISTENCIA y SIMILITUD con las observaciones de informes aprobados anteriores.
 
-CONTEXTO:
+CONTEXTO DE LA OBLIGACIÓN:
 - Obligación: {obligacion}
 - Periodicidad: {periodicidad}
 - Estado: {cumplio}
 {contexto_informes}
 
 CONTENIDO DEL ANEXO ACTUAL:
-{texto_anexo[:4000]}  # Limitar a 4000 caracteres para evitar tokens excesivos
+{texto_anexo[:4000]}
 
-INSTRUCCIONES:
-Genera una observación profesional y concisa (máximo 200 palabras) que:
-1. Confirme el cumplimiento de la obligación
-2. Haga referencia específica al contenido del anexo actual
-3. Sea consistente con el estilo y formato de observaciones de informes anteriores (si están disponibles)
-4. Sea apropiada para un informe técnico formal
-5. Use lenguaje profesional y técnico
-6. Mencione detalles relevantes del anexo si son importantes
+INSTRUCCIONES CRÍTICAS (ORDEN DE PRIORIDAD):
 
-Formato: Texto corrido, sin viñetas ni listas.
+1. **PRIORIDAD MÁXIMA - SIMILITUD CON OBSERVACIONES ANTERIORES:**
+   - Si hay observaciones de informes aprobados anteriores para esta misma obligación, DEBES generar una observación CASI IDÉNTICA
+   - Mantén el MISMO TONO, ESTILO y ESTRUCTURA de las observaciones anteriores
+   - Usa las mismas frases, expresiones y terminología que aparecen en los informes anteriores
+   - Solo adapta detalles específicos del anexo actual si son relevantes y no cambian el sentido general
+   - La observación debe ser RECONOCIBLE como parte de la misma serie de informes
+
+2. **CONSISTENCIA DE ESTILO:**
+   - Mantén el mismo nivel de formalidad y profesionalismo
+   - Usa la misma estructura de párrafos y longitud aproximada
+   - Conserva las mismas palabras clave y expresiones técnicas
+   - Respeta el mismo formato de redacción (oraciones largas/cortas, uso de comas, etc.)
+
+3. **REFERENCIA AL ANEXO ACTUAL:**
+   - Si las observaciones anteriores mencionan detalles específicos del anexo, adapta esos detalles al anexo actual
+   - Mantén la misma forma de referenciar el anexo (ej: "según se detalla en el anexo actual", "conforme se evidencia en el anexo", etc.)
+   - No cambies la estructura solo porque el anexo actual tenga información diferente
+
+4. **REQUISITOS TÉCNICOS:**
+   - Máximo 200 palabras
+   - Texto corrido, sin viñetas ni listas
+   - Lenguaje profesional y técnico apropiado para informes contractuales
+   - Confirmar el cumplimiento de la obligación
+
+IMPORTANTE: Si hay observaciones anteriores disponibles, tu objetivo es generar una observación que sea CASI IDÉNTICA en tono, estilo y estructura. La similitud es más importante que la creatividad. Solo adapta los detalles específicos del anexo actual cuando sea absolutamente necesario.
 
 OBSERVACIÓN:"""
 
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "Eres un asistente experto en redacción de informes técnicos y contractuales."},
+                    {"role": "system", "content": "Eres un asistente experto en redacción de informes técnicos y contractuales. Tu función principal es mantener la CONSISTENCIA y SIMILITUD con observaciones de informes anteriores. Priorizas la similitud sobre la creatividad."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=300,
-                temperature=0.3  # Baja temperatura para respuestas más determinísticas
+                temperature=0.1  # Temperatura muy baja para máxima consistencia y similitud con observaciones anteriores
             )
             
             observacion = response.choices[0].message.content.strip()
