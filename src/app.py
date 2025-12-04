@@ -136,6 +136,13 @@ try:
 except Exception as e:
     logger.warning(f"No se pudieron incluir rutas de sección 5: {e}")
 
+try:
+    from src.routes import seccion4_routes
+    app.include_router(seccion4_routes.router)
+    logger.info("✓ Rutas de sección 4 (bienes y servicios) incluidas")
+except Exception as e:
+    logger.warning(f"No se pudieron incluir rutas de sección 4: {e}")
+
 
 @app.get("/", tags=["Root"])
 async def root():
@@ -150,6 +157,8 @@ async def root():
             "comunicados_recibidos": "/api/comunicados/recibidos",
             "seccion1_generar": "/api/seccion1/generar",
             "seccion1_descargar": "/api/seccion1/descargar",
+            "seccion4_generar": "/api/seccion4/generar",
+            "seccion4_descargar": "/api/seccion4/descargar",
             "seccion5_procesar_excel": "/api/seccion5/procesar-excel",
             "seccion5_obtener_datos": "/api/seccion5/obtener-datos",
             "seccion5_generar": "/api/seccion5/generar",

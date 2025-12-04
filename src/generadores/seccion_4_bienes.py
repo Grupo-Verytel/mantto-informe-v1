@@ -172,6 +172,12 @@ class GeneradorSeccion4(GeneradorSeccion):
         self.doc.add_paragraph()
         return tabla
     
+    def _obtener_dias_mes(self) -> str:
+        """Obtiene el último día del mes"""
+        from calendar import monthrange
+        ultimo_dia = monthrange(self.anio, self.mes)[1]
+        return f"{ultimo_dia:02d}"
+    
     def _agregar_parrafo(self, texto: str, justificado: bool = True, 
                          negrita: bool = False, italica: bool = False):
         """Agrega un párrafo de texto"""
@@ -188,27 +194,30 @@ class GeneradorSeccion4(GeneradorSeccion):
         """4.1 Gestión de Inventario"""
         self.doc.add_heading("4.1. GESTIÓN DE INVENTARIO", level=2)
         
-        mes = config.MESES[self.mes]
-        anio = self.anio
+        gestion = self.datos.get('gestion_inventario', {})
+        texto = gestion.get('texto', '')
+        ruta = gestion.get('ruta', '')
         
-        # Párrafo introductorio (IA)
-        entradas = self.datos.get('entradas_almacen', {})
-        equipos = self.datos.get('equipos_no_operativos', {})
-        inclusiones = self.datos.get('inclusiones_bolsa', {})
+        # Si hay ruta, reemplazar {{root_mes}} o {{01NOV - 30NOV}} con el mes correspondiente
+        if ruta:
+            mes_nombre = config.MESES[self.mes]
+            # Reemplazar variables de mes en la ruta
+            ruta = ruta.replace('{{root_mes}}', f"01{mes_nombre.upper()[:3]} - 30{mes_nombre.upper()[:3]}")
+            # Buscar patrones como {{01NOV - 30NOV}} y reemplazarlos
+            import re
+            patron = r'\{\{01\w+ - 30\w+\}\}'
+            ruta = re.sub(patron, f"01{mes_nombre.upper()[:3]} - 30{mes_nombre.upper()[:3]}", ruta)
+            
+            # Combinar texto y ruta
+            if texto:
+                texto_completo = f"{texto}\n\n{ruta}"
+            else:
+                texto_completo = ruta
+        else:
+            texto_completo = texto
         
-        entradas_count = len(entradas.get('items', [])) if entradas else 0
-        salidas_count = len(equipos.get('equipos', [])) if equipos else 0
-        inclusiones_count = len(inclusiones.get('items', [])) if inclusiones else 0
-        
-        texto_intro = f"""Durante el mes de {mes} de {anio} se realizó la gestión integral del inventario del contrato SCJ-1809-2024, la cual incluyó:
-
-• Recepción e ingreso de {entradas_count} elementos al almacén SDSCJ
-• Entrega de {salidas_count} equipos no operativos para concepto técnico
-• Gestión de {inclusiones_count} solicitudes de inclusión a la bolsa de repuestos
-
-A continuación se presenta el detalle de cada una de las gestiones realizadas durante el periodo."""
-        
-        self._agregar_parrafo(texto_intro)
+        if texto_completo:
+            self._agregar_parrafo(texto_completo)
     
     def _seccion_4_2_entradas_almacen(self):
         """4.2 Entradas Almacén SDSCJ"""
@@ -221,15 +230,25 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
         # Datos del comunicado
         comunicado = entradas.get('comunicado', {})
         items = entradas.get('items', [])
+        texto_entradas = entradas.get('texto', '')
+        
+        # Si hay texto personalizado, usarlo; si no, generar texto automático
+        if texto_entradas:
+            self._agregar_parrafo(texto_entradas)
+        else:
+            numero = comunicado.get('numero', 'N/A')
+            titulo = comunicado.get('titulo', 'N/A')
+            fecha = comunicado.get('fecha', 'N/A')
+            if numero != 'N/A' or fecha != 'N/A':
+                texto = f"""Se relacionan las entradas al almacén SDSCJ durante el mes correspondiente, donde se registran los equipos y componentes recibidos para el sistema de videovigilancia."""
+                if numero != 'N/A':
+                    texto += f" Comunicado: {numero}"
+                if fecha != 'N/A':
+                    texto += f" Fecha: {fecha}"
+                texto += "."
+                self._agregar_parrafo(texto)
+        
         valor_total = sum(item.get('valor_total', 0) for item in items)
-        
-        # Párrafo introductorio según template del prompt
-        numero = comunicado.get('numero', 'N/A')
-        titulo = comunicado.get('titulo', 'N/A')
-        fecha = comunicado.get('fecha', 'N/A')
-        texto = f"""Se realiza el trámite de entradas al almacén SDSCJ en el mes de {mes} del {anio} bajo el comunicado {numero} "{titulo}" el {fecha}."""
-        
-        self._agregar_parrafo(texto)
         
         # Tabla de ítems
         if items:
@@ -242,8 +261,8 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
                     item.get('descripcion', ''),
                     item.get('cantidad', 0),
                     item.get('unidad', 'UN'),
-                    self._formato_moneda(item.get('valor_unitario', 0)),
-                    self._formato_moneda(item.get('valor_total', 0))
+                    self._formato_moneda(item.get('valor_unitario', 0)) if item.get('valor_unitario', 0) > 0 else "-",
+                    self._formato_moneda(item.get('valor_total', 0)) if item.get('valor_total', 0) > 0 else "-"
                 ])
             
             # Alineaciones: No., Descripción, Cant, Unidad, V.Unit, V.Total
@@ -256,8 +275,10 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
                 WD_ALIGN_PARAGRAPH.RIGHT,   # Valor Total
             ]
             
-            # Fila de total
-            fila_total = ["", "TOTAL", "", "", "", self._formato_moneda(valor_total)]
+            # Fila de total solo si hay valores
+            fila_total = None
+            if valor_total > 0:
+                fila_total = ["", "TOTAL", "", "", "", self._formato_moneda(valor_total)]
             
             self._agregar_tabla(
                 encabezados=["No.", "DESCRIPCIÓN", "CANT.", "UND", "VALOR UNIT.", "VALOR TOTAL"],
@@ -293,12 +314,21 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
         
         comunicado = equipos_data.get('comunicado', {})
         equipos = equipos_data.get('equipos', [])
+        texto_equipos = equipos_data.get('texto', '')
         valor_total = sum(eq.get('valor', 0) for eq in equipos)
         
-        # Párrafo introductorio
-        texto = f"""Se realiza el trámite de entrega de equipos no operativos al almacén SDSCJ en el mes de {mes} del {anio} bajo el comunicado {comunicado.get('numero', 'N/A')} "{comunicado.get('titulo', 'N/A')}" el {comunicado.get('fecha', 'N/A')}, para concepto técnico y disposición final."""
-        
-        self._agregar_parrafo(texto)
+        # Si hay texto personalizado, usarlo; si no, generar texto automático
+        if texto_equipos:
+            self._agregar_parrafo(texto_equipos)
+        else:
+            # Párrafo introductorio
+            texto = f"""Se realiza el trámite de entrega de equipos no operativos al almacén SDSCJ en el mes de {mes} del {anio}"""
+            if comunicado.get('numero'):
+                texto += f" bajo el comunicado {comunicado.get('numero', 'N/A')}"
+            if comunicado.get('fecha'):
+                texto += f" el {comunicado.get('fecha', 'N/A')}"
+            texto += ", para concepto técnico y disposición final."
+            self._agregar_parrafo(texto)
         
         # Tabla de equipos
         if equipos:
@@ -309,10 +339,10 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
                 filas.append([
                     idx,
                     eq.get('descripcion', ''),
-                    eq.get('serial', 'N/A'),
+                    eq.get('serial', '') if eq.get('serial') else '-',
                     eq.get('cantidad', 1),
                     eq.get('motivo', ''),
-                    self._formato_moneda(eq.get('valor', 0))
+                    self._formato_moneda(eq.get('valor', 0)) if eq.get('valor', 0) > 0 else "-"
                 ])
             
             alineaciones = [
@@ -324,7 +354,9 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
                 WD_ALIGN_PARAGRAPH.RIGHT,   # Valor
             ]
             
-            fila_total = ["", "TOTAL", "", "", "", self._formato_moneda(valor_total)]
+            fila_total = None
+            if valor_total > 0:
+                fila_total = ["", "TOTAL", "", "", "", self._formato_moneda(valor_total)]
             
             self._agregar_tabla(
                 encabezados=["No.", "DESCRIPCIÓN", "SERIAL", "CANT.", "MOTIVO", "VALOR"],
@@ -361,15 +393,20 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
         comunicado = inclusiones_data.get('comunicado', {})
         items = inclusiones_data.get('items', [])
         estado = inclusiones_data.get('estado', 'Sin solicitudes')
+        texto_inclusiones = inclusiones_data.get('texto', '')
         valor_total = sum(item.get('valor_total', 0) for item in items)
         
-        # Párrafo introductorio
-        texto = f"""Se realiza la solicitud de inclusión de elementos a la bolsa de repuestos del contrato SCJ-1809-2024 en el mes de {mes} del {anio} bajo el comunicado {comunicado.get('numero', 'N/A')} "{comunicado.get('titulo', 'N/A')}" el {comunicado.get('fecha', 'N/A')}."""
+        # Si hay texto personalizado, usarlo; si no, generar texto automático
+        if texto_inclusiones:
+            self._agregar_parrafo(texto_inclusiones)
+        else:
+            # Párrafo introductorio
+            texto = f"""Para el periodo comprendido entre el 01 al {self._obtener_dias_mes()} de {mes} del {anio} se realizó la presentación de solicitud de inclusión de bolsa de repuestos de:"""
+            self._agregar_parrafo(texto)
         
-        self._agregar_parrafo(texto)
-        
-        # Estado de la solicitud
-        self._agregar_parrafo(f"Estado de la solicitud: {estado}", negrita=True)
+        # Estado de la solicitud solo si no es "Sin solicitudes"
+        if estado != 'Sin solicitudes':
+            self._agregar_parrafo(f"Estado de la solicitud: {estado}", negrita=True)
         
         # Tabla de ítems
         if items:
@@ -397,7 +434,9 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
                 WD_ALIGN_PARAGRAPH.LEFT,    # Justificación
             ]
             
-            fila_total = ["", "TOTAL", "", "", "", self._formato_moneda(valor_total), ""]
+            fila_total = None
+            if valor_total > 0:
+                fila_total = ["", "TOTAL", "", "", "", self._formato_moneda(valor_total), ""]
             
             self._agregar_tabla(
                 encabezados=["No.", "DESCRIPCIÓN", "CANT.", "UND", "VALOR UNIT.", "VALOR TOTAL", "JUSTIFICACIÓN"],
@@ -423,7 +462,14 @@ A continuación se presenta el detalle de cada una de las gestiones realizadas d
                 self._agregar_parrafo(f"• {anexo}")
     
     def cargar_datos(self) -> None:
-        """Carga los datos específicos de la sección 4 desde JSON y Excel"""
+        """
+        Carga los datos específicos de la sección 4 desde JSON y Excel
+        Si ya hay datos cargados (desde MongoDB), no los sobrescribe
+        """
+        # Si ya hay datos cargados (desde MongoDB), no cargar desde archivos
+        if self.datos and any(key in self.datos for key in ['gestion_inventario', 'entradas_almacen', 'equipos_no_operativos', 'inclusiones_bolsa']):
+            return
+        
         # Cargar datos desde archivo JSON
         # Intentar primero con formato numérico, luego con nombre de mes
         archivo = config.FUENTES_DIR / f"bienes_{self.mes}_{self.anio}.json"
