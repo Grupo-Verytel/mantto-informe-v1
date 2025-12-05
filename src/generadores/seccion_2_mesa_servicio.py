@@ -22,13 +22,14 @@ from PIL import Image
 from io import BytesIO
 import logging
 import re
+import time
 
 # Importar utilidades
 from src.utils.fecha_utils import formatear_fecha_simple, formatear_fechas_en_tabla
 from src.utils.tabla_utils import (
     set_cell_shading, centrar_celda_vertical, enable_autofit,
     detectar_columnas_desde_datos, preparar_datos_tabla, count_rows,
-    reemplazar_placeholder_con_tabla
+    reemplazar_placeholder_con_tabla, reemplazar_multiples_placeholders_con_tablas
 )
 from src.utils.imagen_utils import base64_to_inline_image, procesar_imagen
 from src.utils.documento_utils import convertir_url_sharepoint_a_ruta_relativa
@@ -1276,6 +1277,7 @@ class GeneradorSeccion2:
         reemplazar_placeholder_con_tabla(doc, placeholder, table_data)
     
     def _construir_contexto(self, document: Dict[str, Any], template: DocxTemplate) -> Dict[str, Any]:
+        tiempo_inicio = time.time()
         mes = document.get("mes")
         anio = document.get("anio")
         
@@ -1304,10 +1306,15 @@ class GeneradorSeccion2:
             "date_month": date_month
         }
         
+        tiempo_procesamiento_imagenes = 0
+        tiempo_procesamiento_tablas = 0
+        
         # Sección 2 (index[0]) - INFORME DE MESA DE SERVICIO
         if len(index) > 0:
+            tiempo_img = time.time()
             content_2 = index[0].get("content", {})
             imagen_2 = procesar_imagen(template, content_2.get("image", ""))
+            tiempo_procesamiento_imagenes += time.time() - tiempo_img
             if imagen_2:
                 contexto["image_2"] = imagen_2
         
@@ -1317,11 +1324,14 @@ class GeneradorSeccion2:
             # Si la ruta está vacía en el documento, usar la construida
             route_doc = content_21.get("route", "")
             contexto["route_21"] = route_doc if route_doc else route_21
+            tiempo_img = time.time()
             imagen_21 = procesar_imagen(template, content_21.get("image", ""))
+            tiempo_procesamiento_imagenes += time.time() - tiempo_img
             if imagen_21:
                 contexto["image_21"] = imagen_21
             
             # Preparar datos de tablas en formato lista de listas
+            tiempo_tabla = time.time()
             table_1_data = content_21.get("table_1", [])
             if table_1_data:
                 headers_21_1 = ["ÍTEM", "FECHA", "REFERENCIA", "RADICADO", "ESTADO", "APROBACIÓN"]
@@ -1329,7 +1339,9 @@ class GeneradorSeccion2:
                 contexto["table_21_1"] = preparar_datos_tabla(table_1_data, headers_21_1, campos_21_1)
             else:
                 contexto["table_21_1"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
             
+            tiempo_tabla = time.time()
             table_2_data = content_21.get("table_2", [])
             if table_2_data:
                 headers_21_2 = ["SUBSISTEMA", "DIAGNÓSTICO", "DIAGNÓSTICO SUBSISTEMA", "LIMPIEZA ACRÍLICO", 
@@ -1337,69 +1349,59 @@ class GeneradorSeccion2:
                 campos_21_2 = ["subsistema", "diagnostico", "diagnostico_subsistema", "limpieza_acrilico",
                               "mto_acometida", "mto_correctivo", "mto_correctivo_subsistema", "plan_de_choque", "total"]
                 
-                # Calcular el total de diagnósticos (suma de la columna "diagnostico")
+                # OPTIMIZACIÓN: Calcular todos los totales en una sola pasada
                 total_diagnostico = 0
+                total_general = 0
+                mayor_subsistema = None
+                mayor_total = 0
+                
                 try:
                     for item in table_2_data:
-                        valor = item.get("diagnostico", "")
-                        if valor:
-                            if isinstance(valor, str):
-                                valor_limpio = valor.replace(",", "").replace(" ", "").strip()
+                        # Calcular total de diagnósticos
+                        valor_diag = item.get("diagnostico", "")
+                        if valor_diag:
+                            if isinstance(valor_diag, str):
+                                valor_limpio = valor_diag.replace(",", "").replace(" ", "").strip()
                                 if valor_limpio:
                                     total_diagnostico += float(valor_limpio)
                             else:
-                                total_diagnostico += float(valor)
-                except (ValueError, TypeError):
-                    pass
-                
-                # Asignar el total de diagnósticos al contexto
-                contexto["diagnostico_21"] = str(int(total_diagnostico)) if total_diagnostico == int(total_diagnostico) else str(total_diagnostico)
-                
-                # Calcular el total general (suma de la columna "total")
-                total_general = 0
-                try:
-                    for item in table_2_data:
-                        valor = item.get("total", "")
-                        if valor:
-                            if isinstance(valor, str):
-                                valor_limpio = valor.replace(",", "").replace(" ", "").strip()
-                                if valor_limpio:
-                                    total_general += float(valor_limpio)
-                            else:
-                                total_general += float(valor)
-                except (ValueError, TypeError):
-                    pass
-                
-                # Guardar el total general para reutilizarlo en total_24
-                contexto["_total_general_table_2"] = int(total_general) if total_general == int(total_general) else total_general
-                
-                # Encontrar el subsistema con el mayor total
-                mayor_subsistema = None
-                mayor_total = 0
-                try:
-                    for item in table_2_data:
+                                total_diagnostico += float(valor_diag)
+                        
+                        # Calcular total general y encontrar mayor subsistema
                         valor_total = item.get("total", "")
                         if valor_total:
-                            # Convertir a número
                             if isinstance(valor_total, str):
                                 valor_limpio = valor_total.replace(",", "").replace(" ", "").strip()
                                 if valor_limpio:
                                     total_num = float(valor_limpio)
-                                else:
-                                    continue
+                                    total_general += total_num
+                                    
+                                    # Comparar con el mayor encontrado hasta ahora
+                                    if total_num > mayor_total:
+                                        mayor_total = total_num
+                                        nombre_subsistema = item.get("subsistema", "")
+                                        mayor_subsistema = {
+                                            "nombre": nombre_subsistema if nombre_subsistema else "N/A",
+                                            "total": int(total_num) if total_num == int(total_num) else total_num
+                                        }
                             else:
                                 total_num = float(valor_total)
-                            
-                            # Comparar con el mayor encontrado hasta ahora
-                            if total_num > mayor_total:
-                                mayor_total = total_num
-                                nombre_subsistema = item.get("subsistema", "")
-                                mayor_subsistema = {
-                                    "nombre": nombre_subsistema if nombre_subsistema else "N/A",
-                                    "total": int(total_num) if total_num == int(total_num) else total_num
-                                }
+                                total_general += total_num
+                                if total_num > mayor_total:
+                                    mayor_total = total_num
+                                    nombre_subsistema = item.get("subsistema", "")
+                                    mayor_subsistema = {
+                                        "nombre": nombre_subsistema if nombre_subsistema else "N/A",
+                                        "total": int(total_num) if total_num == int(total_num) else total_num
+                                    }
                 except (ValueError, TypeError) as e:
-                    logger.warning(f"Error al encontrar mayor subsistema: {e}")
+                    logger.warning(f"Error al procesar datos de tabla 2.1: {e}")
+                
+                # Asignar el total de diagnósticos al contexto
+                contexto["diagnostico_21"] = str(int(total_diagnostico)) if total_diagnostico == int(total_diagnostico) else str(total_diagnostico)
+                
+                # Guardar el total general para reutilizarlo en total_24
+                contexto["_total_general_table_2"] = int(total_general) if total_general == int(total_general) else total_general
                 
                 # Guardar el mayor subsistema para reutilizarlo
                 contexto["_mayor_subsistema_table_2"] = mayor_subsistema
@@ -1417,7 +1419,9 @@ class GeneradorSeccion2:
                 contexto["diagnostico_21"] = "0"
                 contexto["_table_2_data_preparada"] = []
                 contexto["_total_general_table_2"] = 0
-                contexto["_mayor_subsistema_table_2"] = None            
+                contexto["_mayor_subsistema_table_2"] = None
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
+            
         # Sección 2.2 (index[2]) - HERRAMIENTAS DE TRABAJO
         if len(index) > 2:
             content_22 = index[2].get("content", {})
@@ -1430,6 +1434,7 @@ class GeneradorSeccion2:
             contexto["oficio_23"] = content_23.get("oficio", "")
             
             # Preparar datos de tabla en formato lista de listas
+            tiempo_tabla = time.time()
             table_23_data = content_23.get("table_1", [])
             if table_23_data:
                 headers_23_1 = ["SUBSISTEMA", "EJECUTADAS"]
@@ -1441,6 +1446,7 @@ class GeneradorSeccion2:
                 )
             else:
                 contexto["table_23_1"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 2.4 (index[4]) - INFORME CONSOLIDADO DEL ESTADO DE LOS TICKETS ADMINISTRATIVOS
         if len(index) > 4:
@@ -1460,6 +1466,7 @@ class GeneradorSeccion2:
             contexto["name_document_24"] = content_24.get("name_document", "")
             
             # Preparar datos de tabla table_24_2 en formato lista de listas
+            tiempo_tabla = time.time()
             table_24_2_data = content_24.get("table_2", [])
             if table_24_2_data:
                 headers_24_2 = ["SUBSISTEMAS", "CERRADO", "EN CURSO (ASIGNADA)", "EN CURSO (PLANIFICADA)", 
@@ -1473,10 +1480,12 @@ class GeneradorSeccion2:
                 )
             else:
                 contexto["table_24_2"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 2.5 (index[5]) - ESCALAMIENTOS
         if len(index) > 5:
             content_25 = index[5].get("content", {})
+            tiempo_tabla = time.time()
             table_25_data = content_25.get("table_1", [])
             if table_25_data:
                 # Detectar columnas automáticamente desde los datos
@@ -1487,10 +1496,12 @@ class GeneradorSeccion2:
                 )
             else:
                 contexto["table_25_1"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 2.5.1 (index[6]) - ENEL
         if len(index) > 6:
             content_251 = index[6].get("content", {})
+            tiempo_tabla = time.time()
             table_251_data = content_251.get("table_1", [])
             if table_251_data:
                 # Detectar columnas automáticamente desde los datos
@@ -1505,10 +1516,12 @@ class GeneradorSeccion2:
             else:
                 contexto["table_251_1"] = []
                 contexto["count_rows_251_1"] = 0
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 2.5.2 (index[7]) - CAÍDA MASIVA
         if len(index) > 7:
             content_252 = index[7].get("content", {})
+            tiempo_tabla = time.time()
             table_252_data = content_252.get("table_1", [])
             if table_252_data:
                 # Detectar columnas automáticamente desde los datos
@@ -1529,10 +1542,12 @@ class GeneradorSeccion2:
                 contexto["table_252_1"] = []
                 contexto["count_rows_252_1"] = 0
                 contexto["suma_total_registros_252"] = 0
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 2.5.3 (index[8]) - CONECTIVIDAD
         if len(index) > 8:
             content_253 = index[8].get("content", {})
+            tiempo_tabla = time.time()
             table_253_data = content_253.get("table_1", [])
             if table_253_data:
                 # Detectar columnas automáticamente desde los datos
@@ -1547,6 +1562,7 @@ class GeneradorSeccion2:
             else:
                 contexto["table_253_1"] = []
                 contexto["count_rows_253_1"] = 0
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 2.6 (index[9]) - INFORME ACTUALIZADO DE HOJAS DE VIDA
         if len(index) > 9:
@@ -1558,6 +1574,7 @@ class GeneradorSeccion2:
             content_27 = index[10].get("content", {})
             
             # Preparar table_27_1 (ESTADO - CANTIDAD)
+            tiempo_tabla = time.time()
             table_27_1_data = content_27.get("table_1", [])
             if table_27_1_data:
                 headers_27_1 = ["ESTADO", "CANTIDAD"]
@@ -1568,14 +1585,18 @@ class GeneradorSeccion2:
                 )
             else:
                 contexto["table_27_1"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
             
+            tiempo_img = time.time()
             imagen_27 = procesar_imagen(template, content_27.get("image", ""))
+            tiempo_procesamiento_imagenes += time.time() - tiempo_img
             if imagen_27:
                 contexto["image_27"] = imagen_27
             contexto["section_27_1"] = content_27.get("section_1", "")
             contexto["section_27_2"] = content_27.get("section_2", "")
             
             # Preparar table_27_2 (RESPONSABLE - CANTIDAD)
+            tiempo_tabla = time.time()
             table_27_2_data = content_27.get("table_2", [])
             if table_27_2_data:
                 headers_27_2 = ["RESPONSABLE", "CANTIDAD"]
@@ -1586,10 +1607,12 @@ class GeneradorSeccion2:
                 )
             else:
                 contexto["table_27_2"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
             
             contexto["section_27_3"] = content_27.get("section_3", "")
             
             # Preparar table_27_3 (SUBSISTEMAS con múltiples columnas)
+            tiempo_tabla = time.time()
             table_27_3_data = content_27.get("table_3", [])
             if table_27_3_data:
                 headers_27_3 = ["SUBSISTEMAS", "CAÍDA MASIVA", "FUERA DE SERVICIO", "OPERATIVA", "OPERATIVA CON NOVEDAD", "TOTAL"]
@@ -1600,6 +1623,7 @@ class GeneradorSeccion2:
                 )
             else:
                 contexto["table_27_3"] = []
+            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
             contexto["observaciones_27"] = content_27.get("observaciones", "")
             contexto["name_document_27"] = content_27.get("name_document", "")
             
@@ -1609,15 +1633,31 @@ class GeneradorSeccion2:
             else:
                 contexto["last_day_27"] = ""
 
+        tiempo_total_contexto = time.time() - tiempo_inicio
+        logger.info(f"  📊 Detalle construcción contexto:")
+        logger.info(f"     - Procesamiento imágenes: {tiempo_procesamiento_imagenes:.2f}s ({tiempo_procesamiento_imagenes/tiempo_total_contexto*100:.1f}%)")
+        logger.info(f"     - Procesamiento tablas: {tiempo_procesamiento_tablas:.2f}s ({tiempo_procesamiento_tablas/tiempo_total_contexto*100:.1f}%)")
+        logger.info(f"     - Otros: {tiempo_total_contexto - tiempo_procesamiento_imagenes - tiempo_procesamiento_tablas:.2f}s")
         
         return contexto
     
     def generar(self, document: Dict[str, Any], output_path: Optional[Path] = None):       
+        tiempo_inicio_total = time.time()
+        logger.info("=" * 80)
+        logger.info("INICIO GENERACIÓN DE DOCUMENTO SECCIÓN 2")
+        logger.info("=" * 80)
         
+        tiempo_inicio = time.time()
         template_path = config.TEMPLATES_DIR / self.template_file
-        template = DocxTemplate(str(template_path) )
-                
-        contexto = self._construir_contexto(document , template)
+        template = DocxTemplate(str(template_path))
+        tiempo_carga_template = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo carga template: {tiempo_carga_template:.2f}s")
+        
+        tiempo_inicio = time.time()
+        contexto = self._construir_contexto(document, template)
+        tiempo_construccion_contexto = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo construcción contexto: {tiempo_construccion_contexto:.2f}s")
+        
         if output_path:
             # Asegurar que el output_path tenga extensión .docx
             if not str(output_path).endswith('.docx'):
@@ -1625,86 +1665,81 @@ class GeneradorSeccion2:
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
+        tiempo_inicio = time.time()
         # Preparar placeholders especiales para tablas
         # El usuario puede usar {{ table_21_1_placeholder }} o [[TABLE_21_1]] directamente en el Word
-        contexto_tablas = contexto.copy()
-        if contexto.get("table_21_1"):
-            contexto_tablas["table_21_1_placeholder"] = "[[TABLE_21_1]]"
-        if contexto.get("table_21_2"):
-            contexto_tablas["table_21_2_placeholder"] = "[[TABLE_21_2]]"
-        if contexto.get("table_23_1"):
-            contexto_tablas["table_23_1_placeholder"] = "[[TABLE_23_1]]"
-        if contexto.get("table_24_1"):
-            contexto_tablas["table_24_1_placeholder"] = "[[TABLE_24_1]]"
-        if contexto.get("table_24_2"):
-            contexto_tablas["table_24_2_placeholder"] = "[[TABLE_24_2]]"
-        if contexto.get("table_25_1"):
-            contexto_tablas["table_25_1_placeholder"] = "[[TABLE_25_1]]"
-        if contexto.get("table_251_1"):
-            contexto_tablas["table_251_1_placeholder"] = "[[TABLE_251_1]]"
-        if contexto.get("table_252_1"):
-            contexto_tablas["table_252_1_placeholder"] = "[[TABLE_252_1]]"
-        if contexto.get("table_253_1"):
-            contexto_tablas["table_253_1_placeholder"] = "[[TABLE_253_1]]"
+        contexto_tablas = {}
+        # Solo copiar las claves necesarias en lugar de copiar todo el contexto
+        for key in ["mes", "anio", "mes_numero", "date_month", "route_21", "email_22", 
+                   "comunicacion_23", "oficio_23", "total_24", "mayor_subsistema_21",
+                   "name_document_24", "name_document_26", "name_document_27",
+                   "section_27_1", "section_27_2", "section_27_3", "observaciones_27",
+                   "last_day_27", "diagnostico_21", "count_rows_251_1", "count_rows_252_1",
+                   "count_rows_253_1", "suma_total_registros_252"]:
+            if key in contexto:
+                contexto_tablas[key] = contexto[key]
         
-        # Agregar placeholders para tablas de la sección 2.7
-        if contexto.get("table_27_1"):
-            contexto_tablas["table_27_1_placeholder"] = "[[TABLE_27_1]]"
-        if contexto.get("table_27_2"):
-            contexto_tablas["table_27_2_placeholder"] = "[[TABLE_27_2]]"
-        if contexto.get("table_27_3"):
-            contexto_tablas["table_27_3_placeholder"] = "[[TABLE_27_3]]"
+        # Agregar imágenes solo si existen
+        for img_key in ["image_2", "image_21", "image_27"]:
+            if img_key in contexto:
+                contexto_tablas[img_key] = contexto[img_key]
         
+        # Agregar placeholders para tablas (solo para Jinja2, las tablas se insertan después)
+        placeholders_tablas = {}
+        tabla_mapping = {
+            "table_21_1": "[[TABLE_21_1]]",
+            "table_21_2": "[[TABLE_21_2]]",
+            "table_23_1": "[[TABLE_23_1]]",
+            "table_24_1": "[[TABLE_24_1]]",
+            "table_24_2": "[[TABLE_24_2]]",
+            "table_25_1": "[[TABLE_25_1]]",
+            "table_251_1": "[[TABLE_251_1]]",
+            "table_252_1": "[[TABLE_252_1]]",
+            "table_253_1": "[[TABLE_253_1]]",
+            "table_27_1": "[[TABLE_27_1]]",
+            "table_27_2": "[[TABLE_27_2]]",
+            "table_27_3": "[[TABLE_27_3]]"
+        }
+        
+        for tabla_key, placeholder in tabla_mapping.items():
+            if contexto.get(tabla_key):
+                contexto_tablas[f"{tabla_key}_placeholder"] = placeholder
+                placeholders_tablas[placeholder] = contexto[tabla_key]
+        tiempo_preparacion_contexto = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo preparación contexto tablas: {tiempo_preparacion_contexto:.2f}s")
+        logger.info(f"   - Número de tablas a procesar: {len(placeholders_tablas)}")
+        
+        tiempo_inicio = time.time()
         # Renderizar el template con las variables básicas
         template.render(contexto_tablas)
+        tiempo_renderizado = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo renderizado template Jinja2: {tiempo_renderizado:.2f}s")
         
+        tiempo_inicio = time.time()
         # Guardar temporalmente para poder trabajar con el documento renderizado
         temp_path = str(output_path).replace('.docx', '_temp.docx')
         template.save(temp_path)
+        tiempo_guardado_temp = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo guardado template temporal: {tiempo_guardado_temp:.2f}s")
         
+        tiempo_inicio = time.time()
         # Abrir el documento renderizado para insertar tablas programáticamente
         doc = Document(temp_path)
+        tiempo_apertura_doc = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo apertura documento: {tiempo_apertura_doc:.2f}s")
         
-        # Reemplazar placeholders de tablas con tablas creadas programáticamente
-        if contexto.get("table_21_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_21_1]]", contexto["table_21_1"])
+        tiempo_inicio = time.time()
+        # Reemplazar todos los placeholders de tablas en una sola pasada (MUCHO MÁS RÁPIDO)
+        if placeholders_tablas:
+            reemplazar_multiples_placeholders_con_tablas(doc, placeholders_tablas)
+        tiempo_procesamiento_tablas = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo procesamiento tablas: {tiempo_procesamiento_tablas:.2f}s")
         
-        if contexto.get("table_21_2"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_21_2]]", contexto["table_21_2"])
-        
-        if contexto.get("table_23_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_23_1]]", contexto["table_23_1"])
-        
-        if contexto.get("table_24_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_24_1]]", contexto["table_24_1"])
-        
-        if contexto.get("table_24_2"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_24_2]]", contexto["table_24_2"])
-        
-        if contexto.get("table_25_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_25_1]]", contexto["table_25_1"])
-        
-        if contexto.get("table_251_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_251_1]]", contexto["table_251_1"])
-        
-        if contexto.get("table_252_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_252_1]]", contexto["table_252_1"])
-        
-        if contexto.get("table_253_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_253_1]]", contexto["table_253_1"])
-        
-        # Reemplazar tablas de la sección 2.7 (Estado del Sistema)
-        if contexto.get("table_27_1"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_27_1]]", contexto["table_27_1"])
-        
-        if contexto.get("table_27_2"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_27_2]]", contexto["table_27_2"])
-        
-        if contexto.get("table_27_3"):
-            reemplazar_placeholder_con_tabla(doc, "[[TABLE_27_3]]", contexto["table_27_3"])
-        
+        tiempo_inicio = time.time()
         # Guardar el documento final
         doc.save(str(output_path))
+        tiempo_guardado_final = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo guardado documento final: {tiempo_guardado_final:.2f}s")
         
         # Eliminar archivo temporal
         try:
@@ -1712,6 +1747,138 @@ class GeneradorSeccion2:
         except:
             pass
 
-        print(f"[OK] Documento generado en: {output_path}")
+        tiempo_total = time.time() - tiempo_inicio_total
+        logger.info("=" * 80)
+        logger.info("RESUMEN DE TIEMPOS:")
+        logger.info(f"  • Carga template: {tiempo_carga_template:.2f}s ({tiempo_carga_template/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Construcción contexto: {tiempo_construccion_contexto:.2f}s ({tiempo_construccion_contexto/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Preparación contexto tablas: {tiempo_preparacion_contexto:.2f}s ({tiempo_preparacion_contexto/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Renderizado Jinja2: {tiempo_renderizado:.2f}s ({tiempo_renderizado/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Guardado template temporal: {tiempo_guardado_temp:.2f}s ({tiempo_guardado_temp/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Apertura documento: {tiempo_apertura_doc:.2f}s ({tiempo_apertura_doc/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Procesamiento tablas: {tiempo_procesamiento_tablas:.2f}s ({tiempo_procesamiento_tablas/tiempo_total*100:.1f}%)")
+        logger.info(f"  • Guardado documento final: {tiempo_guardado_final:.2f}s ({tiempo_guardado_final/tiempo_total*100:.1f}%)")
+        logger.info(f"  {'='*76}")
+        logger.info(f"  ⏱️  TIEMPO TOTAL: {tiempo_total:.2f}s ({tiempo_total/60:.2f} minutos)")
+        logger.info("=" * 80)
+        
+        print(f"[OK] Documento generado en: {output_path} (Tiempo total: {tiempo_total:.2f}s)")
         
         return template
+    
+    def generar_preview(self, document: Dict[str, Any]) -> bytes:
+        """
+        Genera el documento de la sección 2 y retorna los bytes para preview.
+        Similar a generar() pero retorna bytes en lugar de guardar en disco.
+        
+        Args:
+            document: Diccionario con los datos del documento
+            
+        Returns:
+            bytes: Contenido del archivo .docx generado
+        """
+        from io import BytesIO
+        import tempfile
+        
+        tiempo_inicio_total = time.time()
+        logger.info("=" * 80)
+        logger.info("INICIO GENERACIÓN DE PREVIEW DOCUMENTO SECCIÓN 2")
+        logger.info("=" * 80)
+        
+        tiempo_inicio = time.time()
+        template_path = config.TEMPLATES_DIR / self.template_file
+        template = DocxTemplate(str(template_path))
+        tiempo_carga_template = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo carga template: {tiempo_carga_template:.2f}s")
+        
+        tiempo_inicio = time.time()
+        contexto = self._construir_contexto(document, template)
+        tiempo_construccion_contexto = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo construcción contexto: {tiempo_construccion_contexto:.2f}s")
+        
+        tiempo_inicio = time.time()
+        # Preparar placeholders especiales para tablas
+        contexto_tablas = {}
+        # Solo copiar las claves necesarias
+        for key in ["mes", "anio", "mes_numero", "date_month", "route_21", "email_22", 
+                   "comunicacion_23", "oficio_23", "total_24", "mayor_subsistema_21",
+                   "name_document_24", "name_document_26", "name_document_27",
+                   "section_27_1", "section_27_2", "section_27_3", "observaciones_27",
+                   "last_day_27", "diagnostico_21", "count_rows_251_1", "count_rows_252_1",
+                   "count_rows_253_1", "suma_total_registros_252"]:
+            if key in contexto:
+                contexto_tablas[key] = contexto[key]
+        
+        # Agregar imágenes solo si existen
+        for img_key in ["image_2", "image_21", "image_27"]:
+            if img_key in contexto:
+                contexto_tablas[img_key] = contexto[img_key]
+        
+        # Agregar placeholders para tablas
+        placeholders_tablas = {}
+        tabla_mapping = {
+            "table_21_1": "[[TABLE_21_1]]",
+            "table_21_2": "[[TABLE_21_2]]",
+            "table_23_1": "[[TABLE_23_1]]",
+            "table_24_1": "[[TABLE_24_1]]",
+            "table_24_2": "[[TABLE_24_2]]",
+            "table_25_1": "[[TABLE_25_1]]",
+            "table_251_1": "[[TABLE_251_1]]",
+            "table_252_1": "[[TABLE_252_1]]",
+            "table_253_1": "[[TABLE_253_1]]",
+            "table_27_1": "[[TABLE_27_1]]",
+            "table_27_2": "[[TABLE_27_2]]",
+            "table_27_3": "[[TABLE_27_3]]"
+        }
+        
+        for tabla_key, placeholder in tabla_mapping.items():
+            if contexto.get(tabla_key):
+                contexto_tablas[f"{tabla_key}_placeholder"] = placeholder
+                placeholders_tablas[placeholder] = contexto[tabla_key]
+        
+        tiempo_preparacion_contexto = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo preparación contexto tablas: {tiempo_preparacion_contexto:.2f}s")
+        logger.info(f"   - Número de tablas a procesar: {len(placeholders_tablas)}")
+        
+        tiempo_inicio = time.time()
+        # Renderizar el template con las variables básicas
+        template.render(contexto_tablas)
+        tiempo_renderizado = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo renderizado template Jinja2: {tiempo_renderizado:.2f}s")
+        
+        tiempo_inicio = time.time()
+        # Guardar temporalmente en memoria usando BytesIO
+        temp_buffer = BytesIO()
+        template.save(temp_buffer)
+        temp_buffer.seek(0)
+        tiempo_guardado_temp = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo guardado template temporal: {tiempo_guardado_temp:.2f}s")
+        
+        tiempo_inicio = time.time()
+        # Abrir el documento renderizado para insertar tablas programáticamente
+        doc = Document(temp_buffer)
+        tiempo_apertura_doc = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo apertura documento: {tiempo_apertura_doc:.2f}s")
+        
+        tiempo_inicio = time.time()
+        # Reemplazar todos los placeholders de tablas en una sola pasada
+        if placeholders_tablas:
+            reemplazar_multiples_placeholders_con_tablas(doc, placeholders_tablas)
+        tiempo_procesamiento_tablas = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo procesamiento tablas: {tiempo_procesamiento_tablas:.2f}s")
+        
+        tiempo_inicio = time.time()
+        # Guardar el documento final en BytesIO
+        final_buffer = BytesIO()
+        doc.save(final_buffer)
+        final_buffer.seek(0)
+        file_bytes = final_buffer.read()
+        tiempo_guardado_final = time.time() - tiempo_inicio
+        logger.info(f"⏱️  Tiempo guardado documento final: {tiempo_guardado_final:.2f}s")
+        
+        tiempo_total = time.time() - tiempo_inicio_total
+        logger.info("=" * 80)
+        logger.info(f"⏱️  TIEMPO TOTAL PREVIEW: {tiempo_total:.2f}s ({tiempo_total/60:.2f} minutos)")
+        logger.info("=" * 80)
+        
+        return file_bytes

@@ -1,7 +1,7 @@
 """
 Utilidades para crear tablas en documentos Word
 """
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -9,6 +9,8 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 import logging
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 logger = logging.getLogger(__name__)
 
@@ -296,3 +298,379 @@ def reemplazar_placeholder_con_tabla(doc: Document, placeholder: str, table_data
                 parent.remove(paragraph._element)
             break
 
+
+def _crear_tabla_procesada(table_data: List[List[str]], estilos_tabla: List[str]) -> Tuple[Any, float]:
+    """
+    Crea y procesa una tabla de forma independiente (para procesamiento paralelo).
+    Retorna el elemento XML de la tabla y el tiempo que tomó procesarla.
+    
+    Args:
+        table_data: Datos de la tabla
+        estilos_tabla: Lista de estilos a intentar
+        
+    Returns:
+        Tupla (elemento_tabla, tiempo_procesamiento)
+    """
+    tiempo_inicio = time.time()
+    
+    # Crear un documento temporal para crear la tabla
+    doc_temp = Document()
+    total_rows = len(table_data)
+    total_cols = len(table_data[0]) if table_data else 0
+    
+    if total_rows == 0 or total_cols == 0:
+        return None, 0.0
+    
+    tabla = doc_temp.add_table(rows=total_rows, cols=total_cols)
+    
+    # Centrar tabla
+    try:
+        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
+    except:
+        try:
+            tbl_pr = tabla._tbl.tblPr
+            if tbl_pr is None:
+                from docx.oxml import parse_xml
+                tbl_pr = parse_xml(r'<w:tblPr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:jc w:val="center"/></w:tblPr>')
+                tabla._tbl.insert(0, tbl_pr)
+            else:
+                jc = tbl_pr.find(qn('w:jc'))
+                if jc is None:
+                    jc = OxmlElement('w:jc')
+                    jc.set(qn('w:val'), 'center')
+                    tbl_pr.append(jc)
+                else:
+                    jc.set(qn('w:val'), 'center')
+        except Exception as e:
+            logger.warning(f"No se pudo centrar la tabla: {e}")
+    
+    # Aplicar estilo
+    try:
+        tabla.style = estilos_tabla[0]
+    except:
+        try:
+            tabla.style = 'Table Grid'
+        except:
+            pass
+    
+    enable_autofit(tabla)
+    habilitar_encabezado_repetido(tabla, num_filas=1)
+    
+    # OPTIMIZACIÓN CRÍTICA: Para tablas grandes, aplicar estilos mínimos
+    es_fila_total = total_rows > 1 and table_data[total_rows - 1][0].upper() == "TOTAL"
+    es_tabla_grande = total_rows > 100
+    es_tabla_muy_grande = total_rows > 200  # Tablas con más de 200 filas - formato ultra mínimo
+    
+    # Llenar todos los datos primero (más rápido usando acceso directo)
+    for row_idx, fila in enumerate(table_data):
+        for col_idx, valor in enumerate(fila):
+            celda = tabla.rows[row_idx].cells[col_idx]
+            # Usar acceso directo al texto sin crear runs innecesarios
+            celda.paragraphs[0].text = str(valor) if valor is not None else ""
+    
+    # OPTIMIZACIÓN ULTRA AGRESIVA: Para tablas muy grandes, solo formato en encabezado
+    if es_tabla_muy_grande:
+        # Solo aplicar formato al encabezado, nada más (SIN cambiar tamaño de fuente para acelerar)
+        for col_idx in range(total_cols):
+            celda = tabla.rows[0].cells[col_idx]
+            parrafo = celda.paragraphs[0]
+            run = parrafo.runs[0] if parrafo.runs else None
+            
+            set_cell_shading(celda, "1F4E79")
+            centrar_celda_vertical(celda)
+            parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            if run:
+                run.bold = True
+                # NO cambiar tamaño de fuente para acelerar (usa el tamaño por defecto del template)
+                run.font.color.rgb = RGBColor(255, 255, 255)
+    else:
+        # Aplicar estilos de manera optimizada solo a encabezado y totales
+        for row_idx in range(total_rows):
+            fila = table_data[row_idx]
+            for col_idx in range(total_cols):
+                celda = tabla.rows[row_idx].cells[col_idx]
+                parrafo = celda.paragraphs[0]
+                run = parrafo.runs[0] if parrafo.runs else None
+                
+                if row_idx == 0:
+                    # Fila de encabezado - SIEMPRE formatear
+                    set_cell_shading(celda, "1F4E79")
+                    centrar_celda_vertical(celda)
+                    parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    if run:
+                        run.bold = True
+                        # Solo cambiar tamaño de fuente en encabezado si no es tabla muy grande
+                        if not es_tabla_muy_grande:
+                            run.font.size = Pt(8)
+                        run.font.color.rgb = RGBColor(255, 255, 255)
+                elif row_idx == total_rows - 1 and es_fila_total:
+                    # Fila de totales - SIEMPRE formatear
+                    set_cell_shading(celda, "D9E1F2")
+                    centrar_celda_vertical(celda)
+                    parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    if run:
+                        run.bold = True
+                        # Solo cambiar tamaño de fuente en totales si no es tabla muy grande
+                        if not es_tabla_muy_grande:
+                            run.font.size = Pt(8)
+                        run.font.color.rgb = RGBColor(0, 0, 0)
+                elif not es_tabla_grande:
+                    # Fila normal en tablas pequeñas - aplicar formato completo
+                    set_cell_shading(celda, "F2F2F2" if row_idx % 2 == 0 else "FFFFFF")
+                    centrar_celda_vertical(celda)
+                    parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT if col_idx == 0 else WD_ALIGN_PARAGRAPH.CENTER
+                    if run:
+                        run.font.size = Pt(8)
+                        run.font.color.rgb = RGBColor(0, 0, 0)
+                # Para tablas grandes (100-200 filas), no aplicar formato a filas normales
+    
+    # Retornar el elemento XML de la tabla (clonado para evitar problemas de referencia)
+    tabla_element = tabla._element
+    tiempo_procesamiento = time.time() - tiempo_inicio
+    
+    return tabla_element, tiempo_procesamiento
+
+
+def reemplazar_multiples_placeholders_con_tablas(doc: Document, placeholders_tablas: Dict[str, List[List[str]]]):
+    """
+    Reemplaza múltiples placeholders con tablas en una sola pasada del documento.
+    OPTIMIZADO: Usa acceso directo a XML para aplicar estilos más rápido.
+    
+    Args:
+        doc: Documento Word
+        placeholders_tablas: Diccionario con formato {placeholder: table_data}
+    """
+    if not placeholders_tablas:
+        return
+    
+    # Crear un conjunto de placeholders para búsqueda rápida
+    placeholders_set = set(placeholders_tablas.keys())
+    estilos_tabla = ['Table Grid', 'Light Shading', 'Light List', 'Medium Shading 1', 'Light Grid']
+    
+    # Buscar todos los placeholders en una sola pasada
+    tiempo_busqueda = time.time()
+    paragraphs_to_process = []
+    for i, paragraph in enumerate(doc.paragraphs):
+        texto_parrafo = paragraph.text  # Acceder una sola vez
+        for placeholder in placeholders_set:
+            if placeholder in texto_parrafo:
+                table_data = placeholders_tablas[placeholder]
+                if table_data and len(table_data) > 0:
+                    paragraphs_to_process.append((i, paragraph, placeholder, table_data))
+                    break  # Solo procesar un placeholder por párrafo
+    tiempo_busqueda_total = time.time() - tiempo_busqueda
+    logger.info(f"  🔍 Búsqueda de placeholders: {tiempo_busqueda_total:.2f}s ({len(paragraphs_to_process)} tablas encontradas)")
+    
+    # Procesar tablas en paralelo usando ThreadPoolExecutor
+    tiempo_total_procesamiento = time.time()
+    
+    # Determinar si usar procesamiento paralelo (solo si hay más de 1 tabla)
+    usar_paralelo = len(paragraphs_to_process) > 1
+    
+    if usar_paralelo:
+        logger.info(f"  🚀 Procesando {len(paragraphs_to_process)} tablas en paralelo...")
+        tablas_procesadas = {}
+        
+        # Procesar tablas en paralelo
+        with ThreadPoolExecutor(max_workers=min(len(paragraphs_to_process), 4)) as executor:
+            # Enviar todas las tareas
+            future_to_tabla = {
+                executor.submit(_crear_tabla_procesada, table_data, estilos_tabla): (tabla_idx, para_idx, paragraph, placeholder, table_data)
+                for tabla_idx, (para_idx, paragraph, placeholder, table_data) in enumerate(paragraphs_to_process)
+            }
+            
+            # Recoger resultados conforme se completan
+            for future in as_completed(future_to_tabla):
+                tabla_idx, para_idx, paragraph, placeholder, table_data = future_to_tabla[future]
+                try:
+                    tabla_element, tiempo_procesamiento = future.result()
+                    tablas_procesadas[tabla_idx] = {
+                        'element': tabla_element,
+                        'paragraph': paragraph,
+                        'placeholder': placeholder,
+                        'table_data': table_data,
+                        'tiempo': tiempo_procesamiento
+                    }
+                    if tiempo_procesamiento > 1.0:
+                        total_rows = len(table_data)
+                        total_cols = len(table_data[0]) if table_data else 0
+                        logger.info(f"    ✅ Tabla {tabla_idx + 1}/{len(paragraphs_to_process)} ({placeholder}) procesada: {tiempo_procesamiento:.2f}s ({total_rows}x{total_cols})")
+                except Exception as e:
+                    logger.error(f"    ❌ Error procesando tabla {tabla_idx + 1} ({placeholder}): {e}")
+        
+        # Insertar tablas en el documento en orden (secuencial para evitar problemas)
+        tiempo_insercion = time.time()
+        for tabla_idx in sorted(tablas_procesadas.keys()):
+            info = tablas_procesadas[tabla_idx]
+            paragraph = info['paragraph']
+            placeholder = info['placeholder']
+            tabla_element = info['element']
+            
+            if tabla_element is None:
+                continue
+            
+            # Clonar el elemento para insertarlo en el documento
+            from copy import deepcopy
+            tabla_element_clonado = deepcopy(tabla_element)
+            
+            # Insertar tabla en el documento
+            parent = paragraph._element.getparent()
+            para_idx = parent.index(paragraph._element)
+            parent.insert(para_idx + 1, tabla_element_clonado)
+            
+            # Limpiar placeholder del párrafo
+            texto_original = paragraph.text
+            nuevo_texto = texto_original.replace(placeholder, "").strip()
+            if nuevo_texto != texto_original:
+                paragraph.text = nuevo_texto
+                if not nuevo_texto:
+                    parent.remove(paragraph._element)
+        
+        tiempo_insercion_total = time.time() - tiempo_insercion
+        logger.info(f"  📌 Inserción de tablas en documento: {tiempo_insercion_total:.2f}s")
+    else:
+        # Procesamiento secuencial (para 1 tabla o si hay problemas)
+        logger.info(f"  📝 Procesando {len(paragraphs_to_process)} tabla(s) secuencialmente...")
+        for tabla_idx, (para_idx, paragraph, placeholder, table_data) in enumerate(paragraphs_to_process):
+            tiempo_tabla = time.time()
+            total_rows = len(table_data)
+            total_cols = len(table_data[0]) if table_data else 0
+            
+            if total_rows == 0 or total_cols == 0:
+                continue
+            
+            tabla = doc.add_table(rows=total_rows, cols=total_cols)
+            
+            # Centrar tabla (optimizado)
+            try:
+                tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
+            except:
+                try:
+                    tbl_pr = tabla._tbl.tblPr
+                    if tbl_pr is None:
+                        from docx.oxml import parse_xml
+                        tbl_pr = parse_xml(r'<w:tblPr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:jc w:val="center"/></w:tblPr>')
+                        tabla._tbl.insert(0, tbl_pr)
+                    else:
+                        jc = tbl_pr.find(qn('w:jc'))
+                        if jc is None:
+                            jc = OxmlElement('w:jc')
+                            jc.set(qn('w:val'), 'center')
+                            tbl_pr.append(jc)
+                        else:
+                            jc.set(qn('w:val'), 'center')
+                except Exception as e:
+                    logger.warning(f"No se pudo centrar la tabla: {e}")
+            
+            # Aplicar estilo (solo intentar el primero que funcione)
+            try:
+                tabla.style = estilos_tabla[0]
+            except:
+                try:
+                    tabla.style = 'Table Grid'
+                except:
+                    pass
+            
+            enable_autofit(tabla)
+            habilitar_encabezado_repetido(tabla, num_filas=1)
+            
+            # OPTIMIZACIÓN CRÍTICA: Para tablas grandes, aplicar estilos mínimos
+            es_fila_total = total_rows > 1 and table_data[total_rows - 1][0].upper() == "TOTAL"
+            es_tabla_grande = total_rows > 100
+            es_tabla_muy_grande = total_rows > 200  # Tablas con más de 200 filas - formato ultra mínimo
+            
+            # Para tablas grandes, solo aplicar formato a encabezado y totales
+            if es_tabla_muy_grande:
+                logger.info(f"    ⚡ Tabla MUY grande detectada ({total_rows}x{total_cols}), aplicando formato ULTRA mínimo (solo encabezado)")
+            elif es_tabla_grande:
+                logger.info(f"    📊 Tabla grande detectada ({total_rows}x{total_cols}), aplicando formato optimizado")
+            
+            # Llenar todos los datos primero (más rápido)
+            tiempo_llenado = time.time()
+            for row_idx, fila in enumerate(table_data):
+                for col_idx, valor in enumerate(fila):
+                    celda = tabla.rows[row_idx].cells[col_idx]
+                    celda.paragraphs[0].text = str(valor) if valor is not None else ""
+            tiempo_llenado_total = time.time() - tiempo_llenado
+            
+            # OPTIMIZACIÓN ULTRA AGRESIVA: Para tablas muy grandes, solo formato en encabezado
+            tiempo_estilos = time.time()
+            if es_tabla_muy_grande:
+                # Solo aplicar formato al encabezado, nada más (SIN cambiar tamaño de fuente para acelerar)
+                for col_idx in range(total_cols):
+                    celda = tabla.rows[0].cells[col_idx]
+                    parrafo = celda.paragraphs[0]
+                    run = parrafo.runs[0] if parrafo.runs else None
+                    
+                    set_cell_shading(celda, "1F4E79")
+                    centrar_celda_vertical(celda)
+                    parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    if run:
+                        run.bold = True
+                        # NO cambiar tamaño de fuente para acelerar (usa el tamaño por defecto del template)
+                        run.font.color.rgb = RGBColor(255, 255, 255)
+            else:
+                # Aplicar estilos de manera optimizada solo a encabezado y totales
+                for row_idx in range(total_rows):
+                    fila = table_data[row_idx]
+                    for col_idx in range(total_cols):
+                        celda = tabla.rows[row_idx].cells[col_idx]
+                        parrafo = celda.paragraphs[0]
+                        run = parrafo.runs[0] if parrafo.runs else None
+                        
+                        if row_idx == 0:
+                            # Fila de encabezado - SIEMPRE formatear
+                            set_cell_shading(celda, "1F4E79")
+                            centrar_celda_vertical(celda)
+                            parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                            if run:
+                                run.bold = True
+                                # Solo cambiar tamaño de fuente en encabezado si no es tabla muy grande
+                                if not es_tabla_muy_grande:
+                                    run.font.size = Pt(8)
+                                run.font.color.rgb = RGBColor(255, 255, 255)
+                        elif row_idx == total_rows - 1 and es_fila_total:
+                            # Fila de totales - SIEMPRE formatear
+                            set_cell_shading(celda, "D9E1F2")
+                            centrar_celda_vertical(celda)
+                            parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                            if run:
+                                run.bold = True
+                                # Solo cambiar tamaño de fuente en totales si no es tabla muy grande
+                                if not es_tabla_muy_grande:
+                                    run.font.size = Pt(8)
+                                run.font.color.rgb = RGBColor(0, 0, 0)
+                        elif not es_tabla_grande:
+                            # Fila normal en tablas pequeñas - aplicar formato completo
+                            set_cell_shading(celda, "F2F2F2" if row_idx % 2 == 0 else "FFFFFF")
+                            centrar_celda_vertical(celda)
+                            parrafo.alignment = WD_ALIGN_PARAGRAPH.LEFT if col_idx == 0 else WD_ALIGN_PARAGRAPH.CENTER
+                            if run:
+                                run.font.size = Pt(8)
+                                run.font.color.rgb = RGBColor(0, 0, 0)
+                        # Para tablas grandes (100-200 filas), no aplicar formato a filas normales
+            tiempo_estilos_total = time.time() - tiempo_estilos
+            
+            if tiempo_llenado_total > 1.0 or tiempo_estilos_total > 1.0:
+                logger.info(f"      - Llenado datos: {tiempo_llenado_total:.2f}s")
+                logger.info(f"      - Aplicación estilos: {tiempo_estilos_total:.2f}s")
+            
+            # Insertar tabla en el documento
+            parent = paragraph._element.getparent()
+            para_idx = parent.index(paragraph._element)
+            parent.insert(para_idx + 1, tabla._element)
+            
+            # Limpiar placeholder del párrafo
+            texto_original = paragraph.text
+            nuevo_texto = texto_original.replace(placeholder, "").strip()
+            if nuevo_texto != texto_original:
+                paragraph.text = nuevo_texto
+                if not nuevo_texto:
+                    parent.remove(paragraph._element)
+            
+            tiempo_tabla_total = time.time() - tiempo_tabla
+            if tiempo_tabla_total > 1.0:  # Solo loggear si tarda más de 1 segundo
+                logger.info(f"    ⚠️  Tabla {tabla_idx + 1}/{len(paragraphs_to_process)} ({placeholder}): {tiempo_tabla_total:.2f}s ({total_rows}x{total_cols})")
+    
+    tiempo_total_procesamiento_total = time.time() - tiempo_total_procesamiento
+    logger.info(f"  ⏱️  Tiempo total procesamiento tablas: {tiempo_total_procesamiento_total:.2f}s")

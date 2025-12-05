@@ -352,6 +352,34 @@ class Section2Service:
             logger.error(f"Error al generar documento: {str(e)}", exc_info=True)
             raise
 
+    async def generate_document_preview(self, data: Dict[str, Any]) -> bytes:
+        """
+        Genera el documento de la sección 2 y retorna los bytes del archivo para preview.
+        
+        Args:
+            data: Diccionario con anio y mes
+            
+        Returns:
+            bytes: Contenido del archivo .docx generado
+        """
+        try:
+            anio = data.get("anio")
+            mes = data.get("mes")
+
+            document = await self.get_all_section({"anio": anio, "mes": mes})           
+            if not document:
+                raise ValueError(f"No se encontró el documento para año {anio}, mes {mes}")
+            
+            # Generar el documento usando el método del generador que retorna bytes
+            generador = GeneradorSeccion2()
+            file_bytes = generador.generar_preview(document)
+            
+            return file_bytes
+                    
+        except Exception as e:
+            logger.error(f"Error al generar preview del documento: {str(e)}", exc_info=True)
+            raise
+
     def serialize_mongo(self, doc):
         if not doc:
          return doc

@@ -3,6 +3,7 @@ Rutas para la Sección 2: Informe de Mesa de Servicio
 """
 from typing import Dict, Any, Optional
 from fastapi import APIRouter, status, Body, Query
+from fastapi.responses import Response
 from ..controllers.section2_controller import Section2Controller
 
 router = APIRouter(prefix="/section2", tags=["Sección 2 - Mesa de Servicio"])
@@ -36,7 +37,26 @@ async def send_data_section(
 @router.post("/generate_document", status_code=status.HTTP_200_OK)
 async def generate_document(
     data: Dict[str, Any] = Body(...),    
-) -> Dict[str, Any]:   
-    return await section2_controller.generate_document(data)  
+) -> Dict[str, Any]:
+    return await section2_controller.generate_document(data)
+
+
+@router.post("/seccion_2_preview", status_code=status.HTTP_200_OK)
+async def seccion_2_preview(
+    data: Dict[str, Any] = Body(...),    
+) -> Response:
+    """
+    Genera el documento de la sección 2 y lo retorna como bytes para preview.
+    
+    Body esperado:
+    {
+        "anio": 2025,
+        "mes": 11
+    }
+    
+    Retorna:
+    Archivo .docx como bytes (para usar con docx-preview en el frontend)
+    """
+    return await section2_controller.seccion_2_preview(data)
 
   

@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from fastapi import HTTPException, status
+from fastapi.responses import Response
 import logging
 from ..services.section2_service import Section2Service
 from ..generadores.seccion_2_mesa_servicio import GeneradorSeccion2
@@ -163,4 +164,51 @@ class Section2Controller:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error al generar la sección: {str(e)}"
+            )
+    
+    async def seccion_2_preview(
+        self, 
+        data: Dict[str, Any], 
+    ) -> Response:
+        """
+        Genera el documento de la sección 2 y lo retorna como bytes para preview en el frontend.
+        
+        Body esperado:
+        {
+            "anio": 2025,
+            "mes": 11
+        }
+        
+        Retorna:
+        Response con el archivo .docx como bytes (para usar con docx-preview)
+        """
+        try:
+            anio = data.get("anio")
+            mes = data.get("mes")
+            
+            if not anio or not mes:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="anio y mes son requeridos"
+                )
+            
+            # Generar el documento y obtener los bytes
+            file_bytes = await self.service.generate_document_preview(data)
+            
+            # Retornar como Response con el content-type correcto
+            return Response(
+                content=file_bytes,
+                media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                headers={
+                    "Content-Disposition": f"inline; filename=seccion_2_preview_{mes}_{anio}.docx"
+                }
+            )
+            
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error en controlador al generar preview: {str(e)}", exc_info=True)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error al generar el preview: {str(e)}"
             )
