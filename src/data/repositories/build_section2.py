@@ -42,10 +42,8 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2",
                 "level": 1,
                 "title": "2. INFORME DE MESA DE SERVICIO",
-                "content": {
-                    "parrafo1": "",
-                    "image": "",
-                    "parrafo2": "",
+                "content": {                    
+                    "image": "",                    
                 },
                 "user_created": 1,
                 "user_updated": 1,
@@ -57,11 +55,14 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "level": 2,
                 "title": "2.1 INFORME DE MESA DE SERVICIO",
                 "content": {
-                    "documento_1": "",
-                    "image": "",
-                    "tabla_1": [
-                        {"id": 0, "fecha" : "valor1", "referencia" : "valor2", "radicado" : "valor3"},                        
-                    ]
+                    "route": "",      
+                    "image": "",    
+                    "table_1": [
+                        {"item": "" , "fecha": "" , "referencia": "" , "radicado": "" , "estado": "", "aprobacion": ""}
+                    ],
+                    "table_2": [
+                        {"subsistema": "" , "diagnostico": "" , "diagnostico_subsistema": "" , "limpieza_acrilico": "" , "mto_acometida": "" , "mto_correctivo": "" , "mto_correctivo_subsistema": "" , "plan_de_choque": "" , "total": ""}
+                    ]                       
                 },
                 "user_created": 1,
                 "user_updated": 1,
@@ -72,7 +73,9 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.2",
                 "level": 2,
                 "title": "HERRAMIENTAS DE TRABAJO",
-                "content": "",
+                "content": {
+                    "email": "ergrodz@etb.com.co",
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,     
@@ -82,7 +85,13 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.3",
                 "level": 2,
                 "title": "VISITAS DE DIAGNÓSTICOS A SUBSISTEMAS",
-                "content": "",
+                "content": {
+                    "table_1": [
+                        {"subsistema": "" , "ejecutadas": ""}
+                    ],
+                    "comunicacion": "",
+                    "oficio": "",
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -92,7 +101,15 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.4",
                 "level": 2,
                 "title": "INFORME CONSOLIDADO DEL ESTADO DE LOS TICKETS ADMINISTRATIVOS",
-                "content": "",
+                "content": {
+                    "table_1": [
+                        {"subsistema": "" , "diagnostico": "" , "diagnostico_subsistema": "" , "limpieza_acrilico": "" , "mto_acometida": "" , "mto_correctivo": "" , "mto_correctivo_subsistema": "" , "plan_de_choque": "" , "total": ""}                        
+                    ],
+                    "name_document": "",
+                    "table_2": [
+                        {"subsistema": "" , "cerrado": "" , "en_curso_asignada": "" , "en_curso_planificada": "" , "en_espera": "" , "resueltas": "" , "total": ""}                        
+                    ]
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -102,7 +119,11 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.5",
                 "level": 2,
                 "title": "ESCALAMIENTOS",
-                "content": "",
+                "content": {
+                    "table_1": [
+                        {"escalamiento": "" , "cantidad": ""}
+                    ]
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -112,7 +133,11 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.5.1",
                 "level": 3,
                 "title": "ENEL",
-                "content": "",
+                "content": {
+                    "table_1": [
+                        {"item": "" , "codigo_punto": "" , "ticket_enel": "" , "fecha_escalamiento": "" , "ticket_glpi": ""}
+                    ]                    
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -122,7 +147,11 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.5.2",
                 "level": 3,
                 "title": "CAÍDA MASIVA",
-                "content": "",
+                "content": {
+                    "table_1": [                        
+                        {"item": "" , "punto": "" , "localidad": "" , "cav": "" , "fecha": "" , "consecutivo_caida": ""}
+                    ]                    
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -132,7 +161,11 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.5.3",
                 "level": 3,
                 "title": "CONECTIVIDAD",
-                "content": "",
+                "content": {
+                    "table_1": [                        
+                        {"item": "" , "codigo_punto": "" , "ticket_etb": "" , "fecha_escalamiento": "" , "ticket_glpi": ""}
+                    ]                    
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -142,7 +175,9 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.6",
                 "level": 2,
                 "title": "INFORME ACTUALIZADO DE HOJAS DE VIDA DE LOS PUNTOS Y SUBSISTEMAS DE VIDEO VIGILANCIA",
-                "content": "",
+                "content": {
+                    "name_document": "",
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,
@@ -152,7 +187,22 @@ async def build_section2(anio: int, mes: int , user_id: int, name_file: str):
                 "id": "2.7",
                 "level": 2,
                 "title": "INFORME EJECUTIVO DEL ESTADO DEL SISTEMA",
-                "content": "",
+                "content": {
+                    "table_1": [
+                        {"estado": "" , "cantidad": ""}
+                    ],
+                    "image": "",
+                    "section_1": "",
+                    "section_2": "",
+                    "table_2": [
+                        {"responsable": "" , "cantidad": ""}
+                    ],
+                    "section_3": "",
+                    "table_3": [
+                        {"subsistema": "" , "caida_masiva": "" , "fuera_de_servicio": "" , "operativa": "" , "operativa_con_novedad": "" , "total": ""}                        
+                    ],
+                    "name_document": "",
+                },
                 "user_created": 1,
                 "user_updated": 1,
                 "created_at": datetime_now,

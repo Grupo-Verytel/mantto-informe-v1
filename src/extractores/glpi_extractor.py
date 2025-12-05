@@ -1,25 +1,47 @@
 """
 Extractor de datos del sistema GLPI
 """
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 import json
+import os
 from pathlib import Path
 import config
+from ..services.glpi_service import get_glpi_service, GLPIService
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GLPIExtractor:
     """Extrae datos del sistema GLPI"""
     
-    def __init__(self, api_url: str = None, api_token: str = None):
-        """Inicializa el extractor con configuración de API"""
-        self.api_url = api_url or getattr(config, 'GLPI_API_URL', None)
-        self.api_token = api_token or getattr(config, 'GLPI_API_TOKEN', None)
+    def __init__(self, glpi_service: Optional[GLPIService] = None):
+        """
+        Inicializa el extractor con servicio GLPI
+        
+        Args:
+            glpi_service: Instancia del servicio GLPI (opcional)
+        """
+        self.glpi_service = glpi_service
+        self._use_mysql = bool(
+            os.getenv("GLPI_MYSQL_HOST") and 
+            os.getenv("GLPI_MYSQL_USER") and 
+            os.getenv("GLPI_MYSQL_PASSWORD")
+        )
     
-    def get_tickets_por_proyecto(self, mes: int, año: int) -> List[Dict]:
-        """Tickets agrupados por proyecto"""
-        # Por ahora retorna datos de ejemplo
-        # TODO: Implementar query real a GLPI
+    async def get_tickets_por_proyecto(self, mes: int, año: int) -> List[Dict]:
+        """
+        Tickets agrupados por proyecto
+        
+        Args:
+            mes: Mes (1-12)
+            año: Año
+            
+        Returns:
+            Lista de tickets agrupados por proyecto
+        """
+        # Intentar cargar desde JSON primero
         datos_json = self._cargar_datos_desde_json(mes, año, "tickets_por_proyecto", None)
         if datos_json:
             return datos_json
@@ -31,8 +53,34 @@ class GLPIExtractor:
             {"proyecto": "TRANSMILENIO", "generados": 18, "cerrados": 18, "abiertos": 0},
         ]
     
-    def get_tickets_por_estado(self, mes: int, año: int) -> List[Dict]:
-        """Tickets agrupados por estado"""
+    def _agrupar_tickets_por_proyecto(self, tickets: List[Dict]) -> List[Dict]:
+        """Agrupa tickets por proyecto"""
+        proyectos = {}
+        for ticket in tickets:
+            proyecto = ticket.get("project", {}).get("name", "SIN PROYECTO")
+            if proyecto not in proyectos:
+                proyectos[proyecto] = {"generados": 0, "cerrados": 0, "abiertos": 0}
+            
+            proyectos[proyecto]["generados"] += 1
+            estado = ticket.get("status", 0)
+            if estado == 6:  # Cerrado
+                proyectos[proyecto]["cerrados"] += 1
+            else:
+                proyectos[proyecto]["abiertos"] += 1
+        
+        return [{"proyecto": k, **v} for k, v in proyectos.items()]
+    
+    async def get_tickets_por_estado(self, mes: int, año: int) -> List[Dict]:
+        """
+        Tickets agrupados por estado
+        
+        Args:
+            mes: Mes (1-12)
+            año: Año
+            
+        Returns:
+            Lista de tickets agrupados por estado
+        """
         datos_json = self._cargar_datos_desde_json(mes, año, "tickets_por_estado", None)
         if datos_json:
             return datos_json
@@ -44,6 +92,36 @@ class GLPIExtractor:
             {"estado": "PENDIENTE", "cantidad": 5, "porcentaje": 2.3},
             {"estado": "ESCALADO", "cantidad": 1, "porcentaje": 0.5},
         ]
+    
+    def _agrupar_tickets_por_estado(self, tickets: List[Dict]) -> List[Dict]:
+        """Agrupa tickets por estado"""
+        estados_map = {
+            1: "NUEVO",
+            2: "ASIGNADO",
+            3: "EN PROCESO",
+            4: "PENDIENTE",
+            5: "RESUELTO",
+            6: "CERRADO"
+        }
+        
+        estados = {}
+        total = len(tickets)
+        
+        for ticket in tickets:
+            estado_id = ticket.get("status", 0)
+            estado_nombre = estados_map.get(estado_id, f"ESTADO_{estado_id}")
+            estados[estado_nombre] = estados.get(estado_nombre, 0) + 1
+        
+        resultado = []
+        for estado, cantidad in estados.items():
+            porcentaje = (cantidad / total * 100) if total > 0 else 0
+            resultado.append({
+                "estado": estado,
+                "cantidad": cantidad,
+                "porcentaje": round(porcentaje, 1)
+            })
+        
+        return resultado
     
     def get_tickets_por_subsistema(self, mes: int, año: int) -> List[Dict]:
         """Tickets agrupados por subsistema"""
@@ -118,14 +196,61 @@ class GLPIExtractor:
                 return default
         
         return default
+    
+    async def get_actividades_por_subsistema(self, mes: int, año: int) -> List[Dict]:
+        """
+        Obtiene actividades agrupadas por subsistema desde MySQL de GLPI
+        
+        Args:
+            mes: Mes (1-12)
+            año: Año (ej: 2025)
+            
+        Returns:
+            Lista de actividades por subsistema
+        """
+        # Intentar cargar desde JSON primero
+        datos_json = self._cargar_datos_desde_json(mes, año, "actividades_por_subsistema", None)
+        if datos_json:
+            return datos_json
+        
+        # Si hay servicio MySQL configurado, obtener datos reales
+        if self._use_mysql and self.glpi_service:
+            try:
+                actividades = await self.glpi_service.get_actividades_por_subsistema(año, mes)
+                logger.info(f"Obtenidas {len(actividades)} actividades desde MySQL GLPI")
+                return actividades
+            except Exception as e:
+                logger.warning(f"Error al obtener actividades de MySQL GLPI: {e}. Usando datos de ejemplo.")
+        
+        # Datos de ejemplo si no hay MySQL ni JSON
+        return [
+            {
+                "subsistema": "Domos Ciudadanos",
+                "diagnostico": "15",
+                "diagnostico_subsistema": "8",
+                "limpieza_acrilico": "12",
+                "mto_acometida": "5",
+                "mto_correctivo": "20",
+                "mto_correctivo_subsistema": "10",
+                "plan_de_choque": "3",
+                "total": "73"
+            }
+        ]
 
 
 # Singleton
-_glpi_extractor_instance = None
+_glpi_extractor_instance: Optional[GLPIExtractor] = None
 
-def get_glpi_extractor() -> GLPIExtractor:
-    """Retorna instancia singleton"""
+
+async def get_glpi_extractor() -> GLPIExtractor:
+    """
+    Retorna instancia singleton del extractor GLPI
+    
+    Returns:
+        Instancia de GLPIExtractor
+    """
     global _glpi_extractor_instance
     if _glpi_extractor_instance is None:
-        _glpi_extractor_instance = GLPIExtractor()
+        glpi_service = await get_glpi_service() if os.getenv("GLPI_MYSQL_HOST") else None
+        _glpi_extractor_instance = GLPIExtractor(glpi_service=glpi_service)
     return _glpi_extractor_instance

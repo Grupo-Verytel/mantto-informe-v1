@@ -3,12 +3,10 @@ Seeder para roles de acceso
 Crea los roles predefinidos del sistema
 """
 import asyncio
-import os
 from datetime import datetime
 from motor.motor_asyncio import AsyncIOMotorClient
-from dotenv import load_dotenv
 
-load_dotenv()
+import config
 
 
 # Módulos del sistema según la documentación
@@ -88,8 +86,8 @@ MODULES = [
 
 async def seed_access_roles():
     """Crea los roles de acceso en la base de datos"""
-    mongodb_uri = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-    db_name = os.getenv("MONGODB_DB_NAME", "mantto_informe")
+    mongodb_uri = config.MONGODB_URI
+    db_name = config.MONGODB_DB_NAME
     
     client = AsyncIOMotorClient(mongodb_uri)
     db = client[db_name]

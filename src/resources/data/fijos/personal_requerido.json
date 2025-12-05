@@ -1,0 +1,38 @@
+{
+    "minimo": [
+        {
+            "cargo": "Director de Proyecto",
+            "cantidad": 1,
+            "nombre": "Por definir"
+        },
+        {
+            "cargo": "Coordinador Técnico",
+            "cantidad": 1,
+            "nombre": "Por definir"
+        },
+        {
+            "cargo": "Ingeniero de Soporte",
+            "cantidad": 2,
+            "nombre": "Por definir"
+        },
+        {
+            "cargo": "Técnico de Campo",
+            "cantidad": 8,
+            "nombre": "Por definir"
+        }
+    ],
+    "apoyo": [
+        {
+            "cargo": "Técnico de Laboratorio",
+            "cantidad": 2,
+            "nombre": "Por definir"
+        },
+        {
+            "cargo": "Auxiliar Administrativo",
+            "cantidad": 1,
+            "nombre": "Por definir"
+        }
+    ]
+}
+
+

@@ -11,21 +11,23 @@ Subsecciones:
 - 3.2 Consolidado ANS (histórico y gráficos)
 """
 from docx import Document
-from docx.shared import Inches, Pt, Cm, RGBColor
+from docx.shared import Pt, RGBColor, Mm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-from datetime import datetime
-import json
-import calendar
-from .base import GeneradorSeccion
+import re
+import matplotlib
+matplotlib.use('Agg')  # Usar backend sin GUI
+import matplotlib.pyplot as plt
+import numpy as np
+from docxtpl import DocxTemplate, InlineImage
 import config
+from src.utils.formato_moneda import formato_moneda_cop, formato_cantidad
 
 
-class GeneradorSeccion3(GeneradorSeccion):
+class GeneradorSeccion3():
     """Genera la Sección 3: Informes de Medición de Niveles de Servicio (ANS)"""
     
     # Umbrales contractuales
@@ -51,65 +53,14 @@ class GeneradorSeccion3(GeneradorSeccion):
     
     @property
     def template_file(self) -> str:
-        return "seccion_3_ans.docx"  # No se usa, pero debe existir para compatibilidad
+        return "Seccion 3.docx"  # Template Word con placeholder {{grafico_lineas}}
     
     def __init__(self, anio: int, mes: int):
-        super().__init__(anio, mes)
+        self.anio = anio
+        self.mes = mes
         self.datos: Dict[str, Any] = {}
-        self.doc: Optional[Document] = None
-        self.disponibilidad: float = 0.0
-        self.cumple_ans: bool = False
-    
-    def _configurar_estilos(self):
-        """Configura los estilos del documento"""
-        if self.doc is None:
-            return
-        
-        # Configurar márgenes (1.27 cm = 0.5 pulgadas)
-        sections = self.doc.sections
-        for section in sections:
-            section.top_margin = Cm(1.27)
-            section.bottom_margin = Cm(1.27)
-            section.left_margin = Cm(1.27)
-            section.right_margin = Cm(1.27)
-        
-        # Estilo normal
-        style = self.doc.styles['Normal']
-        style.font.name = 'Arial'
-        style.font.size = Pt(11)
-        
-        # Título Sección (3.)
-        h1 = self.doc.styles['Heading 1']
-        h1.font.name = 'Arial'
-        h1.font.size = Pt(14)
-        h1.font.bold = True
-        h1.font.color.rgb = self.COLOR_AZUL_OSCURO
-        
-        # Subsecciones (3.1, 3.2)
-        h2 = self.doc.styles['Heading 2']
-        h2.font.name = 'Arial'
-        h2.font.size = Pt(12)
-        h2.font.bold = True
-        h2.font.color.rgb = self.COLOR_AZUL_MEDIO
-        
-        # Subtítulos
-        h3 = self.doc.styles['Heading 3']
-        h3.font.name = 'Arial'
-        h3.font.size = Pt(11)
-        h3.font.bold = True
-        h3.font.color.rgb = self.COLOR_GRIS
-    
-    def _aplicar_sombreado_celda(self, cell, color: RGBColor):
-        """Aplica color de fondo a celda de tabla"""
-        shading_elm = OxmlElement('w:shd')
-        # RGBColor es una tupla, acceder con índices
-        r = color[0]
-        g = color[1]
-        b = color[2]
-        
-        hex_color = f'{r:02X}{g:02X}{b:02X}'
-        shading_elm.set(qn('w:fill'), hex_color)
-        cell._element.get_or_add_tcPr().append(shading_elm)
+        self.periodo = config.get_periodo_texto(anio, mes)
+        self.contrato = config.CONTRATO
     
     def _centrar_celda_vertical(self, cell):
         """Centra verticalmente el contenido de una celda"""
@@ -119,645 +70,1025 @@ class GeneradorSeccion3(GeneradorSeccion):
         vAlign.set(qn('w:val'), 'center')
         tcPr.append(vAlign)
     
-    def _aplicar_color_disponibilidad(self, cell, porcentaje: float):
-        """Aplica color según semáforo de disponibilidad"""
-        if porcentaje >= self.UMBRAL_ANS:
-            # Verde: cumple
-            for paragraph in cell.paragraphs:
-                for run in paragraph.runs:
-                    run.font.color.rgb = self.COLOR_VERDE
-            self._aplicar_sombreado_celda(cell, self.COLOR_VERDE_CLARO)
-        elif porcentaje >= self.UMBRAL_AMARILLO:
-            # Amarillo: zona de alerta
-            for paragraph in cell.paragraphs:
-                for run in paragraph.runs:
-                    run.font.color.rgb = self.COLOR_AMARILLO
-            self._aplicar_sombreado_celda(cell, self.COLOR_AMARILLO_CLARO)
-        else:
-            # Rojo: crítico
-            for paragraph in cell.paragraphs:
-                for run in paragraph.runs:
-                    run.font.color.rgb = self.COLOR_ROJO
-            self._aplicar_sombreado_celda(cell, self.COLOR_ROJO_CLARO)
-    
-    def _agregar_parrafo(self, texto: str, justificado: bool = True, 
-                        negrita: bool = False, color: RGBColor = None, tamano: int = 11):
-        """Agrega un párrafo de texto"""
-        p = self.doc.add_paragraph()
-        run = p.add_run(texto)
-        run.bold = negrita
-        run.font.name = 'Arial'
-        run.font.size = Pt(tamano)
-        if color:
-            run.font.color.rgb = color
-        if justificado:
-            p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        p.paragraph_format.space_after = Pt(6)
-        return p
-    
-    def _calcular_penalidad(self) -> Dict[str, Any]:
-        """
-        Calcula la penalidad por incumplimiento de ANS
-        Escala contractual:
-        - Déficit ≤ 0.5%: 0.5% del contrato
-        - Déficit ≤ 1.0%: 1.0% del contrato
-        - Déficit ≤ 1.5%: 1.5% del contrato
-        - Déficit > 1.5%: 2.0% del contrato
-        """
-        if self.disponibilidad >= self.UMBRAL_ANS:
-            return {
-                'aplica': False,
-                'deficit': 0.0,
-                'porcentaje_penalidad': 0.0,
-                'valor_penalidad': 0.0
-            }
-        
-        deficit = self.UMBRAL_ANS - self.disponibilidad
-        valor_mensual = self.datos.get('valor_mensual_contrato', 500000000)
-        
-        # Escala de penalidad según especificaciones
-        if deficit <= 0.5:
-            porcentaje_penalidad = 0.5
-        elif deficit <= 1.0:
-            porcentaje_penalidad = 1.0
-        elif deficit <= 1.5:
-            porcentaje_penalidad = 1.5
-        else:
-            porcentaje_penalidad = 2.0
-        
-        valor_penalidad = valor_mensual * (porcentaje_penalidad / 100)
-        
+    def _cargar_contexto_base(self) -> Dict[str, Any]:
+        """Carga el contexto base común a todas las secciones"""
         return {
-            'aplica': True,
-            'deficit': deficit,
-            'porcentaje_penalidad': porcentaje_penalidad,
-            'valor_penalidad': valor_penalidad
-        }
-    
-    def _agregar_titulo_seccion(self):
-        """Título principal: 3. INFORMES DE MEDICIÓN DE NIVELES DE SERVICIO (ANS)"""
-        self.doc.add_heading("3. INFORMES DE MEDICIÓN DE NIVELES DE SERVICIO (ANS)", level=1)
-    
-    def _agregar_introduccion(self):
-        """Introducción con fórmula de disponibilidad"""
-        mes = self.datos.get('mes', config.MESES[self.mes])
-        anio = self.datos.get('anio', self.anio)
-        
-        texto = (
-            f"El contrato establece un Acuerdo de Nivel de Servicio (ANS) mínimo del {self.UMBRAL_ANS}% "
-            f"de disponibilidad mensual para el sistema de videovigilancia. La disponibilidad "
-            f"se calcula mediante la siguiente fórmula:\n\n"
-            f"Disponibilidad (%) = (Horas Operativas / Horas Totales del Mes) × 100\n\n"
-            f"A continuación se presenta el análisis de cumplimiento del ANS para el mes "
-            f"de {mes} de {anio}."
-        )
-        self._agregar_parrafo(texto)
-        
-        # Fórmula destacada
-        p = self.doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run("Disponibilidad (%) = (Horas Operativas / Horas Totales del Mes) × 100")
-        run.italic = True
-        run.bold = True
-        run.font.size = Pt(10)
-        run.font.color.rgb = self.COLOR_GRIS
-        self.doc.add_paragraph()
-    
-    def _agregar_3_1_penalidad_ans(self):
-        """Subsección 3.1 completa"""
-        self.doc.add_heading("3.1. PENALIDAD DE ANS", level=2)
-        
-        # Datos del periodo
-        self._agregar_datos_periodo()
-        
-        # Resultado ANS
-        self._agregar_resultado_ans()
-        
-        # Análisis de cumplimiento
-        self._agregar_analisis_cumplimiento()
-        
-        # Tabla de localidades
-        self._agregar_tabla_localidades()
-        
-        # Cálculo de penalidad (solo si no cumple)
-        if not self.cumple_ans:
-            self._agregar_calculo_penalidad()
-    
-    def _agregar_datos_periodo(self):
-        """Tabla resumen del periodo"""
-        self._agregar_parrafo("Datos del Periodo:", negrita=True)
-        
-        total_camaras = self.datos.get('total_camaras', 0)
-        dias_mes = self.datos.get('dias_mes', calendar.monthrange(self.anio, self.mes)[1])
-        horas_totales = self.datos.get('horas_totales', total_camaras * dias_mes * 24)
-        horas_operativas = self.datos.get('horas_operativas', 0)
-        horas_no_operativas = self.datos.get('horas_no_operativas', 0)
-        
-        # Crear tabla
-        tabla = self.doc.add_table(rows=1, cols=2)
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        hdr_cells[0].text = "Concepto"
-        hdr_cells[1].text = "Valor"
-        
-        for i in range(2):
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_GRIS)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        filas = [
-            ["Total de cámaras en operación", f"{total_camaras:,}"],
-            ["Horas totales del periodo", f"{horas_totales:,} hrs"],
-            ["Horas operativas", f"{horas_operativas:,} hrs"],
-            ["Horas no operativas", f"{horas_no_operativas:,} hrs"],
-            ["Disponibilidad calculada", f"{self.disponibilidad:.2f}%"]
-        ]
-        
-        for fila in filas:
-            row_cells = tabla.add_row().cells
-            row_cells[0].text = fila[0]
-            row_cells[1].text = fila[1]
-            
-            for i in range(2):
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i == 1 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-            
-            # Aplicar color a la última fila según cumplimiento
-            if fila[0] == "Disponibilidad calculada":
-                self._aplicar_color_disponibilidad(row_cells[1], self.disponibilidad)
-        
-        # Ajustar anchos
-        for cell in tabla.columns[0].cells:
-            cell.width = Cm(8.0)
-        for cell in tabla.columns[1].cells:
-            cell.width = Cm(6.0)
-        
-        self.doc.add_paragraph()
-    
-    def _agregar_resultado_ans(self):
-        """Resultado: ✓ CUMPLE o ✗ NO CUMPLE"""
-        self._agregar_parrafo("Resultado del ANS:", negrita=True)
-        
-        if self.cumple_ans:
-            texto = f"✓ ANS CUMPLIDO - Disponibilidad: {self.disponibilidad:.2f}% (Umbral: {self.UMBRAL_ANS}%)"
-            self._agregar_parrafo(texto, negrita=True, color=self.COLOR_VERDE, tamano=11)
-        else:
-            texto = f"✗ ANS NO CUMPLIDO - Disponibilidad: {self.disponibilidad:.2f}% (Umbral: {self.UMBRAL_ANS}%)"
-            self._agregar_parrafo(texto, negrita=True, color=self.COLOR_ROJO, tamano=11)
-        
-        self.doc.add_paragraph()
-    
-    def _agregar_analisis_cumplimiento(self):
-        """Análisis cualitativo (condicional)"""
-        self._agregar_parrafo("Análisis de Cumplimiento:", negrita=True)
-        
-        mes = self.datos.get('mes', config.MESES[self.mes])
-        anio = self.datos.get('anio', self.anio)
-        
-        if self.cumple_ans:
-            factores = self.datos.get('factores_cumplimiento', [
-                "mantenimiento preventivo programado",
-                "respuesta rápida ante incidencias",
-                "bajo índice de fallas de conectividad"
-            ])
-            factores_texto = "\n".join([f"• {f}" for f in factores])
-            
-            texto = (
-                f"Durante el mes de {mes}, el sistema de videovigilancia alcanzó una disponibilidad "
-                f"del {self.disponibilidad:.2f}%, superando el umbral contractual del {self.UMBRAL_ANS}%. "
-                f"Este resultado se logró gracias a las actividades preventivas de mantenimiento, "
-                f"la respuesta oportuna ante fallas, y la gestión eficiente de los recursos técnicos. "
-                f"Los principales factores que contribuyeron al cumplimiento fueron:\n\n{factores_texto}"
-            )
-        else:
-            causas = self.datos.get('causas_incumplimiento', [
-                "falla masiva de conectividad en zona sur (15 horas)",
-                "corte de energía prolongado en Kennedy (8 horas)"
-            ])
-            acciones = self.datos.get('acciones_correctivas', [
-                "instalación de enlaces de respaldo",
-                "implementación de UPS adicionales"
-            ])
-            
-            deficit = self.UMBRAL_ANS - self.disponibilidad
-            causas_texto = "\n".join([f"• {c}" for c in causas])
-            acciones_texto = "\n".join([f"• {a}" for a in acciones])
-            
-            texto = (
-                f"Durante el mes de {mes}, el sistema de videovigilancia registró una disponibilidad "
-                f"del {self.disponibilidad:.2f}%, presentando un déficit de {deficit:.2f}% respecto al umbral "
-                f"contractual. Las principales causas del incumplimiento fueron:\n\n{causas_texto}\n\n"
-                f"Se han implementado las siguientes acciones correctivas:\n\n{acciones_texto}"
-            )
-        
-        self._agregar_parrafo(texto)
-        self.doc.add_paragraph()
-    
-    def _agregar_tabla_localidades(self):
-        """Tabla con semáforo por localidad"""
-        self._agregar_parrafo("Disponibilidad por Localidad:", negrita=True)
-        
-        localidades = self.datos.get('disponibilidad_por_localidad', [])
-        
-        if not localidades:
-            self._agregar_parrafo("No se registraron datos de disponibilidad por localidad durante este periodo.")
-            return
-        
-        # Crear tabla
-        tabla = self.doc.add_table(rows=1, cols=5)
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        encabezados = ["Localidad", "Cámaras", "Hrs Operativas", "Hrs No Operativas", "Disponibilidad (%)"]
-        hdr_cells = tabla.rows[0].cells
-        
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_AZUL_OSCURO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for loc in localidades:
-            row_cells = tabla.add_row().cells
-            disponibilidad = loc.get('disponibilidad', loc.get('disponibilidad_porcentaje', 0))
-            
-            fila = [
-                loc.get('nombre', loc.get('localidad', '')),
-                str(loc.get('camaras', loc.get('total_camaras', 0))),
-                f"{loc.get('horas_operativas', 0):,}",
-                f"{loc.get('horas_no_operativas', 0):,}",
-                f"{disponibilidad:.2f}%"
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = texto
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i > 0 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-            
-            # Aplicar semáforo a la columna de disponibilidad
-            self._aplicar_color_disponibilidad(row_cells[4], disponibilidad)
-        
-        # Ajustar anchos
-        anchos = [Cm(4.5), Cm(2.5), Cm(3.0), Cm(3.5), Cm(3.5)]
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
-    
-    def _agregar_calculo_penalidad(self):
-        """Muestra cálculo de penalidad (solo si no cumple)"""
-        self._agregar_parrafo("Cálculo de Penalidad:", negrita=True)
-        
-        penalidad = self._calcular_penalidad()
-        
-        if not penalidad['aplica']:
-            self._agregar_parrafo(
-                "No aplica penalidad. El ANS fue cumplido satisfactoriamente.",
-                color=self.COLOR_VERDE
-            )
-            return
-        
-        texto = (
-            f"Por el incumplimiento del ANS contractual, se calcula una penalidad de "
-            f"{penalidad['porcentaje_penalidad']:.1f}% sobre el valor mensual del contrato, "
-            f"equivalente a ${penalidad['valor_penalidad']:,.0f} pesos colombianos."
-        )
-        self._agregar_parrafo(texto, color=self.COLOR_ROJO)
-        
-        # Tabla de penalidad
-        tabla = self.doc.add_table(rows=1, cols=2)
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        hdr_cells[0].text = "Concepto"
-        hdr_cells[1].text = "Valor"
-        
-        for i in range(2):
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_ROJO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        filas = [
-            ["Déficit de disponibilidad", f"{penalidad['deficit']:.2f}%"],
-            ["Porcentaje de penalidad", f"{penalidad['porcentaje_penalidad']:.1f}%"],
-            ["Valor de la penalidad", f"${penalidad['valor_penalidad']:,.0f}"]
-        ]
-        
-        for fila in filas:
-            row_cells = tabla.add_row().cells
-            row_cells[0].text = fila[0]
-            row_cells[1].text = fila[1]
-            
-            for i in range(2):
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i == 1 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-            
-            # Aplicar color rojo claro a todas las filas
-            for cell in row_cells:
-                self._aplicar_sombreado_celda(cell, self.COLOR_ROJO_CLARO)
-        
-        # Ajustar anchos
-        for cell in tabla.columns[0].cells:
-            cell.width = Cm(8.0)
-        for cell in tabla.columns[1].cells:
-            cell.width = Cm(6.0)
-        
-        self.doc.add_paragraph()
-    
-    def _agregar_3_2_consolidado_ans(self):
-        """Subsección 3.2 completa"""
-        self.doc.add_heading("3.2. CONSOLIDADO ANS", level=2)
-        
-        self._agregar_parrafo(
-            "A continuación se presenta el histórico de cumplimiento del ANS desde el inicio del contrato:"
-        )
-        self.doc.add_paragraph()
-        
-        # Tabla histórico
-        self._agregar_tabla_historico()
-        
-        # Resumen acumulado
-        self._agregar_resumen_acumulado()
-        
-        # Nota sobre gráficos
-        self._agregar_parrafo(
-            "Nota: Los gráficos de tendencia del ANS se encuentran en el Anexo 3.1 del presente informe.",
-            negrita=False
-        )
-    
-    def _agregar_tabla_historico(self):
-        """Tabla histórico mensual"""
-        historico = self.datos.get('historico_ans', [])
-        
-        if not historico:
-            self._agregar_parrafo("No se cuenta con histórico de ANS para este periodo.")
-            return
-        
-        # Crear tabla
-        tabla = self.doc.add_table(rows=1, cols=5)
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        encabezados = ["Mes", "Disponibilidad (%)", "Umbral (%)", "Estado", "Observaciones"]
-        hdr_cells = tabla.rows[0].cells
-        
-        for i, texto in enumerate(encabezados):
-            hdr_cells[i].text = texto
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_AZUL_MEDIO)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        for h in historico:
-            row_cells = tabla.add_row().cells
-            disponibilidad = h.get('disponibilidad', 0)
-            cumple = disponibilidad >= self.UMBRAL_ANS
-            
-            fila = [
-                h.get('mes', ''),
-                f"{disponibilidad:.2f}%",
-                f"{self.UMBRAL_ANS}%",
-                "✓ Cumple" if cumple else "✗ No Cumple",
-                h.get('observaciones', '-')
-            ]
-            
-            for i, texto in enumerate(fila):
-                row_cells[i].text = texto
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i < 4 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-            
-            # Aplicar color a la columna de estado
-            if cumple:
-                for paragraph in row_cells[3].paragraphs:
-                    for run in paragraph.runs:
-                        run.font.color.rgb = self.COLOR_VERDE
-                self._aplicar_sombreado_celda(row_cells[3], self.COLOR_VERDE_CLARO)
-            else:
-                for paragraph in row_cells[3].paragraphs:
-                    for run in paragraph.runs:
-                        run.font.color.rgb = self.COLOR_ROJO
-                self._aplicar_sombreado_celda(row_cells[3], self.COLOR_ROJO_CLARO)
-        
-        # Ajustar anchos
-        anchos = [Cm(3.0), Cm(3.0), Cm(2.5), Cm(2.5), Cm(6.0)]
-        for i, ancho in enumerate(anchos):
-            for cell in tabla.columns[i].cells:
-                cell.width = ancho
-        
-        self.doc.add_paragraph()
-    
-    def _agregar_resumen_acumulado(self):
-        """Resumen estadístico acumulado"""
-        self._agregar_parrafo("Resumen Acumulado:", negrita=True)
-        
-        historico = self.datos.get('historico_ans', [])
-        
-        if not historico:
-            self._agregar_parrafo("No se cuenta con datos suficientes para el resumen acumulado.")
-            return
-        
-        meses_cumplidos = sum(1 for h in historico if h.get('disponibilidad', 0) >= self.UMBRAL_ANS)
-        total_meses = len(historico)
-        promedio_disponibilidad = sum(h.get('disponibilidad', 0) for h in historico) / total_meses if total_meses > 0 else 0
-        
-        # Crear tabla
-        tabla = self.doc.add_table(rows=1, cols=2)
-        tabla.style = 'Table Grid'
-        tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
-        
-        # Encabezados
-        hdr_cells = tabla.rows[0].cells
-        hdr_cells[0].text = "Indicador"
-        hdr_cells[1].text = "Valor"
-        
-        for i in range(2):
-            for paragraph in hdr_cells[i].paragraphs:
-                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in paragraph.runs:
-                    run.bold = True
-                    run.font.size = Pt(9)
-                    run.font.color.rgb = RGBColor(255, 255, 255)
-            self._aplicar_sombreado_celda(hdr_cells[i], self.COLOR_GRIS)
-            self._centrar_celda_vertical(hdr_cells[i])
-        
-        # Filas de datos
-        filas = [
-            ["Total meses evaluados", str(total_meses)],
-            ["Meses con ANS cumplido", str(meses_cumplidos)],
-            ["Meses con ANS no cumplido", str(total_meses - meses_cumplidos)],
-            ["Porcentaje de cumplimiento", f"{(meses_cumplidos/total_meses*100):.1f}%" if total_meses > 0 else "N/A"],
-            ["Disponibilidad promedio", f"{promedio_disponibilidad:.2f}%"]
-        ]
-        
-        for fila in filas:
-            row_cells = tabla.add_row().cells
-            row_cells[0].text = fila[0]
-            row_cells[1].text = fila[1]
-            
-            for i in range(2):
-                for paragraph in row_cells[i].paragraphs:
-                    alineacion = WD_ALIGN_PARAGRAPH.CENTER if i == 1 else WD_ALIGN_PARAGRAPH.LEFT
-                    paragraph.alignment = alineacion
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-                self._centrar_celda_vertical(row_cells[i])
-        
-        # Ajustar anchos
-        for cell in tabla.columns[0].cells:
-            cell.width = Cm(8.0)
-        for cell in tabla.columns[1].cells:
-            cell.width = Cm(6.0)
-        
-        self.doc.add_paragraph()
-    
-    def cargar_datos(self) -> None:
-        """Carga los datos específicos de la sección 3 desde JSON"""
-        archivo = config.FUENTES_DIR / f"ans_{self.mes}_{self.anio}.json"
-        
-        if archivo.exists():
-            try:
-                with open(archivo, 'r', encoding='utf-8') as f:
-                    self.datos = json.load(f)
-            except Exception as e:
-                print(f"[WARNING] Error al cargar datos desde {archivo}: {e}")
-                self.datos = self._datos_ejemplo()
-        else:
-            print(f"[WARNING] Archivo de datos no encontrado: {archivo}")
-            self.datos = self._datos_ejemplo()
-        
-        # Calcular disponibilidad si no está en los datos
-        if 'disponibilidad_porcentaje' not in self.datos:
-            horas_totales = self.datos.get('horas_totales', 0)
-            horas_operativas = self.datos.get('horas_operativas', 0)
-            if horas_totales > 0:
-                self.datos['disponibilidad_porcentaje'] = (horas_operativas / horas_totales) * 100
-        
-        # Calcular disponibilidad y cumplimiento
-        self.disponibilidad = self.datos.get('disponibilidad_porcentaje', 0)
-        self.cumple_ans = self.disponibilidad >= self.UMBRAL_ANS
-        
-        # Agregar mes y año a los datos para compatibilidad
-        if 'mes' not in self.datos:
-            self.datos['mes'] = config.MESES[self.mes]
-        if 'anio' not in self.datos:
-            self.datos['anio'] = self.anio
-    
-    def _datos_ejemplo(self) -> Dict[str, Any]:
-        """Retorna datos de ejemplo para desarrollo"""
-        dias_mes = calendar.monthrange(self.anio, self.mes)[1]
-        total_camaras = 5824
-        horas_totales = total_camaras * dias_mes * 24
-        horas_operativas = int(horas_totales * 0.9917)  # 99.17%
-        horas_no_operativas = horas_totales - horas_operativas
-        
-        return {
+            "contrato_numero": self.contrato["numero"],
+            "entidad": self.contrato["entidad"],
+            "entidad_corto": self.contrato["entidad_corto"],
+            "periodo": self.periodo,
             "mes": config.MESES[self.mes],
             "anio": self.anio,
-            "total_camaras": total_camaras,
-            "dias_mes": dias_mes,
-            "horas_totales": horas_totales,
-            "horas_operativas": horas_operativas,
-            "horas_no_operativas": horas_no_operativas,
-            "disponibilidad_porcentaje": 99.17,
-            "valor_mensual_contrato": 500000000,
-            "disponibilidad_por_localidad": [],
-            "historico_ans": [],
-            "factores_cumplimiento": [
-                "mantenimiento preventivo programado",
-                "respuesta rápida ante incidencias",
-                "bajo índice de fallas de conectividad"
-            ]
+            "mes_numero": self.mes,
         }
     
-    def procesar(self) -> Dict[str, Any]:
-        """Procesa los datos y retorna el contexto (no se usa en generación programática)"""
-        return {}
+    def _set_cell_shading(self, cell, hex_color: str):
+        """
+        Aplica color de fondo a una celda de tabla
+        
+        Args:
+            cell: Celda de la tabla
+            hex_color: Color en formato hexadecimal (ej: "1F4E79" para azul oscuro)
+        """
+        shading_elm = OxmlElement('w:shd')
+        shading_elm.set(qn('w:fill'), hex_color)
+        cell._element.get_or_add_tcPr().append(shading_elm)
     
-    def generar(self) -> Document:
+    def procesar(self, document: Dict[str, Any]) -> Dict[str, Any]:
+        
+        if document:
+            for item in document.get("index", []):
+                if item.get("id") == "3":
+                    self.datos = item.get("content", {})
+                    return self.datos
+        else:
+            raise ValueError("No se encontraron datos para la sección 3")
+    
+  
+    def _generar_grafico_lineas_ans(self, output_dir: Path) -> Optional[str]:
         """
-        Genera el documento completo de la Sección 3
-        Sobrescribe el método de la clase base para usar python-docx directamente
+        Genera el gráfico de líneas con los valores ANS de la sección 3.1
+        Retorna la ruta del archivo JPG generado
         """
-        # Cargar datos si no se han cargado
-        if not self.datos:
-            self.cargar_datos()
+        try:
+            # Obtener datos para el gráfico
+            categorias = [
+                "ANS CALIDAD DE LOS REPORTES ENTREGADOS",
+                "ANS DISPONIBILIDAD DEL SISTEMA",
+                "ANS OPORTUNIDAD DE LOS REPORTES ENTREGADOS",
+                "ANS OPORTUNIDAD EN LAS ACTIVIDADES DE MANTENIMIENTO PREVENTIVO",
+                "ANS RTO",
+                "ANS TIEMPO DE RESTAURACIÓN DE SERVICIOS EN EL DATA CENTER"
+            ]
+            
+            # Calcular valores consolidados desde los datos
+            def safe_float(value, default=0):
+                """Convierte valor a float de forma segura"""
+                if value is None:
+                    return default
+                try:
+                    return float(value)
+                except (ValueError, TypeError):
+                    return default
+            
+            valor_calidad = (
+                safe_float(self.datos.get('valor_calidad_informes_1')) +
+                safe_float(self.datos.get('valor_calidad_informes_2')) +
+                safe_float(self.datos.get('valor_calidad_informes_3')) +
+                safe_float(self.datos.get('valor_calidad_informes_4'))
+            )
+            
+            valor_disponibilidad = safe_float(self.datos.get('valor_disponibilidad_sistema'))
+            valor_oportunidad_informes = safe_float(self.datos.get('valor_oportunidad_informes'))
+            valor_oportunidad_actividades = safe_float(self.datos.get('valor_oportunidad_actividades'))
+            
+            # Consolidar RTO (sumar los 4 valores)
+            valor_rto = (
+                safe_float(self.datos.get('valor_rto_1')) +
+                safe_float(self.datos.get('valor_rto_2')) +
+                safe_float(self.datos.get('valor_rto_3')) +
+                safe_float(self.datos.get('valor_rto_4'))
+            )
+            
+            valor_tiempo_restauracion = safe_float(self.datos.get('valor_tiempo_restauracion'))
+            
+            valores = [
+                valor_calidad,
+                valor_disponibilidad,
+                valor_oportunidad_informes,
+                valor_oportunidad_actividades,
+                valor_rto,
+                valor_tiempo_restauracion
+            ]
+            
+            # Crear figura
+            plt.figure(figsize=(18, 8))
+            
+            # Dibujar la línea
+            plt.plot(categorias, valores, marker='o', linewidth=2, color='#2E75B6', markersize=8)
+            
+            # Títulos
+            mes_nombre = config.MESES[self.datos.get('mes')]
+            anio = self.datos.get('anio', self.anio)
+            plt.title(f"ANS MES {mes_nombre.upper()} {anio}", fontsize=18, fontweight='bold')
+            plt.xlabel("Categorías", fontsize=12)
+            plt.ylabel("Valor", fontsize=12)
+            
+            # Rotación del texto del eje X
+            plt.xticks(rotation=45, ha='right')
+            
+            # Grid
+            plt.grid(True, linestyle='--', alpha=0.5)
+            
+            # Etiquetas sobre cada punto
+            for x, y in zip(categorias, valores):
+                if abs(y) > 0.01:  # Solo mostrar si el valor es significativo
+                    plt.text(x, y, f"${y:,.0f}", fontsize=10, ha='center', 
+                            va='bottom' if y >= 0 else 'top')
+                else:
+                    plt.text(x, y, "$-", fontsize=10, ha='center', va='center')
+            
+            plt.tight_layout()
+            
+            # Guardar como JPG
+            output_dir.mkdir(parents=True, exist_ok=True)
+            output_path = output_dir / f"grafico_lineas_ans_{self.mes}_{self.anio}.jpg"
+            plt.savefig(output_path, dpi=150, bbox_inches='tight', format='jpg')
+            plt.close()
+            
+            return str(output_path)
+        except Exception as e:
+            print(f"[WARNING] Error al generar gráfico de líneas: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
+    def _generar_grafico_pastel_ans(self, datos_actuales: Dict[str, Any], 
+                                     datos_historicos: List[Dict[str, Any]], 
+                                     output_dir: Path) -> Optional[str]:
+        """
+        Genera el gráfico de pastel (pie chart) con el consolidado de valores ANS por mes
+        Retorna la ruta del archivo JPG generado
+        """
+        try:
+            def safe_float(value, default=0.0):
+                """Convierte valor a float de forma segura"""
+                if value is None:
+                    return default
+                try:
+                    return float(value)
+                except (ValueError, TypeError):
+                    return default
+            
+            # Calcular valor total del mes actual
+            total_valor_actual = (
+                safe_float(datos_actuales.get('valor_calidad_informes_1', 0)) +
+                safe_float(datos_actuales.get('valor_calidad_informes_2', 0)) +
+                safe_float(datos_actuales.get('valor_calidad_informes_3', 0)) +
+                safe_float(datos_actuales.get('valor_calidad_informes_4', 0)) +
+                safe_float(datos_actuales.get('valor_disponibilidad_sistema', 0)) +
+                safe_float(datos_actuales.get('valor_oportunidad_informes', 0)) +
+                safe_float(datos_actuales.get('valor_oportunidad_actividades', 0)) +
+                safe_float(datos_actuales.get('valor_rto_1', 0)) +
+                safe_float(datos_actuales.get('valor_rto_2', 0)) +
+                safe_float(datos_actuales.get('valor_rto_3', 0)) +
+                safe_float(datos_actuales.get('valor_rto_4', 0)) +
+                safe_float(datos_actuales.get('valor_tiempo_restauracion', 0))
+            )
+            
+            # Preparar datos para el gráfico
+            meses = []
+            valores = []
+            
+            # Agregar meses históricos (orden ascendente: más antiguo primero)
+            for historico in datos_historicos:
+                mes_nombre = historico.get("mes_nombre", "")
+                anio = historico.get("anio", "")
+                valor = historico.get("total_valor", 0)
+                if valor > 0:
+                    meses.append(f"{mes_nombre}-{anio}")
+                    valores.append(valor)
+            
+            # Agregar mes actual (al final)
+            mes_nombre_actual = config.MESES[self.mes].lower()[:3]
+            if total_valor_actual > 0:
+                meses.append(f"{mes_nombre_actual}-{self.anio}")
+                valores.append(total_valor_actual)
+            
+            # Si no hay datos, retornar None
+            if not valores or sum(valores) == 0:
+                return None
+            
+            # Crear figura con espacio para la leyenda
+            fig, ax = plt.subplots(figsize=(14, 10))
+            
+            # Colores para el gráfico (usar colores distintos y visibles)
+            # Usar una paleta de colores más variada
+            colores = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
+                      '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+                      '#aec7e8', '#ffbb78']
+            
+            # Asegurar que tengamos suficientes colores
+            if len(meses) > len(colores):
+                import matplotlib.cm as cm
+                colores = [cm.Set3(i) for i in range(len(meses))]
+            else:
+                colores = colores[:len(meses)]
+            
+            # Crear el gráfico de pastel
+            wedges, texts, autotexts = ax.pie(
+                valores,
+                labels=None,  # No usar labels automáticos
+                autopct='%1.0f%%',
+                startangle=90,
+                colors=colores,
+                textprops={'fontsize': 10, 'fontweight': 'bold', 'color': 'white'},
+                pctdistance=0.85
+            )
+            
+            # Calcular porcentajes para cada segmento
+            total = sum(valores)
+            porcentajes = [(v / total * 100) for v in valores]
+            
+            # Actualizar los textos para incluir el mes y el porcentaje
+            for i, (autotext, mes, pct) in enumerate(zip(autotexts, meses, porcentajes)):
+                if pct > 0:  # Solo mostrar si el porcentaje es mayor a 0
+                    autotext.set_text(f'{mes}\n{pct:.0f}%')
+                else:
+                    autotext.set_text('')
+            
+            # Título
+            ax.set_title("CONSOLIDADO VALOR ANS", fontsize=18, fontweight='bold', pad=30)
+            
+            # Función auxiliar para ordenar cronológicamente
+            def ordenar_mes_anio(mes_anio_str):
+                """Convierte 'mes-año' a un número para ordenar cronológicamente"""
+                try:
+                    mes_str, anio_str = mes_anio_str.split('-')
+                    # Buscar el número del mes en config.MESES
+                    mes_num = None
+                    for i, nombre_mes in enumerate(config.MESES.values(), 1):
+                        if nombre_mes.lower()[:3] == mes_str:
+                            mes_num = i
+                            break
+                    if mes_num is None:
+                        return 0
+                    anio_num = int(anio_str)
+                    return anio_num * 100 + mes_num  # Año*100 + mes para ordenar
+                except:
+                    return 0
+            
+            # Crear leyenda en la parte superior con los meses y sus colores
+            # Ordenar por fecha para mostrar en orden cronológico
+            meses_datos = list(zip(meses, valores, colores))
+            meses_ordenados = sorted(meses_datos, key=lambda x: ordenar_mes_anio(x[0]))
+            
+            # Crear etiquetas para la leyenda con formato: "mes-año"
+            legend_labels = [f"{mes}" for mes, _, _ in meses_ordenados]
+            legend_colors = [color for _, _, color in meses_ordenados]
+            
+            # Crear la leyenda en la parte superior
+            legend_elements = [plt.Rectangle((0,0),1,1, facecolor=color, edgecolor='black', linewidth=1) 
+                             for color in legend_colors]
+            
+            ax.legend(legend_elements, legend_labels, 
+                     loc='upper center', 
+                     bbox_to_anchor=(0.5, 1.15),
+                     ncol=min(5, len(meses)),
+                     fontsize=9,
+                     frameon=True,
+                     fancybox=True,
+                     shadow=True)
+            
+            # Ajustar el layout
+            plt.tight_layout()
+            
+            # Guardar como JPG
+            output_dir.mkdir(parents=True, exist_ok=True)
+            output_path = output_dir / f"grafico_pastel_ans_{self.mes}_{self.anio}.jpg"
+            plt.savefig(output_path, dpi=150, bbox_inches='tight', format='jpg')
+            plt.close()
+            
+            return str(output_path)
+        except Exception as e:
+            print(f"[WARNING] Error al generar gráfico de pastel: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
+    def _generar_graficos_barras_ans(self, datos_actuales: Dict[str, Any], 
+                                      datos_historicos: List[Dict[str, Any]], 
+                                      output_dir: Path) -> Dict[str, Optional[str]]:
+        """
+        Genera 6 gráficos de barras (waterfall) para cada tipo de ANS
+        Retorna un diccionario con las rutas de los archivos JPG generados
+        """
+        def safe_float(value, default=0.0):
+            """Convierte valor a float de forma segura"""
+            if value is None:
+                return default
+            try:
+                return float(value)
+            except (ValueError, TypeError):
+                return default
         
-        # Crear documento
-        self.doc = Document()
-        self._configurar_estilos()
+        # Definir los 6 tipos de ANS
+        tipos_ans = [
+            {
+                "nombre": "ANS CALIDAD DE LOS REPORTES ENTREGADOS",
+                "key_cant": ["cant_calidad_informes_1", "cant_calidad_informes_2", 
+                            "cant_calidad_informes_3", "cant_calidad_informes_4"],
+                "key_valor": ["valor_calidad_informes_1", "valor_calidad_informes_2",
+                             "valor_calidad_informes_3", "valor_calidad_informes_4"],
+                "key_hist_cant": "calidad_reportes",
+                "key_hist_valor": "calidad_reportes"
+            },
+            {
+                "nombre": "ANS DISPONIBILIDAD DEL SISTEMA",
+                "key_cant": ["cant_disponibilidad_sistema"],
+                "key_valor": ["valor_disponibilidad_sistema"],
+                "key_hist_cant": "disponibilidad",
+                "key_hist_valor": "disponibilidad"
+            },
+            {
+                "nombre": "ANS OPORTUNIDAD DE LOS REPORTES ENTREGADOS",
+                "key_cant": ["cant_oportunidad_informes"],
+                "key_valor": ["valor_oportunidad_informes"],
+                "key_hist_cant": "oportunidad_reportes",
+                "key_hist_valor": "oportunidad_reportes"
+            },
+            {
+                "nombre": "ANS OPORTUNIDAD EN LAS ACTIVIDADES DE MANTENIMIENTO PREVENTIVO",
+                "key_cant": ["cant_oportunidad_actividades"],
+                "key_valor": ["valor_oportunidad_actividades"],
+                "key_hist_cant": "oportunidad_actividades",
+                "key_hist_valor": "oportunidad_actividades"
+            },
+            {
+                "nombre": "ANS RTO",
+                "key_cant": ["cant_rto_1", "cant_rto_2", "cant_rto_3", "cant_rto_4"],
+                "key_valor": ["valor_rto_1", "valor_rto_2", "valor_rto_3", "valor_rto_4"],
+                "key_hist_cant": "rto",
+                "key_hist_valor": "rto"
+            },
+            {
+                "nombre": "ANS TIEMPO DE RESTAURACIÓN DE SERVICIOS EN EL DATA CENTER",
+                "key_cant": ["cant_tiempo_restauracion"],
+                "key_valor": ["valor_tiempo_restauracion"],
+                "key_hist_cant": "tiempo_restauracion",
+                "key_hist_valor": "tiempo_restauracion"
+            }
+        ]
         
-        # Generar contenido
-        self._agregar_titulo_seccion()
-        self._agregar_introduccion()
-        self._agregar_3_1_penalidad_ans()
-        self._agregar_3_2_consolidado_ans()
+        rutas_graficos = {}
         
-        # Separador fin de sección
-        self.doc.add_paragraph()
-        p = self.doc.add_paragraph("═" * 60)
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        print(f"[DEBUG] Iniciando generación de gráficos de barras. Datos históricos: {len(datos_historicos)} meses")
         
-        p = self.doc.add_paragraph("Fin Sección 3 - Informes de Medición de Niveles de Servicio (ANS)")
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.runs[0].italic = True
-        p.runs[0].font.color.rgb = RGBColor(128, 128, 128)
+        for tipo_ans in tipos_ans:
+            try:
+                print(f"[DEBUG] Procesando gráfico para: {tipo_ans['nombre']}")
+                
+                # Preparar datos para el gráfico
+                meses = []
+                cantidades = []
+                valores = []
+                
+                # Agregar meses históricos
+                for historico in datos_historicos:
+                    mes_nombre = historico.get("mes_nombre", "")
+                    anio = historico.get("anio", "")
+                    indicadores = historico.get("indicadores", {})
+                    
+                    # Obtener cantidad y valor del histórico
+                    indicador = indicadores.get(tipo_ans["key_hist_cant"], {})
+                    cant = indicador.get("cant", 0) if isinstance(indicador, dict) else 0
+                    valor = indicador.get("valor", 0) if isinstance(indicador, dict) else 0
+                    
+                    # Agregar siempre, incluso si es 0 (para mostrar todos los meses)
+                    meses.append(f"{mes_nombre}-{anio}")
+                    cantidades.append(cant)
+                    valores.append(valor)
+                
+                # Agregar mes actual
+                mes_nombre_actual = config.MESES[self.mes].lower()[:3]
+                
+                # Calcular cantidad y valor del mes actual (sumar si hay múltiples keys)
+                cant_actual = sum(safe_float(datos_actuales.get(key, 0)) for key in tipo_ans["key_cant"])
+                valor_actual = sum(safe_float(datos_actuales.get(key, 0)) for key in tipo_ans["key_valor"])
+                
+                # Agregar siempre el mes actual, incluso si es 0
+                meses.append(f"{mes_nombre_actual}-{self.anio}")
+                cantidades.append(cant_actual)
+                valores.append(valor_actual)
+                
+                print(f"[DEBUG] {tipo_ans['nombre']}: {len(meses)} meses, valores: {valores}")
+                
+                # Si no hay meses, continuar con el siguiente tipo
+                if not meses:
+                    print(f"[WARNING] No hay meses para {tipo_ans['nombre']}, saltando...")
+                    rutas_graficos[tipo_ans["nombre"]] = None
+                    continue
+                
+                # Asegurar que tenemos valores (llenar con 0 si faltan)
+                while len(valores) < len(meses):
+                    valores.append(0.0)
+                while len(cantidades) < len(meses):
+                    cantidades.append(0.0)
+                
+                # Crear figura con espacio para la tabla
+                fig = plt.figure(figsize=(16, 10))
+                gs = fig.add_gridspec(2, 1, height_ratios=[3, 1], hspace=0.3)
+                ax = fig.add_subplot(gs[0])
+                ax_table = fig.add_subplot(gs[1])
+                ax_table.axis('off')
+                
+                # Crear gráfico de barras (valores negativos hacia abajo)
+                x_pos = np.arange(len(meses))
+                bars = ax.bar(x_pos, valores, color='#2E75B6', width=0.6)
+                
+                # Configurar eje Y
+                max_valor = max(abs(v) for v in valores) if valores else 1
+                min_valor = min(valores) if valores else 0
+                
+                # Calcular límites del eje Y correctamente
+                if min_valor < 0:
+                    y_min = min_valor * 1.15
+                else:
+                    y_min = -max_valor * 0.1  # Un poco de espacio negativo para visualización
+                
+                y_max = max_valor * 1.15 if max_valor > 0 else 1
+                
+                ax.set_ylim(y_min, y_max)
+                ax.axhline(y=0, color='black', linewidth=1)
+                
+                # Formatear eje Y con formato de moneda (usar puntos como separadores de miles)
+                def formatear_moneda_y(x, p):
+                    if abs(x) >= 1000:
+                        return f'${x/1000:,.0f}K'.replace(',', '.')
+                    else:
+                        return f'${x:,.0f}'.replace(',', '.')
+                
+                ax.yaxis.set_major_formatter(plt.FuncFormatter(formatear_moneda_y))
+                
+                # Ajustar número de ticks en el eje Y
+                ax.yaxis.set_major_locator(plt.MaxNLocator(8))
+                
+                # Etiquetas en el eje X (solo el mes, sin texto adicional)
+                ax.set_xticks(x_pos)
+                ax.set_xticklabels(meses, rotation=45, ha='right', fontsize=9)
+                ax.set_xlabel('')  # Eliminar etiqueta del eje X para evitar duplicación
+                
+                # Agregar etiquetas en las barras
+                for i, (bar, cant, valor) in enumerate(zip(bars, cantidades, valores)):
+                    if valor != 0:
+                        # Formatear cantidad (mostrar hasta 4 decimales, eliminar ceros innecesarios)
+                        cant_str = f'{cant:.4f}'.rstrip('0').rstrip('.')
+                        if '.' in cant_str:
+                            cant_str = cant_str.replace('.', ',')
+                        
+                        # Etiqueta con la cantidad (arriba de la barra)
+                        if valor > 0:
+                            y_cant = valor + (y_max - valor) * 0.05
+                        else:
+                            y_cant = abs(valor) * 0.05
+                        
+                        ax.text(bar.get_x() + bar.get_width()/2, y_cant,
+                               cant_str,
+                               ha='center', va='bottom', fontsize=9, fontweight='bold', color='black')
+                        
+                        # Etiqueta con el valor monetario (dentro de la barra)
+                        if valor != 0:
+                            # Para valores positivos, poner dentro de la barra
+                            if valor > 0:
+                                y_valor = valor / 2  # Mitad de la barra
+                                va = 'center'
+                            else:
+                                # Para valores negativos, poner al final de la barra
+                                y_valor = valor - abs(valor) * 0.1
+                                va = 'top'
+                            
+                            ax.text(bar.get_x() + bar.get_width()/2, y_valor,
+                                   formato_moneda_cop(valor),
+                                   ha='center', va=va, 
+                                   fontsize=8, fontweight='bold', color='white')
+                
+                # Título
+                ax.set_title(tipo_ans["nombre"], fontsize=14, fontweight='bold', pad=20)
+                
+                # Grid
+                ax.grid(True, axis='y', linestyle='--', alpha=0.3)
+                ax.set_facecolor('#f5f5f5')
+                
+                # Crear tabla debajo del gráfico
+                # Headers (solo el mes, sin el nombre completo para evitar repetición)
+                headers = [mes for mes in meses]
+                
+                # Fila de cantidades (formatear con coma como separador decimal)
+                cantidades_str = []
+                for cant in cantidades:
+                    if cant > 0:
+                        cant_str = f'{cant:.4f}'.rstrip('0').rstrip('.')
+                        if '.' in cant_str:
+                            cant_str = cant_str.replace('.', ',')
+                        cantidades_str.append(cant_str)
+                    else:
+                        cantidades_str.append('')
+                
+                # Fila de valores
+                valores_str = [formato_moneda_cop(valor) if valor != 0 else '' for valor in valores]
+                
+                # Crear tabla: cellText solo contiene las filas de datos (sin headers)
+                tabla_data = [cantidades_str, valores_str]
+                
+                # Crear tabla con headers como colLabels
+                tabla = ax_table.table(cellText=tabla_data,
+                                      rowLabels=['CANTIDAD', 'VALOR'],
+                                      colLabels=headers,
+                                      cellLoc='center',
+                                      loc='center',
+                                      bbox=[0, 0, 1, 1])
+                tabla.auto_set_font_size(False)
+                tabla.set_fontsize(7)
+                tabla.scale(1, 2.5)
+                
+                # Ajustar ancho de columnas automáticamente
+                for i in range(len(headers)):
+                    tabla.auto_set_column_width(i)
+                
+                # Estilo de la tabla
+                # Headers (fila 0 son los colLabels) - ya son solo los meses, no necesitan truncamiento
+                for i in range(len(headers)):
+                    tabla[(0, i)].set_facecolor('#1F4E79')
+                    tabla[(0, i)].set_text_props(weight='bold', color='white', fontsize=7)
+                
+                # Filas de datos (fila 1 = CANTIDAD, fila 2 = VALOR)
+                for i in range(1, 3):
+                    for j in range(len(headers)):
+                        if i % 2 == 0:
+                            tabla[(i, j)].set_facecolor('#f2f2f2')
+                        else:
+                            tabla[(i, j)].set_facecolor('#ffffff')
+                        tabla[(i, j)].set_text_props(fontsize=7)
+                
+                # Guardar gráfico
+                output_dir.mkdir(parents=True, exist_ok=True)
+                nombre_archivo = tipo_ans["nombre"].lower().replace(" ", "_").replace("ans_", "")
+                output_path = output_dir / f"grafico_barras_{nombre_archivo}_{self.mes}_{self.anio}.jpg"
+                plt.savefig(output_path, dpi=150, bbox_inches='tight', format='jpg')
+                plt.close()
+                
+                rutas_graficos[tipo_ans["nombre"]] = str(output_path)
+                print(f"[OK] Gráfico de barras generado: {output_path}")
+                
+            except Exception as e:
+                print(f"[WARNING] Error al generar gráfico de barras para {tipo_ans['nombre']}: {e}")
+                import traceback
+                traceback.print_exc()
+                rutas_graficos[tipo_ans["nombre"]] = None
         
-        return self.doc
+        return rutas_graficos
+    
+    def _obtener_datos_historicos_ans(self) -> List[Dict[str, Any]]:
+        """
+        Obtiene datos históricos de ANS desde GLPI (por ahora retorna datos dummy)
+        
+        Returns:
+            Lista de diccionarios con datos históricos por mes
+        """
+        # TODO: Implementar obtención real desde GLPI
+        # Por ahora retornamos datos dummy
+        datos_dummy = []
+        
+        # Generar datos para los últimos 6 meses (excluyendo el mes actual)
+        # Orden descendente: mes más reciente primero
+        meses_anteriores = []
+        mes_actual = self.mes
+        anio_actual = self.anio
+        
+        for i in range(1, 7):  # Últimos 6 meses
+            mes = mes_actual - i
+            anio = anio_actual
+            if mes <= 0:
+                mes += 12
+                anio -= 1
+            
+            mes_nombre = config.MESES[mes].lower()[:3]  # Primeras 3 letras del mes
+            datos_dummy.append({
+                "mes": mes,
+                "anio": anio,
+                "mes_nombre": mes_nombre,
+                "total_cant": 150 + (i * 10),  # Valores dummy
+                "total_valor": 5000000 + (i * 100000),
+                "indicadores": {
+                    "calidad_reportes": {"cant": 25 + i, "valor": 800000 + (i * 10000)},
+                    "disponibilidad": {"cant": 30 + i, "valor": 1000000 + (i * 20000)},
+                    "oportunidad_reportes": {"cant": 20 + i, "valor": 600000 + (i * 8000)},
+                    "oportunidad_actividades": {"cant": 15 + i, "valor": 500000 + (i * 6000)},
+                    "rto": {"cant": 35 + i, "valor": 1200000 + (i * 25000)},
+                    "tiempo_restauracion": {"cant": 25 + i, "valor": 900000 + (i * 12000)}
+                }
+            })
+        
+        # Retornar en orden ascendente (del más antiguo al más reciente)
+        return datos_dummy
+  
+    def _preparar_datos_tabla_indicadores_ans(self, datos_actuales: Dict[str, Any], 
+                                               datos_historicos: List[Dict[str, Any]]) -> List[List[str]]:
+        """
+        Prepara los datos de la tabla de indicadores ANS
+        
+        Args:
+            datos_actuales: Datos del mes actual desde MongoDB
+            datos_historicos: Lista de datos históricos (meses anteriores)
+        
+        Returns:
+            Lista de listas con los datos de la tabla (primera fila son headers)
+        """
+        def safe_float(value, default=0.0):
+            """Convierte valor a float de forma segura"""
+            if value is None:
+                return default
+            try:
+                return float(value)
+            except (ValueError, TypeError):
+                return default
+        
+        # Calcular totales del mes actual
+        total_cant_actual = 0
+        total_valor_actual = 0.0
+        
+        # ANS CALIDAD DE LOS REPORTES ENTREGADOS (suma de 4 valores)
+        cant_calidad = (
+            safe_float(datos_actuales.get('cant_calidad_informes_1', 0)) +
+            safe_float(datos_actuales.get('cant_calidad_informes_2', 0)) +
+            safe_float(datos_actuales.get('cant_calidad_informes_3', 0)) +
+            safe_float(datos_actuales.get('cant_calidad_informes_4', 0))
+        )
+        valor_calidad = (
+            safe_float(datos_actuales.get('valor_calidad_informes_1', 0)) +
+            safe_float(datos_actuales.get('valor_calidad_informes_2', 0)) +
+            safe_float(datos_actuales.get('valor_calidad_informes_3', 0)) +
+            safe_float(datos_actuales.get('valor_calidad_informes_4', 0))
+        )
+        total_cant_actual += cant_calidad
+        total_valor_actual += valor_calidad
+        
+        # ANS DISPONIBILIDAD DEL SISTEMA
+        cant_disponibilidad = safe_float(datos_actuales.get('cant_disponibilidad_sistema', 0))
+        valor_disponibilidad = safe_float(datos_actuales.get('valor_disponibilidad_sistema', 0))
+        total_cant_actual += cant_disponibilidad
+        total_valor_actual += valor_disponibilidad
+        
+        # ANS OPORTUNIDAD DE LOS REPORTES ENTREGADOS
+        cant_oportunidad_informes = safe_float(datos_actuales.get('cant_oportunidad_informes', 0))
+        valor_oportunidad_informes = safe_float(datos_actuales.get('valor_oportunidad_informes', 0))
+        total_cant_actual += cant_oportunidad_informes
+        total_valor_actual += valor_oportunidad_informes
+        
+        # ANS OPORTUNIDAD EN LAS ACTIVIDADES DE MANTENIMIENTO PREVENTIVO
+        cant_oportunidad_actividades = safe_float(datos_actuales.get('cant_oportunidad_actividades', 0))
+        valor_oportunidad_actividades = safe_float(datos_actuales.get('valor_oportunidad_actividades', 0))
+        total_cant_actual += cant_oportunidad_actividades
+        total_valor_actual += valor_oportunidad_actividades
+        
+        # ANS RTO (suma de 4 valores)
+        cant_rto = (
+            safe_float(datos_actuales.get('cant_rto_1', 0)) +
+            safe_float(datos_actuales.get('cant_rto_2', 0)) +
+            safe_float(datos_actuales.get('cant_rto_3', 0)) +
+            safe_float(datos_actuales.get('cant_rto_4', 0))
+        )
+        valor_rto = (
+            safe_float(datos_actuales.get('valor_rto_1', 0)) +
+            safe_float(datos_actuales.get('valor_rto_2', 0)) +
+            safe_float(datos_actuales.get('valor_rto_3', 0)) +
+            safe_float(datos_actuales.get('valor_rto_4', 0))
+        )
+        total_cant_actual += cant_rto
+        total_valor_actual += valor_rto
+        
+        # ANS TIEMPO DE RESTAURACIÓN DE SERVICIOS EN EL DATA CENTER
+        cant_tiempo_restauracion = safe_float(datos_actuales.get('cant_tiempo_restauracion', 0))
+        valor_tiempo_restauracion = safe_float(datos_actuales.get('valor_tiempo_restauracion', 0))
+        total_cant_actual += cant_tiempo_restauracion
+        total_valor_actual += valor_tiempo_restauracion
+        
+        # Preparar datos de la tabla
+        table_data = []
+        
+        # Headers
+        table_data.append(["TIPO INDICADOR", "CANTIDAD", "VALOR"])
+        
+        # Inicializar totales generales
+        total_cant_general = total_cant_actual
+        total_valor_general = total_valor_actual
+        
+        # PRIMERO: Agregar meses anteriores desde datos históricos (orden ascendente: más antiguo primero)
+        for historico in datos_historicos:
+            mes_nombre_hist = historico.get("mes_nombre", "")
+            anio_hist = historico.get("anio", "")
+            total_cant_hist = historico.get("total_cant", 0)
+            total_valor_hist = historico.get("total_valor", 0)
+            indicadores_hist = historico.get("indicadores", {})
+            
+            # Fila de totales del mes histórico
+            fila_total_hist = [
+                f"{mes_nombre_hist}-{anio_hist}",
+                formato_cantidad(total_cant_hist),
+                formato_moneda_cop(total_valor_hist)
+            ]
+            table_data.append(fila_total_hist)
+            
+            # Filas de indicadores del mes histórico
+            indicadores_hist_list = [
+                ("ANS CALIDAD DE LOS REPORTES ENTREGADOS", 
+                 indicadores_hist.get("calidad_reportes", {}).get("cant", 0),
+                 indicadores_hist.get("calidad_reportes", {}).get("valor", 0)),
+                ("ANS DISPONIBILIDAD DEL SISTEMA",
+                 indicadores_hist.get("disponibilidad", {}).get("cant", 0),
+                 indicadores_hist.get("disponibilidad", {}).get("valor", 0)),
+                ("ANS OPORTUNIDAD DE LOS REPORTES ENTREGADOS",
+                 indicadores_hist.get("oportunidad_reportes", {}).get("cant", 0),
+                 indicadores_hist.get("oportunidad_reportes", {}).get("valor", 0)),
+                ("ANS OPORTUNIDAD EN LAS ACTIVIDADES DE MANTENIMIENTO PREVENTIVO",
+                 indicadores_hist.get("oportunidad_actividades", {}).get("cant", 0),
+                 indicadores_hist.get("oportunidad_actividades", {}).get("valor", 0)),
+                ("ANS RTO",
+                 indicadores_hist.get("rto", {}).get("cant", 0),
+                 indicadores_hist.get("rto", {}).get("valor", 0)),
+                ("ANS TIEMPO DE RESTAURACIÓN DE SERVICIOS EN EL DATA CENTER",
+                 indicadores_hist.get("tiempo_restauracion", {}).get("cant", 0),
+                 indicadores_hist.get("tiempo_restauracion", {}).get("valor", 0))
+            ]
+            
+            for nombre_hist, cant_hist, valor_hist in indicadores_hist_list:
+                table_data.append([
+                    nombre_hist,
+                    formato_cantidad(cant_hist) if cant_hist > 0 else "",
+                    formato_moneda_cop(valor_hist) if valor_hist > 0 else ""
+                ])
+            
+            # Acumular para Total GENERAL
+            total_cant_general += total_cant_hist
+            total_valor_general += total_valor_hist
+        
+        # SEGUNDO: Agregar mes actual (al final, antes del Total GENERAL)
+        mes_nombre = config.MESES[self.mes].lower()[:3]
+        fila_total = [
+            f"{mes_nombre}-{self.anio}",
+            formato_cantidad(total_cant_actual),
+            formato_moneda_cop(total_valor_actual)
+        ]
+        table_data.append(fila_total)
+        
+        # Filas de indicadores del mes actual
+        indicadores = [
+            ("ANS CALIDAD DE LOS REPORTES ENTREGADOS", cant_calidad, valor_calidad),
+            ("ANS DISPONIBILIDAD DEL SISTEMA", cant_disponibilidad, valor_disponibilidad),
+            ("ANS OPORTUNIDAD DE LOS REPORTES ENTREGADOS", cant_oportunidad_informes, valor_oportunidad_informes),
+            ("ANS OPORTUNIDAD EN LAS ACTIVIDADES DE MANTENIMIENTO PREVENTIVO", cant_oportunidad_actividades, valor_oportunidad_actividades),
+            ("ANS RTO", cant_rto, valor_rto),
+            ("ANS TIEMPO DE RESTAURACIÓN DE SERVICIOS EN EL DATA CENTER", cant_tiempo_restauracion, valor_tiempo_restauracion)
+        ]
+        
+        for nombre, cant, valor in indicadores:
+            table_data.append([
+                nombre,
+                formato_cantidad(cant) if cant > 0 else "",
+                formato_moneda_cop(valor) if valor > 0 else ""
+            ])
+        
+        # TERCERO: Fila de Total GENERAL al final (suma de todos los meses)
+        fila_total_general = [
+            "Total GENERAL",
+            formato_cantidad(total_cant_general),
+            formato_moneda_cop(total_valor_general)
+        ]
+        table_data.append(fila_total_general)
+        
+        return table_data
+    
+    def _es_fila_totales(self, primer_valor: str) -> bool:
+        """
+        Determina si una fila es una fila de totales basándose en el primer valor
+        
+        Args:
+            primer_valor: Primer valor de la fila (columna TIPO INDICADOR)
+        
+        Returns:
+            True si es una fila de totales, False en caso contrario
+        """
+        if not primer_valor:
+            return False
+        
+        primer_valor_upper = primer_valor.upper()
+        
+        # Verificar si es "Total GENERAL"
+        if primer_valor_upper == "TOTAL GENERAL":
+            return True
+        
+        # Verificar si tiene formato "mes-año" (ej: "dic-25", "nov-25")
+        # Patrón: 3 letras, guion, 2 dígitos
+        patron_mes_anio = r'^[a-z]{3}-\d{2,4}$'
+        if re.match(patron_mes_anio, primer_valor.lower()):
+            return True
+        
+        return False
+    
+    def _reemplazar_placeholder_con_tabla(self, doc: Document, placeholder: str, table_data: List[List[str]]):
+        """
+        Busca un placeholder en el documento y lo reemplaza con una tabla creada programáticamente.
+        
+        Args:
+            doc: Documento Word (después de renderizar)
+            placeholder: Texto del placeholder a buscar (ej: "[[TABLE_ANS_INDICADORES]]")
+            table_data: Lista de listas con los datos de la tabla (primera fila son headers)
+        """
+        if not table_data or len(table_data) == 0:
+            return
+        
+        # Estilos de tabla comunes en Word (en orden de preferencia)
+        estilos_tabla = ['Table Grid', 'Light Shading', 'Light List', 'Medium Shading 1', 'Light Grid']
+        
+        # Buscar el placeholder en todos los párrafos
+        for i, paragraph in enumerate(doc.paragraphs):
+            if placeholder in paragraph.text:
+                # Crear la tabla
+                tabla = doc.add_table(rows=len(table_data), cols=len(table_data[0]))
+                
+                # Intentar aplicar un estilo de tabla disponible
+                estilo_aplicado = False
+                for estilo in estilos_tabla:
+                    try:
+                        tabla.style = estilo
+                        estilo_aplicado = True
+                        break
+                    except:
+                        continue
+                
+                # Si ningún estilo funcionó, usar el estilo por defecto
+                if not estilo_aplicado:
+                    try:
+                        tabla.style = 'Table Grid'
+                    except:
+                        pass
+                
+                # Llenar la tabla
+                total_rows = len(table_data)
+                for row_idx, fila in enumerate(table_data):
+                    for col_idx, valor in enumerate(fila):
+                        celda = tabla.rows[row_idx].cells[col_idx]
+                        celda.text = str(valor) if valor is not None else ""
+                        
+                        # Formatear headers (primera fila) - Azul oscuro con texto blanco
+                        if row_idx == 0:
+                            self._set_cell_shading(celda, "1F4E79")
+                            self._centrar_celda_vertical(celda)
+                            for paragraph_celda in celda.paragraphs:
+                                paragraph_celda.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                                for run in paragraph_celda.runs:
+                                    run.bold = True
+                                    run.font.size = Pt(8)
+                                    run.font.color.rgb = RGBColor(255, 255, 255)
+                        elif self._es_fila_totales(fila[0]):  # Fila de totales (mes-año o Total GENERAL)
+                            # Fila de totales - Fondo azul claro con texto en negrita
+                            self._set_cell_shading(celda, "D9E1F2")
+                            self._centrar_celda_vertical(celda)
+                            for paragraph_celda in celda.paragraphs:
+                                paragraph_celda.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                                for run in paragraph_celda.runs:
+                                    run.bold = True
+                                    run.font.size = Pt(8)
+                                    run.font.color.rgb = RGBColor(0, 0, 0)
+                        else:
+                            # Filas de datos - Fondo gris claro alternado
+                            if row_idx % 2 == 0:
+                                self._set_cell_shading(celda, "F2F2F2")
+                            else:
+                                self._set_cell_shading(celda, "FFFFFF")
+                            self._centrar_celda_vertical(celda)
+                            for paragraph_celda in celda.paragraphs:
+                                paragraph_celda.alignment = WD_ALIGN_PARAGRAPH.LEFT if col_idx == 0 else WD_ALIGN_PARAGRAPH.RIGHT
+                                for run in paragraph_celda.runs:
+                                    run.font.size = Pt(8)
+                                    run.font.color.rgb = RGBColor(0, 0, 0)
+                
+                # Insertar la tabla después del párrafo que contiene el placeholder
+                parent = paragraph._element.getparent()
+                para_idx = parent.index(paragraph._element)
+                parent.insert(para_idx + 1, tabla._element)
+                
+                # Eliminar el placeholder del párrafo
+                paragraph.text = paragraph.text.replace(placeholder, "").strip()
+                
+                # Si el párrafo quedó vacío, eliminarlo
+                if not paragraph.text.strip():
+                    parent.remove(paragraph._element)
+                
+                break
+
+  
+    
+    def generar(self, document: Optional[Dict[str, Any]] = None, output_path: Optional[Path] = None) -> DocxTemplate:
+      
+      
+
+        datos_seccion = self.procesar(document)
+        
+        # Cargar template
+        template_path = config.TEMPLATES_DIR / self.template_file
+        if not template_path.exists():
+            raise FileNotFoundError(f"Template no encontrado: {template_path}")
+        
+        template = DocxTemplate(str(template_path))
+        
+        # Generar gráficos
+        output_dir = output_path.parent if output_path else config.OUTPUT_DIR / "seccion_3"
+        grafico_lineas_path = self._generar_grafico_lineas_ans(output_dir)
+        
+        # Obtener datos históricos para los gráficos
+        datos_historicos = self._obtener_datos_historicos_ans()
+        grafico_pastel_path = self._generar_grafico_pastel_ans(datos_seccion, datos_historicos, output_dir)
+        
+        # Generar gráficos de barras para cada tipo de ANS
+        graficos_barras = self._generar_graficos_barras_ans(datos_seccion, datos_historicos, output_dir)
+        
+        # Preparar contexto para el template
+        contexto = self._cargar_contexto_base()
+        
+        print(f"datos_seccion: {datos_seccion}")
+        contexto.update(
+            **datos_seccion,
+        )
+        
+        # Agregar gráfico de líneas como InlineImage si existe
+        if grafico_lineas_path and Path(grafico_lineas_path).exists():
+            try:
+                contexto["grafico_lineas"] = InlineImage(template, grafico_lineas_path, width=Mm(150))
+            except Exception as e:
+                print(f"[WARNING] Error al crear InlineImage del gráfico de líneas: {e}")
+                contexto["grafico_lineas"] = None
+        else:
+            contexto["grafico_lineas"] = None
+        
+        # Agregar gráfico de pastel como InlineImage si existe
+        if grafico_pastel_path and Path(grafico_pastel_path).exists():
+            try:
+                contexto["grafico_pastel"] = InlineImage(template, grafico_pastel_path, width=Mm(150))
+            except Exception as e:
+                print(f"[WARNING] Error al crear InlineImage del gráfico de pastel: {e}")
+                contexto["grafico_pastel"] = None
+        else:
+            contexto["grafico_pastel"] = None
+        
+        # Agregar gráficos de barras como InlineImage si existen
+        nombres_ans = [
+            "ANS CALIDAD DE LOS REPORTES ENTREGADOS",
+            "ANS DISPONIBILIDAD DEL SISTEMA",
+            "ANS OPORTUNIDAD DE LOS REPORTES ENTREGADOS",
+            "ANS OPORTUNIDAD EN LAS ACTIVIDADES DE MANTENIMIENTO PREVENTIVO",
+            "ANS RTO",
+            "ANS TIEMPO DE RESTAURACIÓN DE SERVICIOS EN EL DATA CENTER"
+        ]
+        
+        print(f"[DEBUG] Agregando gráficos de barras al contexto. Total generados: {len([k for k, v in graficos_barras.items() if v])}")
+        
+        for nombre_ans in nombres_ans:
+            key_contexto = nombre_ans.lower().replace(" ", "_").replace("ans_", "grafico_barras_")
+            if nombre_ans in graficos_barras and graficos_barras[nombre_ans] and Path(graficos_barras[nombre_ans]).exists():
+                try:
+                    contexto[key_contexto] = InlineImage(template, graficos_barras[nombre_ans], width=Mm(150))
+                    print(f"[OK] Gráfico de barras agregado al contexto: {key_contexto}")
+                except Exception as e:
+                    print(f"[WARNING] Error al crear InlineImage del gráfico de barras {nombre_ans}: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    contexto[key_contexto] = None
+            else:
+                print(f"[WARNING] Gráfico de barras no encontrado para {nombre_ans}: {graficos_barras.get(nombre_ans, 'No en diccionario')}")
+                contexto[key_contexto] = None
+        
+        # Preparar placeholder para tabla de indicadores
+        contexto["table_ans_indicadores_placeholder"] = "[[TABLE_ANS_INDICADORES]]"
+        
+        # Renderizar template
+        template.render(contexto)
+        
+        # Guardar temporalmente para poder trabajar con el documento renderizado
+        if output_path:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            temp_path = str(output_path).replace('.docx', '_temp.docx')
+            template.save(temp_path)
+            
+            # Abrir el documento renderizado para insertar tabla programáticamente
+            doc = Document(temp_path)
+            
+            # Los datos históricos ya se obtuvieron arriba para el gráfico de pastel
+            
+            # Preparar datos de la tabla
+            table_data = self._preparar_datos_tabla_indicadores_ans(datos_seccion, datos_historicos)
+            
+            # Reemplazar placeholder de tabla con tabla creada programáticamente
+            self._reemplazar_placeholder_con_tabla(doc, "[[TABLE_ANS_INDICADORES]]", table_data)
+            
+            # Guardar el documento final
+            doc.save(str(output_path))
+            
+            # Eliminar archivo temporal
+            try:
+                Path(temp_path).unlink()
+            except:
+                pass
+            
+            print(f"[OK] {self.nombre_seccion} guardada en: {output_path}")
+        else:
+            # Si no hay output_path, solo renderizar
+            pass
+        
+        return template
     
     def guardar(self, output_path: Path) -> None:
         """
-        Genera y guarda la sección
-        Sobrescribe el método de la clase base para usar python-docx
+        Genera y guarda la sección usando template
         """
-        if self.doc is None:
-            self.generar()
-        
-        self.doc.save(str(output_path))
-        print(f"[OK] {self.nombre_seccion} guardada en: {output_path}")
+        self.generar(output_path=output_path)

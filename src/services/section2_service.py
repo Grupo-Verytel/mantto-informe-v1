@@ -4,6 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 import logging
 from datetime import datetime
 from ..data.repositories.build_section2 import get_section2
+from bson import ObjectId
 
 logger = logging.getLogger(__name__)
 
@@ -164,27 +165,48 @@ class Section2Service:
     
     async def get_all_section(self, data: Dict[str, Any]) -> Dict[str, Any]:
         try:
-            anio = data.get("anio")
-            mes = data.get("mes")
+            anio = int(data.get("anio"))
+            mes = int(data.get("mes"))
             
             collection = self._get_collection()
             
-            document = await collection.find_one({"anio": anio, "mes": mes})
-            
+            document = await collection.find_one({"anio": anio, "mes": mes})     
             if not document:
-                return {
-                    "success": False,
-                    "message": f"No se encontró el documento para año {anio}, mes {mes}",
-                    "data": None
-                }
-            
-            return {
-                "success": True,
-                "message": "Sección 2 completa obtenida exitosamente",
-                "data": document
-            }
+                return None     
+                
+            document = self.serialize_mongo(document)
+            return document
         except Exception as e:
             logger.error(f"Error al obtener toda la sección: {str(e)}", exc_info=True)
             raise
     
  
+    async def generate_document(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            anio = data.get("anio")
+            mes = data.get("mes")
+
+            document = await self.get_all_section({"anio": anio, "mes": mes})           
+            if not document:
+                return {
+                    "success": False,
+                    "message": f"No se encontró el documento para año {anio}, mes {mes}",
+                    "data": None
+                }            
+
+            return {
+                "success": True,
+                "message": "Documento generado exitosamente",
+                "data": document
+            }
+        except Exception as e:
+            logger.error(f"Error al generar documento: {str(e)}", exc_info=True)
+            raise
+
+    def serialize_mongo(self, doc):
+        if not doc:
+         return doc
+        for key, value in doc.items():
+            if isinstance(value, ObjectId):
+                doc[key] = str(value)
+        return doc

@@ -1,0 +1,1425 @@
+{
+  "titulos": [
+    {
+      "indice": 1,
+      "estilo": "Heading 1",
+      "texto": "INFORMACIÓN GENERAL DEL CONTRATO SCJ-1809-2024"
+    },
+    {
+      "indice": 11,
+      "estilo": "Heading 1",
+      "texto": "OBJETO CONTRATO SCJ-1809-2024"
+    },
+    {
+      "indice": 14,
+      "estilo": "Heading 1",
+      "texto": "ALCANCE"
+    },
+    {
+      "indice": 24,
+      "estilo": "Heading 1",
+      "texto": "DESCRIPCIÓN DE LA INFRAESTRUCTURA DEL SISTEMA"
+    },
+    {
+      "indice": 40,
+      "estilo": "Heading 1",
+      "texto": "GLOSARIO"
+    },
+    {
+      "indice": 179,
+      "estilo": "Heading 1",
+      "texto": "OBLIGACIONES"
+    },
+    {
+      "indice": 180,
+      "estilo": "Heading 2",
+      "texto": "OBLIGACIONES GENERALES"
+    },
+    {
+      "indice": 189,
+      "estilo": "Heading 2",
+      "texto": "OBLIGACIONES ESPECÍFICAS DEL CONTRATISTA"
+    },
+    {
+      "indice": 203,
+      "estilo": "Heading 2",
+      "texto": "OBLIGACIONES ESPECÍFICAS EN MATERIA AMBIENTAL"
+    },
+    {
+      "indice": 212,
+      "estilo": "Heading 2",
+      "texto": "OBLIGACIONES ANEXOS"
+    },
+    {
+      "indice": 216,
+      "estilo": "Heading 1",
+      "texto": "COMUNICADOS CONTRATO SCJ-1809-2024"
+    },
+    {
+      "indice": 217,
+      "estilo": "Heading 2",
+      "texto": "EMITIDOS CONTRATO SCJ-1809-2024"
+    },
+    {
+      "indice": 232,
+      "estilo": "Heading 2",
+      "texto": "RECIBIDOS CONTRATO SCJ-1809-2024"
+    },
+    {
+      "indice": 243,
+      "estilo": "Heading 1",
+      "texto": "PERSONAL MÍNIMO REQUERIDO"
+    },
+    {
+      "indice": 265,
+      "estilo": "Heading 1",
+      "texto": "PERSONAL DE APOYO"
+    }
+  ],
+  "paragrafos": [
+    {
+      "indice": 3,
+      "estilo": "Body Text",
+      "texto": "Se celebra el número de proceso SECOP II SCJ-SIF-CD-480-2024 bajo número de contrato SCJ-1809- 2024 con vigencia de doce (12) meses luego de suscripción de acta de inicio suscrita el 19 de noviembre d"
+    },
+    {
+      "indice": 5,
+      "estilo": "Normal",
+      "texto": "Tabla 1. INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024"
+    },
+    {
+      "indice": 6,
+      "estilo": "Body Text",
+      "texto": "Se anexa soportes del contrato y el acta de inicio firmada en la ruta: 01SEP - 30SEP/ 01 OBLIGACIONES GENERALES/ OBLIGACIÓN 2,5,6,9,13/ ANEXOS OTROS/ SCJ-1809-2024 ACTA DE INICIO.PDF"
+    },
+    {
+      "indice": 7,
+      "estilo": "Body Text",
+      "texto": "Se presenta ADICIÓN Nro. 01 AL CONTRATO INTERADMINISTRATIVO DE PRESTACIÓN DE SERVICIOS Nro. SCJ-1809-2024,SUSCRITO ENTRE LA SECRETARÍA DISTRITAL DE SEGURIDAD, CONVIVENCIA Y JUSTICIA Y LA EMPRESA DE TE"
+    },
+    {
+      "indice": 8,
+      "estilo": "Body Text",
+      "texto": "se deja documento en la ruta: 01SEP - 30SEP/ 01 OBLIGACIONES GENERALES/ OBLIGACIÓN 2,5,6,9,13/ ANEXOS OTROS/ Adicion1.pdf"
+    },
+    {
+      "indice": 9,
+      "estilo": "Body Text",
+      "texto": "Asi mismo se realizó modificación de la póliza consignada en la ruta: 01SEP - 30SEP / 01 OBLIGACIONES GENERALES/ OBLIGACIÓN 4/Pólizas Cto SCJ-1809-2024 con SSCJ.pdf"
+    },
+    {
+      "indice": 12,
+      "estilo": "Body Text",
+      "texto": "MANTENIMIENTO PREVENTIVO, MANTENIMIENTO CORRECTIVO Y SOPORTE AL SISTEMA DE VIDEOVIGILANCIA DE BOGOTÁ D.C., CON DISPONIBILIDAD DE BOLSA DE REPUESTOS, en las mejores"
+    },
+    {
+      "indice": 13,
+      "estilo": "Body Text",
+      "texto": "condiciones técnicas y financieras y en aplicación de los principios de colaboración entre entidades públicas, de eficiencia y economía, resulta necesario adelantar un contrato interadministrativo de "
+    },
+    {
+      "indice": 15,
+      "estilo": "Body Text",
+      "texto": "El mantenimiento consiste en actividades técnicas preventivas, correctivas y/o de actualización a los bienes que conforman el sistema de video vigilancia de Bogotá, permitiendo garantizar la continuid"
+    },
+    {
+      "indice": 16,
+      "estilo": "List Paragraph",
+      "texto": "Revisión y limpieza periódica de los bienes, para garantizar su buen funcionamiento."
+    },
+    {
+      "indice": 17,
+      "estilo": "List Paragraph",
+      "texto": "Cambio e instalación de los bienes para la puesta en funcionamiento o actualización de cada uno de los sistemas de video vigilancia."
+    },
+    {
+      "indice": 18,
+      "estilo": "List Paragraph",
+      "texto": "Solucionar cualquier fallo o anomalía dentro de las seis (6) horas siguientes a la notificación efectuada por la supervisión o interventoría del contrato."
+    },
+    {
+      "indice": 19,
+      "estilo": "List Paragraph",
+      "texto": "Generar un reporte (ticket) ante un fallo o anomalía detectada por el contratista o notificado por cualquier actor del sistema (MEBOG, SDSCJ, Interventoría, etc.)."
+    },
+    {
+      "indice": 20,
+      "estilo": "List Paragraph",
+      "texto": "Diagnosticar remotamente las fallas o anomalías, haciendo uso de herramientas como: grabaciones, logs de eventos, SNMP, TRACERT, telnet, ping sobre los equipos activos (Ej. UPS o cámara o switch), equ"
+    },
+    {
+      "indice": 21,
+      "estilo": "List Paragraph",
+      "texto": "Actualizar en línea y en tiempo real el estado de todos y cada uno de los puntos de video vigilancia, así como la trazabilidad de los requerimientos (tickets), de tal forma que le permita a la Interve"
+    },
+    {
+      "indice": 22,
+      "estilo": "Body Text",
+      "texto": "Para realizar los mantenimientos de los bienes que componen el sistema de videovigilancia, se debe tener en cuenta el ANEXO 1 ESPECIFICACIONES TÉCNICAS que incluye la ubicación y arquitectura de red e"
+    },
+    {
+      "indice": 25,
+      "estilo": "Body Text",
+      "texto": "Para efectos referenciales, se deben tener en cuenta los siguientes tipos de sistemas de video vigilancia, ubicaciones y cantidades, sobre las cuales se efectuarán los mantenimientos:"
+    },
+    {
+      "indice": 27,
+      "estilo": "Normal",
+      "texto": "Tabla 2. COMPONENTES POR CADA SUBSISTEMA SEGÚN ANEXO 1."
+    },
+    {
+      "indice": 28,
+      "estilo": "Normal",
+      "texto": "Los Centros de Monitoreo que actualmente están bajo la supervisión de la MEBOG para la operación y monitoreo de video vigilancia se relacionan a continuación:"
+    },
+    {
+      "indice": 30,
+      "estilo": "Normal",
+      "texto": "Tabla 3.CENTRO DE MONITOREO"
+    },
+    {
+      "indice": 31,
+      "estilo": "Body Text",
+      "texto": "Nota: Los centros de monitoreo Rafael Uribe se encuentra en garantía y el centro monitoreo Santa Fe aún no ha sido entregado oficialmente."
+    },
+    {
+      "indice": 32,
+      "estilo": "Body Text",
+      "texto": "La SDSCJ pagará al contratista los servicios prestados y elementos utilizados mensualmente de acuerdo con las condiciones establecidas para este Acuerdo No 9, oferta de servicio mensualizado y el uso "
+    },
+    {
+      "indice": 34,
+      "estilo": "Normal",
+      "texto": "Tabla 4. FORMA DE PAGO SDSCJ"
+    },
+    {
+      "indice": 37,
+      "estilo": "Normal",
+      "texto": "1 Se aclara que se desmonta La Estación de Transmilenio Calle 26 con 12 cámaras por obras del metro de la ciudad de Bogotá D.C."
+    },
+    {
+      "indice": 41,
+      "estilo": "Body Text",
+      "texto": "AC: Corriente Alterna"
+    },
+    {
+      "indice": 43,
+      "estilo": "Normal",
+      "texto": "AGENT VI: Comprehensive Video Analytics Range."
+    },
+    {
+      "indice": 45,
+      "estilo": "Body Text",
+      "texto": "Al: Auto iris - Función del objetivo que permite regular automáticamente la cantidad de luz que entra en el sensor CCD / CMOS simulando el funcionamiento del iris en el ojo humano."
+    },
+    {
+      "indice": 47,
+      "estilo": "Body Text",
+      "texto": "AMPERE: Un ampere, o amperio, es la unidad de intensidad de corriente o la densidad eléctrica que corre por un punto de circuito en un momento dado. Es la corriente producida por 1 volt que va por una"
+    },
+    {
+      "indice": 49,
+      "estilo": "Body Text",
+      "texto": "ANS: Acuerdos de niveles de servicio."
+    },
+    {
+      "indice": 51,
+      "estilo": "Body Text",
+      "texto": "ARCGIS: Es el nombre de un conjunto de productos de software en el campo de los Sistemas de Información Geográfica o SIG.  Estas aplicaciones se engloban en familias temáticas como ArcGIS"
+    },
+    {
+      "indice": 52,
+      "estilo": "Body Text",
+      "texto": "Server, para la publicación y gestión web, o ArcGIS Móvil para la captura y gestión de información en campo."
+    },
+    {
+      "indice": 54,
+      "estilo": "Body Text",
+      "texto": "ATENUACIÓN: Termino usado para describir y medir (dB) la disminución de señal de video cuando se transmite de un punto a otro."
+    },
+    {
+      "indice": 56,
+      "estilo": "Body Text",
+      "texto": "AUTOFOCUS: El objetivo garantiza la imagen más nítida posible gracias a la regulación automática continua del enfoque."
+    },
+    {
+      "indice": 58,
+      "estilo": "Body Text",
+      "texto": "BALUN: Se denomina balun (del inglés balanced-un balanced lines transformer) a un dispositivo adaptador de impedancias que convierte líneas de transmisión simétricas en asimétricas. La inversa también"
+    },
+    {
+      "indice": 60,
+      "estilo": "Body Text",
+      "texto": "BIT: Digito binario, es el más pequeño elemento de información de un sistema binario (base 2) su valor puede ser “1” o “0”. En los circuitos eléctricos digitales generalmente el “1” corresponde a un n"
+    },
+    {
+      "indice": 62,
+      "estilo": "Body Text",
+      "texto": "BLC: Compensación de Luz de Fondo (Back Light Compensation) - Función de algunas cámaras de seguridad con la que el dispositivo analiza digitalmente la escena y ajusta automáticamente el brillo"
+    },
+    {
+      "indice": 64,
+      "estilo": "Body Text",
+      "texto": "y contraste de la imagen para que se vean con más claridad las áreas oscuras. Esto lo hace a expensas de que puedan quedar sobre iluminadas las zonas más claras de la imagen que en ocasiones pueden ve"
+    },
+    {
+      "indice": 66,
+      "estilo": "Body Text",
+      "texto": "BNC: Sistema de interconexión utilizado en video profesional. Usualmente es el Standard de los conectores que se ponen a los coaxiales y que tienen detrás los grabadores digitales (DVR)."
+    },
+    {
+      "indice": 68,
+      "estilo": "Body Text",
+      "texto": "BPS: Abreviatura de \"bits por segundo\". Generalmente se escribe con minúsculas: “bps”"
+    },
+    {
+      "indice": 70,
+      "estilo": "Normal",
+      "texto": "BYTE: Conjunto de 8 bits."
+    },
+    {
+      "indice": 72,
+      "estilo": "Body Text",
+      "texto": "CAD: Centro Administrativo Distrital."
+    },
+    {
+      "indice": 74,
+      "estilo": "Body Text",
+      "texto": "CAI: Centro De Atención Inmediata"
+    },
+    {
+      "indice": 76,
+      "estilo": "Body Text",
+      "texto": "CÁMARAS PTZ: Son aquellas cámaras de seguridad motorizadas que tienen funcionalidad de movimiento horizontal (Pan), vertical (Tilt) y capacidad de hacer aumento sobre la imagen (Zoom)."
+    },
+    {
+      "indice": 78,
+      "estilo": "Body Text",
+      "texto": "CABLE COAXIAL: Cable que contiene un conductor central sólido recubierto de material aislante, una malla, y un forro o protector exterior. Muy usado para trasportar señales de video análogas."
+    },
+    {
+      "indice": 80,
+      "estilo": "Body Text",
+      "texto": "CIF: Significa Common Intermediate Format y se refiere al tamaño o resolución de una imagen en el ámbito analógico. Para hacer la comparación entre video analógico (caso NTSC) y digital, 1CIF (CIF) eq"
+    },
+    {
+      "indice": 82,
+      "estilo": "Body Text",
+      "texto": "CCTV: Circuito Cerrado de Televisión - Sistema de Vigilancia Utilizado para ver imágenes / videos en privado y no para uso público."
+    },
+    {
+      "indice": 84,
+      "estilo": "Body Text",
+      "texto": "CMOS (Complementary Metal Oxide Semiconductor): Los dispositivos son semiconductores comúnmente usados, construidos de circuitos positivos y negativos. Dado que en un determinado período temporal sola"
+    },
+    {
+      "indice": 85,
+      "estilo": "Body Text",
+      "texto": "C4: Centro de Comando, Control, Comunicaciones y Cómputo."
+    },
+    {
+      "indice": 87,
+      "estilo": "Body Text",
+      "texto": "CODIFICACIÓN: En la terminología del multiplexor indica que una grabación de video tiene una marca en el fotograma que impide su manipulación."
+    },
+    {
+      "indice": 88,
+      "estilo": "Body Text",
+      "texto": "DC: Corriente Continua."
+    },
+    {
+      "indice": 90,
+      "estilo": "Body Text",
+      "texto": "D/N (Day and Night): Las cámaras de seguridad que tienen esta especificación poseen una sensibilidad a la luz lo que las hace efectivas para monitoreo en lugares con muy poca iluminación. En estas con"
+    },
+    {
+      "indice": 91,
+      "estilo": "Body Text",
+      "texto": "DEFINICIÓN: Capacidad de una cámara, monitor, videograbador, de reproducir fielmente las imágenes capturadas."
+    },
+    {
+      "indice": 92,
+      "estilo": "Body Text",
+      "texto": "DIRECCIÓN IP (IP Address): Se trata de una dirección numérica que se traduce después en un nombre de dominio (Domain Name Server). Cuando insertamos el nombre de un sitio web, el ordenador la traduce "
+    },
+    {
+      "indice": 93,
+      "estilo": "Body Text",
+      "texto": "0.0.0.0 a 255.255.255.255. El protocolo TCP/IP dirige los paquetes de datos a su destinación. Cada host en una red tiene una dirección IP única."
+    },
+    {
+      "indice": 94,
+      "estilo": "Body Text",
+      "texto": "DVR: Grabador de video analógico."
+    },
+    {
+      "indice": 96,
+      "estilo": "Body Text",
+      "texto": "ERROR CONOCIDO O FUERA DEL ALCANCE: Problema de los cuales ya se conoce su causa raíz y de los cuales se busca el planteamiento de la solución definitiva o la cual está en análisis la viabilidad para "
+    },
+    {
+      "indice": 98,
+      "estilo": "Normal",
+      "texto": "ETB: EMPRESA DE TELECOMUNICACIONES DE BOGOTÁ S.A E.S. P - ETB S.A E.S.P."
+    },
+    {
+      "indice": 100,
+      "estilo": "Body Text",
+      "texto": "ETHERNET: El método de acceder a una red LAN (Local Área Network) más usado. La tecnología Ethernet es similar a estándar IEEE 802.3. La tecnología Ethernet apoya la velocidad de transmisión 10 Mbps, "
+    },
+    {
+      "indice": 102,
+      "estilo": "Body Text",
+      "texto": "FRAME (CUADRO): Una imagen de Video completa. 1 frame está compuesto de 2 field en el video análogo, y en el digital es como una foto estática. En el estándar de CCTV análogo o televisión el video tie"
+    },
+    {
+      "indice": 104,
+      "estilo": "Body Text",
+      "texto": "FRAMES PER SECOND (FPS): Se refiere al número de cuadros por segundo al cual se muestra o graba el video. Las transmisiones de TV convencionales son a 30 fps, ya que esta tasa es considerada como vide"
+    },
+    {
+      "indice": 106,
+      "estilo": "Body Text",
+      "texto": "HZ: Hertzios - Ciclos por segundo: medida de la frecuencia."
+    },
+    {
+      "indice": 108,
+      "estilo": "Body Text",
+      "texto": "ILUMINACIÓN CON INFRARROJOS: Iluminación de una zona oscura por medio de emisores de luz en el espectro infrarrojo para permitir que se vean las imágenes aun en ausencia de luces visibles en la escena"
+    },
+    {
+      "indice": 110,
+      "estilo": "Body Text",
+      "texto": "IMAGEN COMPRIMIDA: Una imagen reducida en tamaño que permite almacenar más imágenes que en una imagen normal de video original."
+    },
+    {
+      "indice": 112,
+      "estilo": "Body Text",
+      "texto": "IMPEDANCIA: Medida en ohmios, se refiere a la combinación entre la resistencia y la reactancia en un circuito eléctrico."
+    },
+    {
+      "indice": 114,
+      "estilo": "Body Text",
+      "texto": "INCIDENTES: Eventos que afectan la operación de los sistemas cubiertos y que requieren ser gestionados pasando por las etapas de respuesta, atención, hasta encontrar su solución o workaround."
+    },
+    {
+      "indice": 116,
+      "estilo": "Body Text",
+      "texto": "IRIS: Mecanismo interno del lente para regular la cantidad de luz que pasa a través de él y llega al sensor CCD /CMOS."
+    },
+    {
+      "indice": 118,
+      "estilo": "Body Text",
+      "texto": "LAN: Local Área Network – Nombre dado a las Redes de Datos locales relativas a una Edificación. Usualmente con velocidad de 10Mbps a 1000 Mbps."
+    },
+    {
+      "indice": 120,
+      "estilo": "Body Text",
+      "texto": "LED: Diodo de Emisor de Luz."
+    },
+    {
+      "indice": 122,
+      "estilo": "Body Text",
+      "texto": "MEGAPÍXEL: Un megapíxel o megapixel (Mpx) es una unidad que equivale a 1 millón de píxeles (px). A diferencia de otras unidades usadas en el ámbito de la computación que usan la base 2 para sus cantid"
+    },
+    {
+      "indice": 124,
+      "estilo": "Body Text",
+      "texto": "MOS: Metal Oxido Semiconductor - Forma de chip usado en algunas cámaras de CCTV."
+    },
+    {
+      "indice": 126,
+      "estilo": "Body Text",
+      "texto": "NTSC: National Television Standards Committee - Señal de video en color, estándar de la televisión en Norteamérica y Japón - 525 líneas, 60 Hz."
+    },
+    {
+      "indice": 128,
+      "estilo": "Body Text",
+      "texto": "NVR: Grabador de video en red."
+    },
+    {
+      "indice": 131,
+      "estilo": "Body Text",
+      "texto": "PAL: (Phase Alternative Line) Señal estándar de video en color en Europa, Australia y Medio Oriente."
+    },
+    {
+      "indice": 133,
+      "estilo": "Body Text",
+      "texto": "PÍVOT: Es una tecnología que permite procesar y analizar información compleja en poco tiempo, con poco esfuerzo y con poco hardware."
+    },
+    {
+      "indice": 135,
+      "estilo": "Body Text",
+      "texto": "PÍXEL: Un punto en una imagen digital. El punto simple sensible de un sensor CCD / CMOS o el más pequeño punto luminoso de un monitor LCD / LED."
+    },
+    {
+      "indice": 137,
+      "estilo": "Body Text",
+      "texto": "PIXELAMIENTO: Aplica a la visualización de pequeños cuadros en la constitución o forma de la imagen, manifestándose también en distorsión de la visualización. Comúnmente asociado al procesamiento de i"
+    },
+    {
+      "indice": 139,
+      "estilo": "Body Text",
+      "texto": "PRESET: Posición memorizada de las coordenadas horizontal, vertical y zoom, de una cámara robótica (speed dome) generalmente usada para ser activada a voluntad de un operador o automáticamente con alg"
+    },
+    {
+      "indice": 141,
+      "estilo": "Body Text",
+      "texto": "PROBLEMAS: Incidentes que a pesar del análisis técnico y funcional o de la fábrica, se desconoce la causa raíz; también están en esta categoría el análisis de incidentes reportados como repetitivos, d"
+    },
+    {
+      "indice": 143,
+      "estilo": "Body Text",
+      "texto": "PROTOCOLO: Lenguaje de comunicación entre dispositivos que ha sido estandarizado."
+    },
+    {
+      "indice": 145,
+      "estilo": "Body Text",
+      "texto": "PSU: Power Supply Unit – Unidad / Fuente de alimentación."
+    },
+    {
+      "indice": 147,
+      "estilo": "Body Text",
+      "texto": "RED SAN: (Storage Área Network, red de área de almacenamiento) es una red de almacenamiento integral. Se trata de una arquitectura completa que agrupa una red de alta velocidad de canal de fibra o SCS"
+    },
+    {
+      "indice": 149,
+      "estilo": "Body Text",
+      "texto": "RESOLUCIÓN: Medida del más pequeño detalle que se puede visualizar en una imagen. En los sistemas analógicos, la medición se realiza en TVL (líneas de TV). Resolución vertical – la cantidad de detalle"
+    },
+    {
+      "indice": 151,
+      "estilo": "Body Text",
+      "texto": "ROBOTIZACIÓN: Aplica cuando las imágenes por segundo de la Cámara no son constantes o no son enviadas en relación con lo configurado en los fps (frames per seconds), es decir una transmisión de imágen"
+    },
+    {
+      "indice": 153,
+      "estilo": "Body Text",
+      "texto": "RUIDO: Efecto en pantalla que muestra elementos que no son parte de la imagen útil, como puntos, llovizna, nieve ondas, rayas. Es más evidente este efecto con baja luminosidad en escena."
+    },
+    {
+      "indice": 155,
+      "estilo": "Body Text",
+      "texto": "SDSCJ: Secretaría Distrital De Seguridad, Convivencia Y Justicia."
+    },
+    {
+      "indice": 158,
+      "estilo": "Body Text",
+      "texto": "SEÑAL DIGITAL: Una señal que ha sido convertida en “datos” y la conforma información binaria, es decir “1” y “0”."
+    },
+    {
+      "indice": 160,
+      "estilo": "Body Text",
+      "texto": "SINCRONIZACIÓN: Dos o más impulsos eléctricos que se ejecutan con los mismos intervalos de tiempo para evitar la distorsión de imagen y el ruido."
+    },
+    {
+      "indice": 162,
+      "estilo": "Body Text",
+      "texto": "TEAMVIEWER: Es un software informático “privado” de fácil acceso, que permite conectarse remotamente a otro equipo. Entre sus funciones están: compartir y controlar escritorios, reuniones en línea, vi"
+    },
+    {
+      "indice": 164,
+      "estilo": "Body Text",
+      "texto": "ISS: (Intelligent Security Systems) Sistema de seguridad inteligente."
+    },
+    {
+      "indice": 166,
+      "estilo": "Body Text",
+      "texto": "ISP: Internet Service Provider."
+    },
+    {
+      "indice": 168,
+      "estilo": "Body Text",
+      "texto": "MCC: Monitoring & Control Center."
+    },
+    {
+      "indice": 170,
+      "estilo": "Body Text",
+      "texto": "SAVVI: Video Analytics Software Solution."
+    },
+    {
+      "indice": 172,
+      "estilo": "Body Text",
+      "texto": "SecurOS: Plataforma VMS desarrollada por el fabricante ISS, permite adaptar sistemas de administración y grabación de video en cualquier instalación, ya sean pequeños o de gran escala, soportando serv"
+    },
+    {
+      "indice": 173,
+      "estilo": "Body Text",
+      "texto": "SQL: Structured Query Language (Data Base)"
+    },
+    {
+      "indice": 175,
+      "estilo": "Body Text",
+      "texto": "VMS: Video Management Software."
+    },
+    {
+      "indice": 177,
+      "estilo": "Body Text",
+      "texto": "VPN: Virtual Private Network (VPN), es una tecnología de red de computadoras que permite una extensión segura de la red de área local (LAN) sobre una red pública o no controlada como Internet."
+    },
+    {
+      "indice": 181,
+      "estilo": "Body Text",
+      "texto": "A continuación, se relacionan las obligaciones contractuales y como se dio su respectivo cumplimento durante el contrato SCJ-1809 de 2024 con el anexo que soporta la observación descrita."
+    },
+    {
+      "indice": 187,
+      "estilo": "Normal",
+      "texto": "Tabla 5. OBLIGACIONES GENERALES"
+    },
+    {
+      "indice": 191,
+      "estilo": "Body Text",
+      "texto": "A continuación, se relacionan las obligaciones específicas del contratista y como se dio su respectivo cumplimento durante el contrato SCJ-1809 de 2024 con el anexo que soporta la observación descrita"
+    },
+    {
+      "indice": 202,
+      "estilo": "Normal",
+      "texto": "Tabla 6. OBLIGACIONES ESPECÍFICAS DEL CONTRATISTA."
+    },
+    {
+      "indice": 205,
+      "estilo": "Body Text",
+      "texto": "A continuación, se relacionan las obligaciones específicas en materia ambiental y como se dio su respectivo cumplimento durante el contrato SCJ-1809 de 2024 con el anexo que soporta la observación\tdes"
+    },
+    {
+      "indice": 209,
+      "estilo": "Normal",
+      "texto": "Tabla 7. OBLIGACIONES ESPECÍFICAS EN MATERIA AMBIENTAL"
+    },
+    {
+      "indice": 213,
+      "estilo": "Body Text",
+      "texto": "Dentro del contrato SCJ-1809-2024 existen anexos a los cuales se da cumplimiento de acuerdo con la naturaleza de la operación y necesidad del sistema de videovigilancia, se relacionan anexo sobre la s"
+    },
+    {
+      "indice": 214,
+      "estilo": "Body Text",
+      "texto": "Adjunto encontrará el anexo en la ruta: 01SEP - 30SEP\\ANEXO OBLIGACIONES.XLSX"
+    },
+    {
+      "indice": 219,
+      "estilo": "Body Text",
+      "texto": "Los comunicados emitidos durante el mes de SEPTIEMBRE de 2025 se relacionan a continuación:"
+    },
+    {
+      "indice": 228,
+      "estilo": "Normal",
+      "texto": "Tabla 8. COMUNICADOS EMITIDOS CONTRATO SCJ 1809 2024"
+    },
+    {
+      "indice": 229,
+      "estilo": "Body Text",
+      "texto": "Adjunto encontrará el detalle de cada detallando comunicados emitido en la ruta de acceso: 01SEP"
+    },
+    {
+      "indice": 230,
+      "estilo": "Body Text",
+      "texto": "- 30SEP \\01 OBLIGACIONES GENERALES\\OBLIGACIÓN 7 y 10\\ COMUNICADOS EMITIDOS."
+    },
+    {
+      "indice": 234,
+      "estilo": "Body Text",
+      "texto": "Los comunicados recibidos durante el mes de SEPTIEMBRE de 2025 se relacionan a continuación:"
+    },
+    {
+      "indice": 239,
+      "estilo": "Normal",
+      "texto": "Tabla 9. COMUNICADOS EMITIDOS CONTRATO SCJ 1809 2024"
+    },
+    {
+      "indice": 240,
+      "estilo": "Body Text",
+      "texto": "Adjunto encontrará el detalle de cada detallando comunicados recibidos en la ruta de acceso: 01SEP"
+    },
+    {
+      "indice": 241,
+      "estilo": "Body Text",
+      "texto": "- 30SEP \\01 OBLIGACIONES GENERALES\\OBLIGACIÓN 7 y 10\\ COMUNICADOS RECIBIDOS"
+    },
+    {
+      "indice": 245,
+      "estilo": "Body Text",
+      "texto": "Se mencionan a continuación el personal mínimo requerido que cumple con los requerimientos y obligaciones del CONTRATO SCJ-1809-2024."
+    },
+    {
+      "indice": 246,
+      "estilo": "List Paragraph",
+      "texto": "Coordinador contrato – Pablo Alejandro Bello."
+    },
+    {
+      "indice": 247,
+      "estilo": "List Paragraph",
+      "texto": "Profesional Seguridad y Salud - Ivonne Hernández"
+    },
+    {
+      "indice": 248,
+      "estilo": "List Paragraph",
+      "texto": "Administrador Datacenter - William Fernando Olmos."
+    },
+    {
+      "indice": 249,
+      "estilo": "List Paragraph",
+      "texto": "Coordinador mesa de servicio - Sergio Rodríguez."
+    },
+    {
+      "indice": 250,
+      "estilo": "List Paragraph",
+      "texto": "Ingeniero Residente mesa de servicio."
+    },
+    {
+      "indice": 251,
+      "estilo": "List Paragraph",
+      "texto": "Ariza Dennis"
+    },
+    {
+      "indice": 252,
+      "estilo": "List Paragraph",
+      "texto": "Leivin Carrillo"
+    },
+    {
+      "indice": 253,
+      "estilo": "List Paragraph",
+      "texto": "Diego Díaz"
+    },
+    {
+      "indice": 254,
+      "estilo": "List Paragraph",
+      "texto": "Raúl Ferro"
+    },
+    {
+      "indice": 255,
+      "estilo": "List Paragraph",
+      "texto": "Amílcar Mercado"
+    },
+    {
+      "indice": 256,
+      "estilo": "List Paragraph",
+      "texto": "Luis Muñoz"
+    },
+    {
+      "indice": 257,
+      "estilo": "List Paragraph",
+      "texto": "Hernando Oliveros"
+    },
+    {
+      "indice": 258,
+      "estilo": "List Paragraph",
+      "texto": "Luis Triana"
+    },
+    {
+      "indice": 259,
+      "estilo": "List Paragraph",
+      "texto": "Técnico electricista - Daniel Domínguez"
+    },
+    {
+      "indice": 261,
+      "estilo": "Body Text",
+      "texto": "Durante el periodo del mes de septiembre de 2025 no se presentaron aprobaciones ni cambios en el personal mínimo requerido para la ejecución del contrato."
+    },
+    {
+      "indice": 262,
+      "estilo": "Body Text",
+      "texto": "Adjunto encontrará el listado del personal empleado bajo el CONTRATO SCJ-1809-2024, detallando sus respectivas funciones, cargos, antecedentes y certificaciones. Ruta de acceso 01SEP - 30SEP / 02 OBLI"
+    },
+    {
+      "indice": 267,
+      "estilo": "Body Text",
+      "texto": "Se cuenta con personal adicional de apoyo que permite cumplir con la ejecución contractual y dar cumplimientos a todos los lineamientos y requerimientos del contrato."
+    },
+    {
+      "indice": 268,
+      "estilo": "List Paragraph",
+      "texto": "Técnico Operaciones."
+    },
+    {
+      "indice": 269,
+      "estilo": "List Paragraph",
+      "texto": "Técnico Motorizados."
+    },
+    {
+      "indice": 270,
+      "estilo": "List Paragraph",
+      "texto": "Almacén"
+    },
+    {
+      "indice": 271,
+      "estilo": "List Paragraph",
+      "texto": "Documentales."
+    },
+    {
+      "indice": 272,
+      "estilo": "Body Text",
+      "texto": "Adjunto encontrará el listado del personal empleado bajo el CONTRATO SCJ-1809-2024, detallando sus respectivas funciones, cargos y evaluaciones de riesgos laborales. Ruta de acceso 01SEP - 30SEP"
+    },
+    {
+      "indice": 273,
+      "estilo": "Body Text",
+      "texto": "/ 01 OBLIGACIONES GENERALES/OBLIGACIÓN 2,5,6,9,13/ ANEXO OTROS / PERSONAL. Los cuales"
+    },
+    {
+      "indice": 274,
+      "estilo": "Body Text",
+      "texto": "cubren la totalidad de disponibilidad que requiere el proyecto."
+    },
+    {
+      "indice": 276,
+      "estilo": "Body Text",
+      "texto": "Durante el mes de septiembre se presentaron ingresos los cuales fueron reportados y validados por la interventoria del contrato, se relacionan documentos de personal de apoyo en la ruta: 01SEP - 30SEP"
+    }
+  ],
+  "tablas": [
+    {
+      "numero": 1,
+      "filas": 17,
+      "columnas": 4,
+      "encabezados": [
+        "INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024",
+        "INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024",
+        "INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024",
+        "INFORMACIÓN GENERAL CONTRATO SCJ-1809-2024"
+      ],
+      "primera_fila": [
+        "NIT",
+        "899.999.115-8",
+        "899.999.115-8",
+        "899.999.115-8"
+      ]
+    },
+    {
+      "numero": 2,
+      "filas": 9,
+      "columnas": 6,
+      "encabezados": [
+        "N\n.",
+        "SISTEMA DE VIDEO VIGILANCIA",
+        "CANTIDAD DE UBICACIONES",
+        "CANTIDAD DE PUNTOS DE CÁMARA",
+        "CANTIDAD CENTROS DE MONITOREO – C4",
+        "CANTIDAD VISUALIZADAS\nLOCALMENTE"
+      ],
+      "primera_fila": [
+        "1",
+        "CIUDADANA",
+        "4451",
+        "4451",
+        "4451",
+        "0"
+      ]
+    },
+    {
+      "numero": 3,
+      "filas": 12,
+      "columnas": 4,
+      "encabezados": [
+        "N°\tCENTRO DE MONITOREO\tDIRECCIÓN\tLOCALIDAD",
+        "N°\tCENTRO DE MONITOREO\tDIRECCIÓN\tLOCALIDAD",
+        "N°\tCENTRO DE MONITOREO\tDIRECCIÓN\tLOCALIDAD",
+        "N°\tCENTRO DE MONITOREO\tDIRECCIÓN\tLOCALIDAD"
+      ],
+      "primera_fila": [
+        "1",
+        "CENTRO DE COMANDO, CONTROL, CÓMPUTO Y\nCOMUNICACION",
+        "CALLE 20 NO 68 A 06",
+        "PUENTE ARANDA"
+      ]
+    },
+    {
+      "numero": 4,
+      "filas": 4,
+      "columnas": 3,
+      "encabezados": [
+        "N\n°",
+        "DESCRIPCIÓN TIPO SERVICIO",
+        "CARACTERÍSTI CA"
+      ],
+      "primera_fila": [
+        "1",
+        "Mantenimientos preventivos por UBICACIÓN, aprobado",
+        "Por Demanda"
+      ]
+    },
+    {
+      "numero": 5,
+      "filas": 4,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ\n/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "1",
+        "Acatar la Constitución, la Ley, las normas legales",
+        "Permanente",
+        "Cumplió",
+        "La\tEMPRESA\tDE\nTELECOMUNICACIONES\tDE\nBOGOTÁ S.A. E.",
+        "01SEP\t-\t30SEP / 01 OBLIGACIONES GENERALES/ OBLIGAC"
+      ]
+    },
+    {
+      "numero": 6,
+      "filas": 5,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ\n/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "4",
+        "Dentro de los tres (3) días hábiles siguientes a l",
+        "Única Vez",
+        "Cumplió",
+        "Se adjunta copia de la póliza con la cual se cumpl",
+        "01SEP\t-\t30SEP / 01 OBLIGACIONES GENERALES/ OBLIGAC"
+      ]
+    },
+    {
+      "numero": 7,
+      "filas": 6,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ\n/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "8",
+        "Reportar de manera inmediata cualquier novedad o a",
+        "Permanente",
+        "Cumplió",
+        "En el respectivo periodo no se presentaron novedad",
+        "01SEP\t-\t30SEP / 01 OBLIGACIONES GENERALES/ OBLIGAC"
+      ]
+    },
+    {
+      "numero": 8,
+      "filas": 5,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ\n/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "",
+        "",
+        "",
+        "Adicionalmente, se efectuaron entregas de dotación",
+        "Formación\nEntrega de dotación y EEP"
+      ]
+    },
+    {
+      "numero": 9,
+      "filas": 2,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ\n/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "16",
+        "Publicar de forma mensual en la plataforma del Sis",
+        "Mensual",
+        "Cumplió",
+        "Se genera el cargue en SECOP de los informes mensu",
+        "01SEP\t-\t30SEP / 01 OBLIGACIONES GENERALES/ OBLIGAC"
+      ]
+    },
+    {
+      "numero": 10,
+      "filas": 6,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "1",
+        "Ejecutar el contrato en tiempo, costos, alcance, g",
+        "PERMANENTE",
+        "Cumplió",
+        "Se da cumplimiento con el presente informe y sus a",
+        "01SEP - 30SEP / 02 OBLIGACIONES ESPECIFICAS / OBLI"
+      ]
+    },
+    {
+      "numero": 11,
+      "filas": 3,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "6",
+        "Disponer de una línea de atención telefónica y cor",
+        "PERMANENTE",
+        "Cumplió",
+        "Se cuenta con el número telefónico 318 3915138 y e",
+        "01SEP - 30SEP / OBLIGACIONES ESPECIFICAS/ OBLIGACI"
+      ]
+    },
+    {
+      "numero": 12,
+      "filas": 8,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "",
+        "",
+        "",
+        "Aprobación Plan Gestión v6 16092025.pdf",
+        ""
+      ]
+    },
+    {
+      "numero": 13,
+      "filas": 8,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "informe debe contener la totalidad de los elemento",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "numero": 14,
+      "filas": 6,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "acorde a la Ley 1443 de 2014 “Por el cual se dicta",
+        "",
+        "",
+        "cumplimiento de ETB y sus contratistas aliados.\nDu",
+        "02 Certificados de cumplimiento del SG-SST expedid"
+      ]
+    },
+    {
+      "numero": 15,
+      "filas": 5,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "de la INTERVENTORIA o quien haga sus veces.",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "numero": 16,
+      "filas": 3,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "demás agencias involucradas en los operativos de s",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "numero": 17,
+      "filas": 8,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "28",
+        "Realizar el seguimiento y reportar diariamente a L",
+        "PERMANENTE",
+        "Cumplió",
+        "Se realizan escalamientos a los terceros según sea",
+        "01SEP - 30SEP / 02 OBLIGACIONES ESPECIFICAS / OBLI"
+      ]
+    },
+    {
+      "numero": 18,
+      "filas": 7,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "35",
+        "Acatar las políticas de seguridad de la informació",
+        "PERMANENTE",
+        "Cumplió",
+        "Documentos\tde confidencialidad",
+        "01SEP - 30SEP / 02 OBLIGACIONES ESPECIFICAS / OBLI"
+      ]
+    },
+    {
+      "numero": 19,
+      "filas": 2,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "41",
+        "Las demás obligaciones que se deriven de la natura",
+        "PERMANENTE",
+        "Cumplió",
+        "En el presente informe se relaciona",
+        "01SEP - 30SEP / OBLIGACIONES ESPECIFICAS / OBLIGAC"
+      ]
+    },
+    {
+      "numero": 20,
+      "filas": 4,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "1",
+        "Garantizar la gestión integral de los residuos de ",
+        "Permanente",
+        "Cumplió",
+        "Durante la ejecución del contrato y hasta el mes d",
+        "01AGO – 31AGO / 03 OBLIGACIONES ESPECIFICAS EN MAT"
+      ]
+    },
+    {
+      "numero": 21,
+      "filas": 5,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "",
+        "",
+        "",
+        "Trabajo y Ambiente (SSTA), en cumplimiento de lo e",
+        ""
+      ]
+    },
+    {
+      "numero": 22,
+      "filas": 2,
+      "columnas": 6,
+      "encabezados": [
+        "ÍTEM",
+        "OBLIGACIÓN",
+        "PERIODICIDAD",
+        "CUMPLIÓ/ NO CUMPLIÓ",
+        "OBSERVACIONES",
+        "ANEXO"
+      ],
+      "primera_fila": [
+        "",
+        "",
+        "",
+        "",
+        "Certificación cumplimiento, firmada por la respons",
+        ""
+      ]
+    },
+    {
+      "numero": 23,
+      "filas": 32,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM",
+        "FECHA",
+        "CONSECUTIVO ETB",
+        "DESCRIPCIÓN"
+      ],
+      "primera_fila": [
+        "1",
+        "1/09/2025",
+        "GSC-7027-2025",
+        "Respuesta comunicado VVG-CCS-ETB-723-25 Respuesta "
+      ]
+    },
+    {
+      "numero": 24,
+      "filas": 36,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "32",
+        "3/09/2025",
+        "GSC-7058-2025",
+        "INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (29 DE "
+      ]
+    },
+    {
+      "numero": 25,
+      "filas": 36,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "67",
+        "8/09/2025",
+        "GSC-7098-2025",
+        "INFORMES UNIFICADOS MANTENIMIENTOS CORRECTIVOS 08-"
+      ]
+    },
+    {
+      "numero": 26,
+      "filas": 38,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "102",
+        "11/09/2025",
+        "GSC-7135-2025",
+        "Informes Unificados – Mantenimientos Correctivos –"
+      ]
+    },
+    {
+      "numero": 27,
+      "filas": 37,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "139",
+        "16/09/2025",
+        "GSC-7169-2025",
+        "FACTURACIÓN SERVICIOS FEBRERO 2025"
+      ]
+    },
+    {
+      "numero": 28,
+      "filas": 39,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "175",
+        "19/09/2025",
+        "GSC-7205-2025",
+        "INFORMES UNIFICADOS - VISITAS DIAGNÓSTICAS (16 DE "
+      ]
+    },
+    {
+      "numero": 29,
+      "filas": 38,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "213",
+        "25/09/2025",
+        "GSC-7243-2025",
+        "Informe Unificado – Acometida Eléctrica – Contrato"
+      ]
+    },
+    {
+      "numero": 30,
+      "filas": 7,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB",
+        "ÍTEM\tFECHA\tCONSECUTIVO\tDESCRIPCIÓN\nETB"
+      ],
+      "primera_fila": [
+        "250",
+        "30/09/2025",
+        "GSC-7279-2025",
+        "FACTURACIÓN SERVICIOS MAYO 2025"
+      ]
+    },
+    {
+      "numero": 31,
+      "filas": 27,
+      "columnas": 4,
+      "encabezados": [
+        "ÍTEM",
+        "FECHA",
+        "CONSECUTIVO ETB",
+        "DESCRIPCIÓN"
+      ],
+      "primera_fila": [
+        "1",
+        "01/09/2025",
+        "VVG-CCS-ETB-725-25",
+        "Remisión comunicado No.VVG-CCS-ETB-725-25 Cronogra"
+      ]
+    },
+    {
+      "numero": 32,
+      "filas": 29,
+      "columnas": 4,
+      "encabezados": [
+        "27",
+        "09/09/2025",
+        "VVG-CCS-ETB-751-25",
+        "Remisión comunicado No. VVG-CCS-ETB-751-25 Respuesta a\ncomunicados GSC-6862-2025, GSC-6875-2025, GSC-6896-2025 y GSC- 7057-2025"
+      ],
+      "primera_fila": [
+        "28",
+        "09/09/2025",
+        "VVG-CCS-ETB-752-25",
+        "Remisión comunicado No. VVG-CCS-ETB-752-25 Respues"
+      ]
+    },
+    {
+      "numero": 33,
+      "filas": 28,
+      "columnas": 4,
+      "encabezados": [
+        "56",
+        "22/09/2025",
+        "VVG-CCS-ETB-780-25",
+        "Remisión comunicado No.VVG-CCS-ETB-780-25 Respuesta a comunicados\nGSC-7152-2025, GSC-7172-2025 y GSC-7186-2025"
+      ],
+      "primera_fila": [
+        "57",
+        "22/09/2025",
+        "VVG-CCS-ETB-781-25",
+        "Remisión comunicado No.VVG-CCS-ETB-781-25 Respuest"
+      ]
+    },
+    {
+      "numero": 34,
+      "filas": 25,
+      "columnas": 4,
+      "encabezados": [
+        "84",
+        "26/09/2025",
+        "VVG-CCS-ETB-808-25",
+        "Remisión comunicado No. VVG-CCS-ETB-808-25 Respuesta a\ncomunicados GSC-7226-2025"
+      ],
+      "primera_fila": [
+        "85",
+        "26/09/2025",
+        "VVG-CCS-ETB-809-25",
+        "Remisión comunicado No. VVG-CCS-ETB-809-25 Respues"
+      ]
+    }
+  ]
+}

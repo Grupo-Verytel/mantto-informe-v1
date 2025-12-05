@@ -1,11 +1,12 @@
 """
 Servicio para integración con API externa de autenticación
 """
-import os
 import requests
 from typing import Optional, Dict, Any
 from fastapi import HTTPException, status
 import logging
+
+import config
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +15,8 @@ class ExternalAuthService:
     """Servicio para comunicarse con la API externa de autenticación"""
     
     def __init__(self):
-        self.api_url = os.getenv("EXTERNAL_AUTH_API_URL", "http://localhost:4000")
-        self.timeout = int(os.getenv("EXTERNAL_AUTH_API_TIMEOUT", "10"))
+        self.api_url = config.EXTERNAL_AUTH_API_URL
+        self.timeout = config.EXTERNAL_AUTH_API_TIMEOUT
     
     async def login(self, username: str, password: str) -> Dict[str, Any]:
         """

@@ -32,3 +32,11 @@ async def send_data_section(
     data: Dict[str, Any] = Body(...),    
 ) -> Dict[str, Any]:   
     return await section2_controller.send_data_section(data)
+
+@router.post("/generate_document", status_code=status.HTTP_200_OK)
+async def generate_document(
+    data: Dict[str, Any] = Body(...),    
+) -> Dict[str, Any]:   
+    return await section2_controller.generate_document(data)  
+
+  
