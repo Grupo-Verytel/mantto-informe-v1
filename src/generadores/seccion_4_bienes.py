@@ -156,35 +156,164 @@ class GeneradorSeccion4:
     async def _seccion_4_3(self, data: Dict[str, Any]):
         """
         Procesa la sección 4.3: Entrega Equipos No Operativos Almacén SDSCJ
+        
+        Estructura de datos esperada:
+        {
+            "haySalidas": bool,
+            "texto": str,
+            "tablaEquiposNoOperativos": {
+                "fecha": str,
+                "comunicado": str,
+                "estado": str
+            },
+            "textoBajasNoOperativas": str,
+            "tablaDetalleEquipos": [{"id": int, "equipo": str, "cantidad": int}, ...],
+            "haySiniestros": bool,
+            "textoSiniestros": str,
+            "tablaSiniestros": {
+                "fecha": str,
+                "comunicado": str,
+                "cantidad": str
+            },
+            "textoReintegro": str,
+            "tablaDetalleSiniestros": [{"id": int, "equipo": str, "cantidad": int}, ...]
+        }
         """
         content = data.get("content", {})
         anio = data.get("anio")
         mes = data.get("mes")
         
-        # Obtener datos del comunicado
-        comunicado = content.get("comunicado", {})
-        equipos = content.get("equipos", [])
+        # Obtener indicadores principales
+        hay_salidas = content.get("haySalidas", False)
+        hay_siniestros = content.get("haySiniestros", False)
         
-        # Calcular total
-        valor_total = 0
-        try:
-            for equipo in equipos:
-                valor = equipo.get("valor", 0) or equipo.get("valor_total", 0)
-                if isinstance(valor, (int, float)):
-                    valor_total += float(valor)
-                elif isinstance(valor, str):
-                    valor_limpio = valor.replace(",", "").replace(" ", "").replace("$", "").strip()
-                    if valor_limpio:
-                        valor_total += float(valor_limpio)
-        except (ValueError, TypeError) as e:
-            logger.warning(f"Error al calcular total en sección 4.3: {e}")
-            valor_total = 0
+        # Inicializar resultado
+        resultado = {
+            "haySalidas": hay_salidas,
+            "texto_43": None,
+            "tabla_43_equipos_no_operativos": None,
+            "texto_43_bajas_no_operativas": None,
+            "tabla_43_detalle_equipos": None,
+            "haySiniestros": hay_siniestros,
+            "texto_43_siniestros": None,
+            "tabla_43_siniestros": None,
+            "texto_43_reintegro": None,
+            "tabla_43_detalle_siniestros": None
+        }
         
-        # Formatear valores
-        valor_letras = ""
-        if valor_total > 0:
-            valor_letras = numero_a_letras(valor_total, incluir_moneda=True)
+        # Procesar bloque de salidas si haySalidas == true
+        if hay_salidas:
+            # Texto principal
+            texto_43 = content.get("texto", "")
+            resultado["texto_43"] = texto_43 if texto_43 else None
+            
+            # Tabla resumen de equipos no operativos
+            tabla_equipos_no_operativos = content.get("tablaEquiposNoOperativos", {})
+            if tabla_equipos_no_operativos and isinstance(tabla_equipos_no_operativos, dict):
+                # Preparar datos para tabla resumen
+                datos_resumen = [{
+                    "campo": "FECHA",
+                    "valor": tabla_equipos_no_operativos.get("fecha", "")
+                }, {
+                    "campo": "COMUNICADO",
+                    "valor": tabla_equipos_no_operativos.get("comunicado", "")
+                }, {
+                    "campo": "ESTADO",
+                    "valor": tabla_equipos_no_operativos.get("estado", "")
+                }]
+                
+                headers_resumen = ["CAMPO", "VALOR"]
+                campos_resumen = ["campo", "valor"]
+                tabla_resumen = preparar_datos_tabla(
+                    datos_resumen, headers_resumen, campos_resumen,
+                    agregar_totales=False, columna_total_texto=0
+                )
+                resultado["tabla_43_equipos_no_operativos"] = tabla_resumen if tabla_resumen else None
+            
+            # Texto de bajas no operativas
+            texto_bajas = content.get("textoBajasNoOperativas", "")
+            resultado["texto_43_bajas_no_operativas"] = texto_bajas if texto_bajas else None
+            
+            # Tabla detalle de equipos
+            tabla_detalle_equipos = content.get("tablaDetalleEquipos", [])
+            if tabla_detalle_equipos and isinstance(tabla_detalle_equipos, list) and len(tabla_detalle_equipos) > 0:
+                # Preparar datos con numeración
+                datos_preparados = []
+                for idx, equipo in enumerate(tabla_detalle_equipos, 1):
+                    dato = {
+                        "No.": idx,
+                        "equipo": equipo.get("equipo", ""),
+                        "cantidad": equipo.get("cantidad", 0)
+                    }
+                    datos_preparados.append(dato)
+                
+                headers_detalle = ["No.", "EQUIPO", "CANTIDAD"]
+                campos_detalle = ["No.", "equipo", "cantidad"]
+                tabla_detalle = preparar_datos_tabla(
+                    datos_preparados, headers_detalle, campos_detalle,
+                    agregar_totales=True, columna_total_texto=0
+                )
+                resultado["tabla_43_detalle_equipos"] = tabla_detalle if tabla_detalle else None
+            else:
+                resultado["tabla_43_detalle_equipos"] = None
         
+        # Procesar bloque de siniestros si haySiniestros == true
+        if hay_siniestros:
+            # Texto de siniestros
+            texto_siniestros = content.get("textoSiniestros", "")
+            resultado["texto_43_siniestros"] = texto_siniestros if texto_siniestros else None
+            
+            # Tabla resumen de siniestros
+            tabla_siniestros = content.get("tablaSiniestros", {})
+            if tabla_siniestros and isinstance(tabla_siniestros, dict):
+                # Preparar datos para tabla resumen
+                datos_resumen_siniestros = [{
+                    "campo": "FECHA",
+                    "valor": tabla_siniestros.get("fecha", "")
+                }, {
+                    "campo": "COMUNICADO",
+                    "valor": tabla_siniestros.get("comunicado", "")
+                }, {
+                    "campo": "CANTIDAD",
+                    "valor": tabla_siniestros.get("cantidad", "")
+                }]
+                
+                headers_resumen_siniestros = ["CAMPO", "VALOR"]
+                campos_resumen_siniestros = ["campo", "valor"]
+                tabla_resumen_siniestros = preparar_datos_tabla(
+                    datos_resumen_siniestros, headers_resumen_siniestros, campos_resumen_siniestros,
+                    agregar_totales=False, columna_total_texto=0
+                )
+                resultado["tabla_43_siniestros"] = tabla_resumen_siniestros if tabla_resumen_siniestros else None
+            
+            # Texto reintegro
+            texto_reintegro = content.get("textoReintegro", "")
+            resultado["texto_43_reintegro"] = texto_reintegro if texto_reintegro else None
+            
+            # Tabla detalle siniestros
+            tabla_detalle_siniestros = content.get("tablaDetalleSiniestros", [])
+            if tabla_detalle_siniestros and isinstance(tabla_detalle_siniestros, list) and len(tabla_detalle_siniestros) > 0:
+                # Preparar datos con numeración
+                datos_preparados_siniestros = []
+                for idx, equipo in enumerate(tabla_detalle_siniestros, 1):
+                    dato = {
+                        "No.": idx,
+                        "equipo": equipo.get("equipo", ""),
+                        "cantidad": equipo.get("cantidad", 0)
+                    }
+                    datos_preparados_siniestros.append(dato)
+                
+                headers_detalle_siniestros = ["No.", "EQUIPO", "CANTIDAD"]
+                campos_detalle_siniestros = ["No.", "equipo", "cantidad"]
+                tabla_detalle_siniestros_final = preparar_datos_tabla(
+                    datos_preparados_siniestros, headers_detalle_siniestros, campos_detalle_siniestros,
+                    agregar_totales=True, columna_total_texto=0
+                )
+                resultado["tabla_43_detalle_siniestros"] = tabla_detalle_siniestros_final if tabla_detalle_siniestros_final else None
+            else:
+                resultado["tabla_43_detalle_siniestros"] = None
+        
+        # Retornar estructura compatible con el sistema existente
         content_data = {
             "anio": anio,
             "mes": mes,
@@ -192,14 +321,7 @@ class GeneradorSeccion4:
             "name_file": data.get("name_file"),
             "section_id": data.get("section_id"),
             "level": data.get("level"),
-            "content": {
-                "comunicado": comunicado.get("numero", "") if isinstance(comunicado, dict) else str(comunicado) if comunicado else "",
-                "fecha": comunicado.get("fecha", "") if isinstance(comunicado, dict) else "",
-                "equipos": equipos,
-                "total": valor_total,
-                "valor_letras": valor_letras,
-                "anexos": content.get("anexos", []),
-            },
+            "content": resultado
         }
         
         return content_data
@@ -579,142 +701,166 @@ class GeneradorSeccion4:
         
         # Sección 4.3 (index[3]) - ENTREGA EQUIPOS NO OPERATIVOS
         if len(index) > 3:
-            content_43 = index[3].get("content", {})
-            comunicado = content_43.get("comunicado", {})
-            contexto["comunicado_43"] = comunicado.get("numero", "") if isinstance(comunicado, dict) else str(comunicado) if comunicado else ""
-            contexto["fecha_43"] = comunicado.get("fecha", "") if isinstance(comunicado, dict) else ""
+            content_43_raw = index[3].get("content", {})
             
-            # Preparar datos de tabla en formato lista de listas
-            tiempo_tabla = time.time()
-            equipos_43 = content_43.get("equipos", [])
-            if equipos_43:
-                logger.info(f"Sección 4.3 - Procesando {len(equipos_43)} equipos")
+            # Obtener datos crudos desde MongoDB (estructura nueva)
+            hay_salidas = content_43_raw.get("haySalidas", False)
+            hay_siniestros = content_43_raw.get("haySiniestros", False)
+            
+            logger.info(f"Sección 4.3 - haySalidas={hay_salidas}, haySiniestros={hay_siniestros}")
+            logger.info(f"Sección 4.3 - Claves en content: {list(content_43_raw.keys())}")
+            
+            # Indicadores booleanos para condicionales en el template
+            contexto["haySalidas"] = hay_salidas
+            contexto["haySiniestros"] = hay_siniestros
+            
+            # Procesar bloque de salidas si haySalidas == true
+            if not hay_salidas:
+                contexto["texto_43"] = None
+                contexto["tabla_43_equipos_no_operativos"] = None
+                contexto["texto_43_bajas_no_operativas"] = None
+                contexto["tabla_43_detalle_equipos"] = None
+                logger.info("Sección 4.3 - haySalidas=False, estableciendo None para bloques de salidas")
+            else:
+                # Texto principal
+                texto_43 = content_43_raw.get("texto", "")
+                contexto["texto_43"] = texto_43 if texto_43 else None
+                logger.info(f"Sección 4.3 - texto_43: {len(texto_43) if texto_43 else 0} caracteres")
                 
-                # Verificar si los equipos tienen serial y valor
-                tiene_serial = any(eq.get("serial") for eq in equipos_43)
-                tiene_valor = any(eq.get("valor") for eq in equipos_43)
-                
-                # Determinar columnas según los datos disponibles
-                if tiene_serial and tiene_valor:
-                    headers_43 = ["No.", "DESCRIPCIÓN", "SERIAL", "CANT.", "MOTIVO", "VALOR"]
-                    campos_43 = ["descripcion", "serial", "cantidad", "motivo", "valor"]
-                elif tiene_serial:
-                    headers_43 = ["No.", "DESCRIPCIÓN", "SERIAL", "CANT.", "MOTIVO"]
-                    campos_43 = ["descripcion", "serial", "cantidad", "motivo"]
-                elif tiene_valor:
-                    headers_43 = ["No.", "DESCRIPCIÓN", "CANT.", "MOTIVO", "VALOR"]
-                    campos_43 = ["descripcion", "cantidad", "motivo", "valor"]
+                # Tabla resumen equipos no operativos
+                tiempo_tabla = time.time()
+                tabla_equipos_no_operativos = content_43_raw.get("tablaEquiposNoOperativos", {})
+                if tabla_equipos_no_operativos and isinstance(tabla_equipos_no_operativos, dict):
+                    # Preparar datos para tabla resumen
+                    datos_resumen = [{
+                        "campo": "FECHA",
+                        "valor": tabla_equipos_no_operativos.get("fecha", "")
+                    }, {
+                        "campo": "COMUNICADO",
+                        "valor": tabla_equipos_no_operativos.get("comunicado", "")
+                    }, {
+                        "campo": "ESTADO",
+                        "valor": tabla_equipos_no_operativos.get("estado", "")
+                    }]
+                    
+                    headers_resumen = ["CAMPO", "VALOR"]
+                    campos_resumen = ["campo", "valor"]
+                    tabla_resumen = preparar_datos_tabla(
+                        datos_resumen, headers_resumen, campos_resumen,
+                        agregar_totales=False, columna_total_texto=0
+                    )
+                    contexto["tabla_43_equipos_no_operativos"] = tabla_resumen if tabla_resumen else None
+                    logger.info(f"Sección 4.3 - tabla_43_equipos_no_operativos: {len(tabla_resumen) if tabla_resumen else 0} filas")
                 else:
-                    headers_43 = ["No.", "DESCRIPCIÓN", "CANT.", "MOTIVO"]
-                    campos_43 = ["descripcion", "cantidad", "motivo"]
+                    contexto["tabla_43_equipos_no_operativos"] = None
+                    logger.info("Sección 4.3 - tablaEquiposNoOperativos vacía o inválida")
+                tiempo_procesamiento_tablas += time.time() - tiempo_tabla
                 
-                # Preparar datos con numeración (MANTENER VALORES NUMÉRICOS para calcular totales)
-                datos_preparados = []
-                for idx, equipo in enumerate(equipos_43, 1):
-                    dato = equipo.copy()
-                    dato["No."] = idx
-                    # Asegurar que existan todos los campos
-                    if "descripcion" not in dato:
-                        dato["descripcion"] = dato.get("descripcion", "")
-                    if tiene_serial and "serial" not in dato:
-                        dato["serial"] = dato.get("serial", "-")
-                    if "cantidad" not in dato:
-                        dato["cantidad"] = dato.get("cantidad", 1)
-                    if "motivo" not in dato:
-                        dato["motivo"] = dato.get("motivo", "")
-                    # Mantener valor numérico para calcular totales solo si existe
-                    if tiene_valor:
-                        if "valor" not in dato:
-                            dato["valor"] = 0
-                        else:
-                            try:
-                                dato["valor"] = float(dato["valor"]) if dato["valor"] else 0
-                            except (ValueError, TypeError):
-                                dato["valor"] = 0
-                    datos_preparados.append(dato)
+                # Texto bajas no operativas
+                texto_bajas = content_43_raw.get("textoBajasNoOperativas", "")
+                contexto["texto_43_bajas_no_operativas"] = texto_bajas if texto_bajas else None
+                logger.info(f"Sección 4.3 - texto_43_bajas_no_operativas: {len(texto_bajas) if texto_bajas else 0} caracteres")
                 
-                # Usar las columnas dinámicas determinadas anteriormente
-                headers_43_final = headers_43
-                campos_43_final = campos_43
-                try:
-                    table_43_raw = preparar_datos_tabla(
-                        datos_preparados, headers_43_final, campos_43_final,
-                        agregar_totales=True, columna_total_texto=1
+                # Tabla detalle equipos
+                tiempo_tabla = time.time()
+                tabla_detalle_equipos = content_43_raw.get("tablaDetalleEquipos", [])
+                if tabla_detalle_equipos and isinstance(tabla_detalle_equipos, list) and len(tabla_detalle_equipos) > 0:
+                    # Preparar datos con numeración
+                    datos_preparados = []
+                    for idx, equipo in enumerate(tabla_detalle_equipos, 1):
+                        dato = {
+                            "No.": idx,
+                            "equipo": equipo.get("equipo", ""),
+                            "cantidad": equipo.get("cantidad", 0)
+                        }
+                        datos_preparados.append(dato)
+                    
+                    headers_detalle = ["No.", "EQUIPO", "CANTIDAD"]
+                    campos_detalle = ["No.", "equipo", "cantidad"]
+                    tabla_detalle = preparar_datos_tabla(
+                        datos_preparados, headers_detalle, campos_detalle,
+                        agregar_totales=True, columna_total_texto=0
                     )
-                except ZeroDivisionError as e:
-                    logger.error(f"Error de división por cero al preparar tabla 4.3: {e}")
-                    logger.error(f"Datos preparados: {datos_preparados[:2] if datos_preparados else 'vacío'}")
-                    # Crear tabla sin totales como fallback
-                    table_43_raw = preparar_datos_tabla(
-                        datos_preparados, headers_43_final, campos_43_final,
-                        agregar_totales=False, columna_total_texto=1
+                    contexto["tabla_43_detalle_equipos"] = tabla_detalle if tabla_detalle else None
+                    logger.info(f"Sección 4.3 - tabla_43_detalle_equipos: {len(tabla_detalle) if tabla_detalle else 0} filas")
+                else:
+                    contexto["tabla_43_detalle_equipos"] = None
+                    logger.info(f"Sección 4.3 - tablaDetalleEquipos vacía: {len(tabla_detalle_equipos) if isinstance(tabla_detalle_equipos, list) else 'no es lista'}")
+                tiempo_procesamiento_tablas += time.time() - tiempo_tabla
+            
+            # Procesar bloque de siniestros si haySiniestros == true
+            if not hay_siniestros:
+                contexto["texto_43_siniestros"] = None
+                contexto["tabla_43_siniestros"] = None
+                contexto["texto_43_reintegro"] = None
+                contexto["tabla_43_detalle_siniestros"] = None
+                logger.info("Sección 4.3 - haySiniestros=False, estableciendo None para bloques de siniestros")
+            else:
+                # Texto siniestros
+                texto_siniestros = content_43_raw.get("textoSiniestros", "")
+                contexto["texto_43_siniestros"] = texto_siniestros if texto_siniestros else None
+                logger.info(f"Sección 4.3 - texto_43_siniestros: {len(texto_siniestros) if texto_siniestros else 0} caracteres")
+                
+                # Tabla resumen siniestros
+                tiempo_tabla = time.time()
+                tabla_siniestros = content_43_raw.get("tablaSiniestros", {})
+                if tabla_siniestros and isinstance(tabla_siniestros, dict):
+                    # Preparar datos para tabla resumen
+                    datos_resumen_siniestros = [{
+                        "campo": "FECHA",
+                        "valor": tabla_siniestros.get("fecha", "")
+                    }, {
+                        "campo": "COMUNICADO",
+                        "valor": tabla_siniestros.get("comunicado", "")
+                    }, {
+                        "campo": "CANTIDAD",
+                        "valor": tabla_siniestros.get("cantidad", "")
+                    }]
+                    
+                    headers_resumen_siniestros = ["CAMPO", "VALOR"]
+                    campos_resumen_siniestros = ["campo", "valor"]
+                    tabla_resumen_siniestros = preparar_datos_tabla(
+                        datos_resumen_siniestros, headers_resumen_siniestros, campos_resumen_siniestros,
+                        agregar_totales=False, columna_total_texto=0
                     )
-                except Exception as e:
-                    logger.error(f"Error al preparar tabla 4.3: {e}", exc_info=True)
-                    raise
+                    contexto["tabla_43_siniestros"] = tabla_resumen_siniestros if tabla_resumen_siniestros else None
+                    logger.info(f"Sección 4.3 - tabla_43_siniestros: {len(tabla_resumen_siniestros) if tabla_resumen_siniestros else 0} filas")
+                else:
+                    contexto["tabla_43_siniestros"] = None
+                    logger.info("Sección 4.3 - tablaSiniestros vacía o inválida")
+                tiempo_procesamiento_tablas += time.time() - tiempo_tabla
                 
-                # Formatear valores monetarios DESPUÉS de calcular totales
-                contexto["table_43"] = []
-                # Determinar índice de columna de valor (si existe)
-                indice_valor = None
-                if tiene_valor:
-                    try:
-                        indice_valor = campos_43_final.index("valor")
-                    except ValueError:
-                        indice_valor = None
+                # Texto reintegro
+                texto_reintegro = content_43_raw.get("textoReintegro", "")
+                contexto["texto_43_reintegro"] = texto_reintegro if texto_reintegro else None
+                logger.info(f"Sección 4.3 - texto_43_reintegro: {len(texto_reintegro) if texto_reintegro else 0} caracteres")
                 
-                for row_idx, fila in enumerate(table_43_raw):
-                    fila_formateada = []
-                    for col_idx, valor in enumerate(fila):
-                        # Formatear columna monetaria solo si existe
-                        if tiene_valor and indice_valor is not None and col_idx == indice_valor and row_idx > 0:  # No formatear encabezados
-                            try:
-                                if isinstance(valor, str) and valor.startswith("$"):
-                                    fila_formateada.append(valor)
-                                elif valor and str(valor).strip():
-                                    num_valor = float(valor)
-                                    if num_valor > 0:
-                                        fila_formateada.append(formato_moneda_cop(num_valor))
-                                    else:
-                                        fila_formateada.append("-")
-                                else:
-                                    fila_formateada.append("-")
-                            except (ValueError, TypeError):
-                                fila_formateada.append(str(valor) if valor else "-")
-                        else:
-                            fila_formateada.append(str(valor) if valor is not None else "")
-                    contexto["table_43"].append(fila_formateada)
-            else:
-                contexto["table_43"] = []
-            tiempo_procesamiento_tablas += time.time() - tiempo_tabla
-            
-            # Calcular total y valor en letras
-            valor_total_43 = 0
-            try:
-                for equipo in equipos_43:
-                    valor = equipo.get("valor", 0) or equipo.get("valor_total", 0)
-                    if isinstance(valor, (int, float)):
-                        valor_total_43 += float(valor)
-                    elif isinstance(valor, str):
-                        valor_limpio = valor.replace(",", "").replace(" ", "").replace("$", "").strip()
-                        if valor_limpio:
-                            valor_total_43 += float(valor_limpio)
-            except:
-                valor_total_43 = 0
-            
-            if valor_total_43 > 0:
-                contexto["valor_letras_43"] = numero_a_letras(valor_total_43, incluir_moneda=True)
-            else:
-                contexto["valor_letras_43"] = ""
-            
-            # Anexos
-            anexos_43 = content_43.get("anexos", [])
-            if isinstance(anexos_43, list):
-                contexto["anexos_43"] = "\n".join([f"• {anexo}" for anexo in anexos_43 if anexo])
-            elif anexos_43:
-                contexto["anexos_43"] = str(anexos_43)
-            else:
-                contexto["anexos_43"] = ""
+                # Tabla detalle siniestros
+                tiempo_tabla = time.time()
+                tabla_detalle_siniestros = content_43_raw.get("tablaDetalleSiniestros", [])
+                if tabla_detalle_siniestros and isinstance(tabla_detalle_siniestros, list) and len(tabla_detalle_siniestros) > 0:
+                    # Preparar datos con numeración
+                    datos_preparados_siniestros = []
+                    for idx, equipo in enumerate(tabla_detalle_siniestros, 1):
+                        dato = {
+                            "No.": idx,
+                            "equipo": equipo.get("equipo", ""),
+                            "cantidad": equipo.get("cantidad", 0)
+                        }
+                        datos_preparados_siniestros.append(dato)
+                    
+                    headers_detalle_siniestros = ["No.", "EQUIPO", "CANTIDAD"]
+                    campos_detalle_siniestros = ["No.", "equipo", "cantidad"]
+                    tabla_detalle_siniestros_final = preparar_datos_tabla(
+                        datos_preparados_siniestros, headers_detalle_siniestros, campos_detalle_siniestros,
+                        agregar_totales=True, columna_total_texto=0
+                    )
+                    contexto["tabla_43_detalle_siniestros"] = tabla_detalle_siniestros_final if tabla_detalle_siniestros_final else None
+                    logger.info(f"Sección 4.3 - tabla_43_detalle_siniestros: {len(tabla_detalle_siniestros_final) if tabla_detalle_siniestros_final else 0} filas")
+                else:
+                    contexto["tabla_43_detalle_siniestros"] = None
+                    logger.info(f"Sección 4.3 - tablaDetalleSiniestros vacía: {len(tabla_detalle_siniestros) if isinstance(tabla_detalle_siniestros, list) else 'no es lista'}")
+                tiempo_procesamiento_tablas += time.time() - tiempo_tabla
         
         # Sección 4.4 (index[4]) - GESTIONES DE INCLUSIÓN A LA BOLSA
         if len(index) > 4:
@@ -903,9 +1049,9 @@ class GeneradorSeccion4:
         contexto_tablas = {}
         # Solo copiar las claves necesarias en lugar de copiar todo el contexto
         for key in ["mes", "anio", "mes_numero", "texto_41", "texto_42", "comunicado_42", "fecha_42",
-                   "valor_letras_42", "anexos_42", "comunicado_43", "fecha_43",
-                   "valor_letras_43", "anexos_43", "comunicado_44", "fecha_44",
-                   "valor_letras_44", "anexos_44"]:
+                   "valor_letras_42", "anexos_42", "haySalidas", "texto_43", "texto_43_bajas_no_operativas",
+                   "texto_43_siniestros", "texto_43_reintegro", "haySiniestros",
+                   "comunicado_44", "fecha_44", "valor_letras_44", "anexos_44"]:
             if key in contexto:
                 contexto_tablas[key] = contexto[key]
         
@@ -919,24 +1065,38 @@ class GeneradorSeccion4:
         tabla_mapping = {
             "table_41": "[[TABLE_41]]",
             "table_42": "[[TABLE_42]]",
-            "table_43": "[[TABLE_43]]",
+            "tabla_43_equipos_no_operativos": "[[TABLE_43_EQUIPOS_NO_OPERATIVOS]]",
+            "tabla_43_detalle_equipos": "[[TABLE_43_DETALLE_EQUIPOS]]",
+            "tabla_43_siniestros": "[[TABLE_43_SINIESTROS]]",
+            "tabla_43_detalle_siniestros": "[[TABLE_43_DETALLE_SINIESTROS]]",
             "table_44": "[[TABLE_44]]",
         }
         
         for tabla_key, placeholder in tabla_mapping.items():
+            # IMPORTANTE: Buscar en el contexto ORIGINAL, no en contexto_tablas
             tabla_data = contexto.get(tabla_key)
-            if tabla_data:
+            logger.info(f"  🔍 Verificando tabla {tabla_key}: existe={tabla_key in contexto}, tipo={type(tabla_data)}, longitud={len(tabla_data) if tabla_data else 0}")
+            # Solo agregar tablas que tengan datos (no None y no vacías)
+            if tabla_data is not None and len(tabla_data) > 0:
                 logger.info(f"   ✓ Tabla {tabla_key}: {len(tabla_data)} filas (incluyendo encabezado)")
                 contexto_tablas[f"{tabla_key}_placeholder"] = placeholder
                 placeholders_tablas[placeholder] = tabla_data
             else:
-                logger.debug(f"   ✗ Tabla {tabla_key}: sin datos")
+                logger.warning(f"   ✗ Tabla {tabla_key}: sin datos o None (no se renderizará) - valor en contexto: {type(tabla_data)}, longitud: {len(tabla_data) if tabla_data else 'N/A'}")
+                # Establecer None en contexto para que docxtpl elimine el placeholder
+                contexto_tablas[f"{tabla_key}_placeholder"] = None
         
         tiempo_preparacion_contexto = time.time() - tiempo_inicio
         logger.info(f"⏱️  Tiempo preparación contexto tablas: {tiempo_preparacion_contexto:.2f}s")
         logger.info(f"   - Número de tablas a procesar: {len(placeholders_tablas)}")
         if placeholders_tablas:
             logger.info(f"   - Placeholders de tablas: {list(placeholders_tablas.keys())}")
+            for ph, data in placeholders_tablas.items():
+                logger.info(f"     → {ph}: {len(data)} filas")
+        else:
+            logger.warning(f"   ⚠️ NO HAY TABLAS PARA PROCESAR - Verificar que las tablas estén en el contexto")
+            logger.warning(f"   - Claves disponibles en contexto: {list(contexto.keys())}")
+            logger.warning(f"   - Claves de tablas esperadas: {list(tabla_mapping.keys())}")
         
         tiempo_inicio = time.time()
         # Renderizar el template con las variables básicas
@@ -1002,9 +1162,16 @@ class GeneradorSeccion4:
         
         tiempo_inicio = time.time()
         # Reemplazar todos los placeholders de tablas en una sola pasada (MUCHO MÁS RÁPIDO)
+        # NOTA: Esta función aplica automáticamente:
+        # - Estilos completos (encabezado azul oscuro, totales azul claro, filas alternadas)
+        # - Encabezado repetido en cada página (habilitar_encabezado_repetido)
+        # - Autofit para ajustar columnas
+        # - Centrado vertical y alineación de texto
+        # Igual que en la sección 2 (seccion_2_mesa_servicio.py)
         if placeholders_tablas:
             try:
                 reemplazar_multiples_placeholders_con_tablas(doc, placeholders_tablas)
+                logger.info(f"  ✓ Estilos y encabezado repetido aplicados a {len(placeholders_tablas)} tabla(s)")
             except ZeroDivisionError as e:
                 logger.error(f"Error de división por cero al procesar tablas: {e}", exc_info=True)
                 raise ValueError(f"Error de división por cero al procesar tablas: {e}")
@@ -1087,9 +1254,9 @@ class GeneradorSeccion4:
         contexto_tablas = {}
         # Solo copiar las claves necesarias
         for key in ["mes", "anio", "mes_numero", "texto_41", "texto_42", "comunicado_42", "fecha_42",
-                   "valor_letras_42", "anexos_42", "comunicado_43", "fecha_43",
-                   "valor_letras_43", "anexos_43", "comunicado_44", "fecha_44",
-                   "valor_letras_44", "anexos_44"]:
+                   "valor_letras_42", "anexos_42", "haySalidas", "texto_43", "texto_43_bajas_no_operativas",
+                   "texto_43_siniestros", "texto_43_reintegro", "haySiniestros",
+                   "comunicado_44", "fecha_44", "valor_letras_44", "anexos_44"]:
             if key in contexto:
                 contexto_tablas[key] = contexto[key]
         
@@ -1103,14 +1270,25 @@ class GeneradorSeccion4:
         tabla_mapping = {
             "table_41": "[[TABLE_41]]",
             "table_42": "[[TABLE_42]]",
-            "table_43": "[[TABLE_43]]",
+            "tabla_43_equipos_no_operativos": "[[TABLE_43_EQUIPOS_NO_OPERATIVOS]]",
+            "tabla_43_detalle_equipos": "[[TABLE_43_DETALLE_EQUIPOS]]",
+            "tabla_43_siniestros": "[[TABLE_43_SINIESTROS]]",
+            "tabla_43_detalle_siniestros": "[[TABLE_43_DETALLE_SINIESTROS]]",
             "table_44": "[[TABLE_44]]",
         }
         
         for tabla_key, placeholder in tabla_mapping.items():
-            if contexto.get(tabla_key):
+            tabla_data = contexto.get(tabla_key)
+            logger.info(f"  🔍 Verificando tabla {tabla_key}: existe={tabla_key in contexto}, tipo={type(tabla_data)}, longitud={len(tabla_data) if tabla_data else 0}")
+            # Solo agregar tablas que tengan datos (no None y no vacías)
+            if tabla_data is not None and len(tabla_data) > 0:
+                logger.info(f"   ✓ Tabla {tabla_key}: {len(tabla_data)} filas (incluyendo encabezado)")
                 contexto_tablas[f"{tabla_key}_placeholder"] = placeholder
-                placeholders_tablas[placeholder] = contexto[tabla_key]
+                placeholders_tablas[placeholder] = tabla_data
+            else:
+                logger.warning(f"   ✗ Tabla {tabla_key}: sin datos o None (no se renderizará) - valor en contexto: {type(tabla_data)}, longitud: {len(tabla_data) if tabla_data else 'N/A'}")
+                # Establecer None en contexto para que docxtpl elimine el placeholder
+                contexto_tablas[f"{tabla_key}_placeholder"] = None
         
         tiempo_preparacion_contexto = time.time() - tiempo_inicio
         logger.info(f"⏱️  Tiempo preparación contexto tablas: {tiempo_preparacion_contexto:.2f}s")
@@ -1138,8 +1316,15 @@ class GeneradorSeccion4:
         
         tiempo_inicio = time.time()
         # Reemplazar todos los placeholders de tablas en una sola pasada
+        # NOTA: Esta función aplica automáticamente:
+        # - Estilos completos (encabezado azul oscuro, totales azul claro, filas alternadas)
+        # - Encabezado repetido en cada página (habilitar_encabezado_repetido)
+        # - Autofit para ajustar columnas
+        # - Centrado vertical y alineación de texto
+        # Igual que en la sección 2 (seccion_2_mesa_servicio.py)
         if placeholders_tablas:
             reemplazar_multiples_placeholders_con_tablas(doc, placeholders_tablas)
+            logger.info(f"  ✓ Estilos y encabezado repetido aplicados a {len(placeholders_tablas)} tabla(s)")
         tiempo_procesamiento_tablas = time.time() - tiempo_inicio
         logger.info(f"⏱️  Tiempo procesamiento tablas: {tiempo_procesamiento_tablas:.2f}s")
         

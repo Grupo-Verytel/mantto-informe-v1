@@ -179,50 +179,40 @@ class Seccion4Service:
             
             # 4.3 Entrega Equipos No Operativos
             sub_4_3 = subseccion_4.get("3", {})
-            equipos = []
             
-            # Equipos no operativos
-            if sub_4_3.get("haySalidas", False):
-                tabla_detalle = sub_4_3.get("tablaDetalleEquipos", [])
-                logger.info(f"Sección 4.3 - haySalidas=True, {len(tabla_detalle)} equipos no operativos")
-                for eq in tabla_detalle:
-                    equipos.append({
-                        "descripcion": eq.get("equipo", ""),
-                        "serial": eq.get("serial", ""),
-                        "cantidad": eq.get("cantidad", 1),
-                        "motivo": sub_4_3.get("textoBajasNoOperativas", ""),
-                        "valor": eq.get("valor", 0)
-                    })
+            # Obtener tablaEquiposNoOperativos (puede ser dict o list)
+            tabla_equipos_no_operativos = sub_4_3.get("tablaEquiposNoOperativos", {})
+            if isinstance(tabla_equipos_no_operativos, list) and len(tabla_equipos_no_operativos) > 0:
+                tabla_equipos_no_operativos = tabla_equipos_no_operativos[0]
+            elif not isinstance(tabla_equipos_no_operativos, dict):
+                tabla_equipos_no_operativos = {}
             
-            # Siniestros
-            if sub_4_3.get("haySiniestros", False):
-                tabla_detalle_siniestros = sub_4_3.get("tablaDetalleSiniestros", [])
-                logger.info(f"Sección 4.3 - haySiniestros=True, {len(tabla_detalle_siniestros)} equipos siniestros")
-                for sin in tabla_detalle_siniestros:
-                    equipos.append({
-                        "descripcion": sin.get("equipo", ""),
-                        "serial": sin.get("serial", ""),
-                        "cantidad": sin.get("cantidad", 1),
-                        "motivo": sub_4_3.get("textoSiniestros", ""),
-                        "valor": sin.get("valor", 0)
-                    })
+            # Obtener tablaSiniestros (puede ser dict o list)
+            tabla_siniestros = sub_4_3.get("tablaSiniestros", {})
+            if isinstance(tabla_siniestros, list) and len(tabla_siniestros) > 0:
+                tabla_siniestros = tabla_siniestros[0]
+            elif not isinstance(tabla_siniestros, dict):
+                tabla_siniestros = {}
             
-            tabla_equipos = sub_4_3.get("tablaEquiposNoOperativos", {})
-            # tablaEquiposNoOperativos es un objeto, no un array
-            if isinstance(tabla_equipos, list) and len(tabla_equipos) > 0:
-                tabla_equipos = tabla_equipos[0]
-            elif not isinstance(tabla_equipos, dict):
-                tabla_equipos = {}
-            
+            # Construir content_43 con la nueva estructura que espera _seccion_4_3
             content_43 = {
-                "comunicado": {
-                    "numero": tabla_equipos.get("comunicado", ""),
-                    "fecha": tabla_equipos.get("fecha", "")
-                },
-                "equipos": equipos,
-                "anexos": sub_4_3.get("anexos", [])
+                "haySalidas": sub_4_3.get("haySalidas", False),
+                "texto": sub_4_3.get("texto", ""),
+                "tablaEquiposNoOperativos": tabla_equipos_no_operativos,
+                "textoBajasNoOperativas": sub_4_3.get("textoBajasNoOperativas", ""),
+                "tablaDetalleEquipos": sub_4_3.get("tablaDetalleEquipos", []),
+                "haySiniestros": sub_4_3.get("haySiniestros", False),
+                "textoSiniestros": sub_4_3.get("textoSiniestros", ""),
+                "tablaSiniestros": tabla_siniestros,
+                "textoReintegro": sub_4_3.get("textoReintegro", ""),
+                "tablaDetalleSiniestros": sub_4_3.get("tablaDetalleSiniestros", [])
             }
-            logger.info(f"Sección 4.3 - Total equipos: {len(equipos)}")
+            
+            logger.info(f"Sección 4.3 - haySalidas={content_43.get('haySalidas')}, haySiniestros={content_43.get('haySiniestros')}")
+            logger.info(f"Sección 4.3 - tablaDetalleEquipos: {len(content_43.get('tablaDetalleEquipos', []))} items")
+            logger.info(f"Sección 4.3 - tablaDetalleSiniestros: {len(content_43.get('tablaDetalleSiniestros', []))} items")
+            logger.info(f"Sección 4.3 - tablaEquiposNoOperativos: {bool(tabla_equipos_no_operativos)}")
+            logger.info(f"Sección 4.3 - tablaSiniestros: {bool(tabla_siniestros)}")
             
             index.append({
                 "id": "4.3",

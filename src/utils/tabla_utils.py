@@ -11,6 +11,7 @@ from docx.oxml import OxmlElement
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from functools import partial
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +105,11 @@ def centrar_celda_vertical(cell):
 
 
 def enable_autofit(table):
-    """Activa el autoajuste para tablas en Word"""
+    """
+    Activa el autoajuste para tablas en Word.
+    Al eliminar el elemento tblW, Word ajusta automáticamente la tabla al ancho disponible
+    respetando los márgenes del documento, igual que en la sección 2.
+    """
     tbl = table._element
     if tbl.tblPr is None:
         tblPr = OxmlElement('w:tblPr')
@@ -117,6 +122,7 @@ def enable_autofit(table):
     new_tblLayout = OxmlElement('w:tblLayout')
     new_tblLayout.set(qn('w:type'), 'autofit')
     tblPr.append(new_tblLayout)
+    # Eliminar tblW para que Word ajuste automáticamente respetando márgenes
     tblW = tblPr.find(qn('w:tblW'))
     if tblW is not None:
         tblPr.remove(tblW)
@@ -567,19 +573,26 @@ def reemplazar_multiples_placeholders_con_tablas(doc: Document, placeholders_tab
     tiempo_total_procesamiento = time.time()
     
     # Determinar si usar procesamiento paralelo (solo si hay más de 1 tabla)
-    usar_paralelo = len(paragraphs_to_process) > 1
+    # TEMPORALMENTE DESHABILITADO debido a problemas de scope con ThreadPoolExecutor
+    usar_paralelo = False  # len(paragraphs_to_process) > 1
     
     if usar_paralelo:
         logger.info(f"  🚀 Procesando {len(paragraphs_to_process)} tablas en paralelo...")
         tablas_procesadas = {}
         
         # Procesar tablas en paralelo
+        # Usar una función helper global para evitar problemas de scope
+        def _helper_crear_tabla(table_data_arg, estilos_arg):
+            """Helper function para ThreadPoolExecutor"""
+            return _crear_tabla_procesada(table_data_arg, estilos_arg)
+        
         with ThreadPoolExecutor(max_workers=min(len(paragraphs_to_process), 4)) as executor:
-            # Enviar todas las tareas
-            future_to_tabla = {
-                executor.submit(_crear_tabla_procesada, table_data, estilos_tabla): (tabla_idx, para_idx, paragraph, placeholder, table_data)
-                for tabla_idx, (para_idx, paragraph, placeholder, table_data) in enumerate(paragraphs_to_process)
-            }
+            # Crear un diccionario de futures de forma explícita para evitar problemas de scope
+            future_to_tabla = {}
+            for tabla_idx, (para_idx, paragraph, placeholder, table_data) in enumerate(paragraphs_to_process):
+                # Pasar los argumentos directamente sin usar closure
+                future = executor.submit(_helper_crear_tabla, table_data, estilos_tabla)
+                future_to_tabla[future] = (tabla_idx, para_idx, paragraph, placeholder, table_data)
             
             # Recoger resultados conforme se completan
             for future in as_completed(future_to_tabla):
