@@ -223,34 +223,15 @@ class Seccion4Service:
             
             # 4.4 Gestiones de Inclusión a la Bolsa
             sub_4_4 = subseccion_4.get("4", {})
-            tabla_gestion = sub_4_4.get("tablaGestionInclusion", {}) if sub_4_4 else {}
+            texto_44 = sub_4_4.get("texto", "") if sub_4_4 else ""
+            tabla_gestion_inclusion = sub_4_4.get("tablaGestionInclusion") if sub_4_4 else None
             
-            # tablaGestionInclusion es un objeto, no un array
-            if isinstance(tabla_gestion, list) and len(tabla_gestion) > 0:
-                tabla_gestion = tabla_gestion[0]
-            elif not isinstance(tabla_gestion, dict):
-                tabla_gestion = {}
-            
-            items = []
-            if tabla_gestion:
-                items.append({
-                    "descripcion": tabla_gestion.get("descripcion", ""),
-                    "cantidad": tabla_gestion.get("cantidad", 1),
-                    "unidad": tabla_gestion.get("unidad", "UN"),
-                    "valor_unitario": tabla_gestion.get("valor_unitario", tabla_gestion.get("valorUnitario", 0)),
-                    "valor_total": tabla_gestion.get("valor_total", tabla_gestion.get("valorTotal", 0)),
-                    "justificacion": tabla_gestion.get("justificacion", "")
-                })
-            
-            logger.info(f"Sección 4.4 - tablaGestionInclusion: {bool(tabla_gestion)}, items: {len(items)}")
+            logger.info(f"Sección 4.4 - texto: {len(texto_44) if texto_44 else 0} caracteres")
+            logger.info(f"Sección 4.4 - tablaGestionInclusion: tipo={type(tabla_gestion_inclusion)}, valor={bool(tabla_gestion_inclusion)}")
             
             content_44 = {
-                "comunicado": {
-                    "numero": tabla_gestion.get("consecutivoETB", ""),
-                    "fecha": tabla_gestion.get("fecha", "")
-                },
-                "items": items,
-                "anexos": sub_4_4.get("anexos", []) if sub_4_4 else []
+                "texto": texto_44,
+                "tablaGestionInclusion": tabla_gestion_inclusion
             }
             
             index.append({

@@ -329,53 +329,65 @@ class GeneradorSeccion4:
     async def _seccion_4_4(self, data: Dict[str, Any]):
         """
         Procesa la sección 4.4: Gestiones de Inclusión a la Bolsa
+        
+        Estructura de datos esperada:
+        {
+            "texto": str,
+            "tablaGestionInclusion": dict | list | None
+        }
         """
         content = data.get("content", {})
         anio = data.get("anio")
         mes = data.get("mes")
         
-        # Obtener datos del comunicado/solicitud
-        comunicado = content.get("comunicado", {}) or content.get("solicitud", {})
-        items = content.get("items", []) or content.get("elementos", [])
+        # Obtener texto introductorio
+        texto_44 = content.get("texto", "")
+        texto_44 = texto_44 if texto_44 else None
         
-        # Calcular total
-        valor_total = 0
-        try:
+        # Obtener tablaGestionInclusion (puede ser dict, list, None, o lista vacía)
+        tabla_gestion_inclusion = content.get("tablaGestionInclusion")
+        
+        # Normalizar tablaGestionInclusion a lista de items
+        items = []
+        if tabla_gestion_inclusion is None:
+            items = []
+        elif isinstance(tabla_gestion_inclusion, list):
+            items = tabla_gestion_inclusion
+        elif isinstance(tabla_gestion_inclusion, dict):
+            # Un único registro → tabla de 1 fila
+            items = [tabla_gestion_inclusion]
+        else:
+            items = []
+        
+        # Preparar tabla solo si hay items
+        tabla_44_gestion_inclusion = None
+        if items and len(items) > 0:
+            # Columnas según requerimientos
+            headers_44 = ["Ítem", "Fecha", "Consecutivo ETB", "Descripción"]
+            campos_44 = ["item", "fecha", "consecutivoETB", "descripcion"]
+            
+            # Preparar datos para la tabla
+            datos_preparados = []
             for item in items:
-                valor = item.get("valor_total", 0) or item.get("valor", 0)
-                if isinstance(valor, (int, float)):
-                    valor_total += float(valor)
-                elif isinstance(valor, str):
-                    valor_limpio = valor.replace(",", "").replace(" ", "").replace("$", "").strip()
-                    if valor_limpio:
-                        valor_total += float(valor_limpio)
-        except (ValueError, TypeError) as e:
-            logger.warning(f"Error al calcular total en sección 4.4: {e}")
-            valor_total = 0
+                dato = {
+                    "item": item.get("item", ""),
+                    "fecha": item.get("fecha", ""),
+                    "consecutivoETB": item.get("consecutivoETB", ""),
+                    "descripcion": item.get("descripcion", "")
+                }
+                datos_preparados.append(dato)
+            
+            # Construir tabla usando preparar_datos_tabla (equivalente a construir_tabla)
+            tabla_44_gestion_inclusion = preparar_datos_tabla(
+                datos_preparados, headers_44, campos_44,
+                agregar_totales=False, columna_total_texto=0
+            )
         
-        # Formatear valores
-        valor_letras = ""
-        if valor_total > 0:
-            valor_letras = numero_a_letras(valor_total, incluir_moneda=True)
-        
-        content_data = {
-            "anio": anio,
-            "mes": mes,
-            "user_id": data.get("user_id"),
-            "name_file": data.get("name_file"),
-            "section_id": data.get("section_id"),
-            "level": data.get("level"),
-            "content": {
-                "comunicado": comunicado.get("numero", "") if isinstance(comunicado, dict) else str(comunicado) if comunicado else "",
-                "fecha": comunicado.get("fecha", "") if isinstance(comunicado, dict) else "",
-                "items": items,
-                "total": valor_total,
-                "valor_letras": valor_letras,
-                "anexos": content.get("anexos", []),
-            },
+        # Retornar estructura según requerimientos
+        return {
+            "texto_44": texto_44,
+            "tabla_44_gestion_inclusion": tabla_44_gestion_inclusion
         }
-        
-        return content_data
     
     async def preload_seccion_4(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -864,132 +876,60 @@ class GeneradorSeccion4:
         
         # Sección 4.4 (index[4]) - GESTIONES DE INCLUSIÓN A LA BOLSA
         if len(index) > 4:
-            content_44 = index[4].get("content", {})
-            comunicado = content_44.get("comunicado", {}) or content_44.get("solicitud", {})
-            contexto["comunicado_44"] = comunicado.get("numero", "") if isinstance(comunicado, dict) else str(comunicado) if comunicado else ""
-            contexto["fecha_44"] = comunicado.get("fecha", "") if isinstance(comunicado, dict) else ""
+            # Obtener datos procesados desde _seccion_4_4 (ya procesados)
+            content_44_raw = index[4].get("content", {})
             
-            # Preparar datos de tabla en formato lista de listas
+            # Los datos ya vienen procesados desde _seccion_4_4
+            # pero necesitamos leerlos del content raw para construir el contexto
+            texto_44 = content_44_raw.get("texto", "")
+            contexto["texto_44"] = texto_44 if texto_44 else None
+            logger.info(f"Sección 4.4 - texto_44: {len(texto_44) if texto_44 else 0} caracteres")
+            
+            # Obtener tablaGestionInclusion y procesarla
             tiempo_tabla = time.time()
-            items_44 = content_44.get("items", []) or content_44.get("elementos", [])
-            if items_44:
-                # Columnas esperadas para inclusión a bolsa
-                headers_44 = ["No.", "DESCRIPCIÓN", "CANT.", "UND", "VALOR UNIT.", "VALOR TOTAL", "JUSTIFICACIÓN"]
-                campos_44 = ["descripcion", "cantidad", "unidad", "valor_unitario", "valor_total", "justificacion"]
+            tabla_gestion_inclusion = content_44_raw.get("tablaGestionInclusion")
+            
+            # Normalizar tablaGestionInclusion a lista de items
+            items = []
+            if tabla_gestion_inclusion is None:
+                items = []
+            elif isinstance(tabla_gestion_inclusion, list):
+                items = tabla_gestion_inclusion
+            elif isinstance(tabla_gestion_inclusion, dict):
+                # Un único registro → tabla de 1 fila
+                items = [tabla_gestion_inclusion]
+            else:
+                items = []
+            
+            # Preparar tabla solo si hay items
+            if items and len(items) > 0:
+                # Columnas según requerimientos
+                headers_44 = ["Ítem", "Fecha", "Consecutivo ETB", "Descripción"]
+                campos_44 = ["item", "fecha", "consecutivoETB", "descripcion"]
                 
-                # Preparar datos con numeración (MANTENER VALORES NUMÉRICOS para calcular totales)
+                # Preparar datos para la tabla
                 datos_preparados = []
-                for idx, item in enumerate(items_44, 1):
-                    dato = item.copy()
-                    dato["No."] = idx
-                    # Asegurar que existan todos los campos
-                    if "descripcion" not in dato:
-                        dato["descripcion"] = dato.get("descripcion", "")
-                    if "cantidad" not in dato:
-                        dato["cantidad"] = dato.get("cantidad", 0)
-                    if "unidad" not in dato:
-                        dato["unidad"] = dato.get("unidad", "UN")
-                    # Mantener valores numéricos para calcular totales
-                    if "valor_unitario" not in dato:
-                        valor_unit = dato.get("valor_unitario", 0)
-                        try:
-                            dato["valor_unitario"] = float(valor_unit) if valor_unit else 0
-                        except (ValueError, TypeError):
-                            dato["valor_unitario"] = 0
-                    else:
-                        try:
-                            dato["valor_unitario"] = float(dato["valor_unitario"]) if dato["valor_unitario"] else 0
-                        except (ValueError, TypeError):
-                            dato["valor_unitario"] = 0
-                    
-                    if "valor_total" not in dato:
-                        # Calcular si no existe
-                        cantidad = float(dato.get("cantidad", 0) or 0)
-                        valor_unit = float(dato.get("valor_unitario", 0) or 0)
-                        dato["valor_total"] = cantidad * valor_unit
-                    else:
-                        try:
-                            dato["valor_total"] = float(dato["valor_total"]) if dato["valor_total"] else 0
-                        except (ValueError, TypeError):
-                            dato["valor_total"] = 0
-                    if "justificacion" not in dato:
-                        dato["justificacion"] = dato.get("justificacion", "")
+                for item in items:
+                    dato = {
+                        "item": item.get("item", ""),
+                        "fecha": item.get("fecha", ""),
+                        "consecutivoETB": item.get("consecutivoETB", ""),
+                        "descripcion": item.get("descripcion", "")
+                    }
                     datos_preparados.append(dato)
                 
-                # Preparar tabla con totales (usando valores numéricos)
-                headers_44_final = ["No.", "DESCRIPCIÓN", "CANT.", "UND", "VALOR UNIT.", "VALOR TOTAL", "JUSTIFICACIÓN"]
-                campos_44_final = ["No.", "descripcion", "cantidad", "unidad", "valor_unitario", "valor_total", "justificacion"]
-                try:
-                    table_44_raw = preparar_datos_tabla(
-                        datos_preparados, headers_44_final, campos_44_final,
-                        agregar_totales=True, columna_total_texto=1
-                    )
-                except ZeroDivisionError as e:
-                    logger.error(f"Error de división por cero al preparar tabla 4.4: {e}")
-                    logger.error(f"Datos preparados: {datos_preparados[:2] if datos_preparados else 'vacío'}")
-                    # Crear tabla sin totales como fallback
-                    table_44_raw = preparar_datos_tabla(
-                        datos_preparados, headers_44_final, campos_44_final,
-                        agregar_totales=False, columna_total_texto=1
-                    )
-                except Exception as e:
-                    logger.error(f"Error al preparar tabla 4.4: {e}", exc_info=True)
-                    raise
-                
-                # Formatear valores monetarios DESPUÉS de calcular totales
-                contexto["table_44"] = []
-                for row_idx, fila in enumerate(table_44_raw):
-                    fila_formateada = []
-                    for col_idx, valor in enumerate(fila):
-                        # Formatear columnas monetarias (índices 4 y 5: valor_unitario y valor_total)
-                        if col_idx in [4, 5] and row_idx > 0:  # No formatear encabezados
-                            try:
-                                if isinstance(valor, str) and valor.startswith("$"):
-                                    fila_formateada.append(valor)
-                                elif valor and str(valor).strip():
-                                    num_valor = float(valor)
-                                    if num_valor > 0:
-                                        fila_formateada.append(formato_moneda_cop(num_valor))
-                                    else:
-                                        fila_formateada.append("-")
-                                else:
-                                    fila_formateada.append("-")
-                            except (ValueError, TypeError):
-                                fila_formateada.append(str(valor) if valor else "-")
-                        else:
-                            fila_formateada.append(str(valor) if valor is not None else "")
-                    contexto["table_44"].append(fila_formateada)
+                # Construir tabla usando preparar_datos_tabla
+                tabla_44_gestion_inclusion = preparar_datos_tabla(
+                    datos_preparados, headers_44, campos_44,
+                    agregar_totales=False, columna_total_texto=0
+                )
+                contexto["tabla_44_gestion_inclusion"] = tabla_44_gestion_inclusion if tabla_44_gestion_inclusion else None
+                logger.info(f"Sección 4.4 - tabla_44_gestion_inclusion: {len(tabla_44_gestion_inclusion) if tabla_44_gestion_inclusion else 0} filas")
             else:
-                contexto["table_44"] = []
+                contexto["tabla_44_gestion_inclusion"] = None
+                logger.info("Sección 4.4 - tablaGestionInclusion vacía o sin items")
+            
             tiempo_procesamiento_tablas += time.time() - tiempo_tabla
-            
-            # Calcular total y valor en letras
-            valor_total_44 = 0
-            try:
-                for item in items_44:
-                    valor = item.get("valor_total", 0) or item.get("valor", 0)
-                    if isinstance(valor, (int, float)):
-                        valor_total_44 += float(valor)
-                    elif isinstance(valor, str):
-                        valor_limpio = valor.replace(",", "").replace(" ", "").replace("$", "").strip()
-                        if valor_limpio:
-                            valor_total_44 += float(valor_limpio)
-            except:
-                valor_total_44 = 0
-            
-            if valor_total_44 > 0:
-                contexto["valor_letras_44"] = numero_a_letras(valor_total_44, incluir_moneda=True)
-            else:
-                contexto["valor_letras_44"] = ""
-            
-            # Anexos
-            anexos_44 = content_44.get("anexos", [])
-            if isinstance(anexos_44, list):
-                contexto["anexos_44"] = "\n".join([f"• {anexo}" for anexo in anexos_44 if anexo])
-            elif anexos_44:
-                contexto["anexos_44"] = str(anexos_44)
-            else:
-                contexto["anexos_44"] = ""
         
         tiempo_total_contexto = time.time() - tiempo_inicio
         logger.info(f"  📊 Detalle construcción contexto:")
@@ -1051,7 +991,7 @@ class GeneradorSeccion4:
         for key in ["mes", "anio", "mes_numero", "texto_41", "texto_42", "comunicado_42", "fecha_42",
                    "valor_letras_42", "anexos_42", "haySalidas", "texto_43", "texto_43_bajas_no_operativas",
                    "texto_43_siniestros", "texto_43_reintegro", "haySiniestros",
-                   "comunicado_44", "fecha_44", "valor_letras_44", "anexos_44"]:
+                   "texto_44"]:
             if key in contexto:
                 contexto_tablas[key] = contexto[key]
         
@@ -1069,7 +1009,7 @@ class GeneradorSeccion4:
             "tabla_43_detalle_equipos": "[[TABLE_43_DETALLE_EQUIPOS]]",
             "tabla_43_siniestros": "[[TABLE_43_SINIESTROS]]",
             "tabla_43_detalle_siniestros": "[[TABLE_43_DETALLE_SINIESTROS]]",
-            "table_44": "[[TABLE_44]]",
+            "tabla_44_gestion_inclusion": "[[TABLE_44_GESTION_INCLUSION]]",
         }
         
         for tabla_key, placeholder in tabla_mapping.items():
@@ -1256,7 +1196,7 @@ class GeneradorSeccion4:
         for key in ["mes", "anio", "mes_numero", "texto_41", "texto_42", "comunicado_42", "fecha_42",
                    "valor_letras_42", "anexos_42", "haySalidas", "texto_43", "texto_43_bajas_no_operativas",
                    "texto_43_siniestros", "texto_43_reintegro", "haySiniestros",
-                   "comunicado_44", "fecha_44", "valor_letras_44", "anexos_44"]:
+                   "texto_44"]:
             if key in contexto:
                 contexto_tablas[key] = contexto[key]
         
@@ -1274,7 +1214,7 @@ class GeneradorSeccion4:
             "tabla_43_detalle_equipos": "[[TABLE_43_DETALLE_EQUIPOS]]",
             "tabla_43_siniestros": "[[TABLE_43_SINIESTROS]]",
             "tabla_43_detalle_siniestros": "[[TABLE_43_DETALLE_SINIESTROS]]",
-            "table_44": "[[TABLE_44]]",
+            "tabla_44_gestion_inclusion": "[[TABLE_44_GESTION_INCLUSION]]",
         }
         
         for tabla_key, placeholder in tabla_mapping.items():
